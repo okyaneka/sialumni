@@ -25,3 +25,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
 });
 
+Route::middleware('is_admin')->group(function () {
+	Route::get('/admin', 'AdminController@admin')->name('admin');
+	Route::resource('department', 'DepartmentController', ['except' => ['show']]);
+});

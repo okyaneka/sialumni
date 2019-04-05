@@ -28,6 +28,17 @@ class ProfileRequest extends FormRequest
         return [
             'name' => ['required', 'min:3'],
             'email' => ['required', 'email', Rule::unique((new User)->getTable())->ignore(auth()->id())],
+            'street' => 'required', 
+            'address' => 'required', 
+            'sub_district' => 'required', 
+            'district' => 'required', 
+            'pob' => 'required|alpha', 
+            'dob' => 'required|date', 
+            'department' => 'required', 
+            'status' => 'required', 
+            'grad' => 'required|numeric|digits:4', 
+            'phone' => 'required|numeric|digits_between:9,14', 
+            'telegram' => 'required|numeric|digits_between:9,14',
         ];
     }
 }

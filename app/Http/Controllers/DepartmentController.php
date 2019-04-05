@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Department;
 use App\Http\Requests\DepartmentRequest;
-use Illuminate\Validation\Rule;
 
 class DepartmentController extends Controller
 {
@@ -78,12 +77,6 @@ class DepartmentController extends Controller
      */
     public function update(DepartmentRequest $request, $id)
     {
-        //
-        // $request->validate([
-        //     'code'      => 'required|'.Rule::unique('departments')->ignore(Department::find($id)),
-        //     'department'    => 'required'
-        // ]);
-
         $department = Department::find($id);
         $department->code = strtoupper($request->get('code'));
         $department->department = ucwords(strtolower($request->get('department')));

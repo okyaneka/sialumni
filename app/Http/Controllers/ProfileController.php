@@ -15,7 +15,10 @@ class ProfileController extends Controller
      */
     public function edit()
     {
-        return view('profile.edit');
+        return view('profile.edit', array(
+            'departments' => \App\Department::all(),
+            'statuses' => \App\Status::all(),
+        ));
     }
 
     /**

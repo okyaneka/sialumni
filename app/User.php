@@ -18,13 +18,22 @@ class User extends Authenticatable
         return $this->type === self::ADMIN_TYPE;
     }
 
+    public function isDataComplete()
+    {
+        foreach ($this->fillable as $column) {
+            if ($column == 'group') continue;
+            if(empty($this->$column)) return FALSE;
+        }
+        return TRUE;
+    }
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'pob', 'dob', 'street', 'address', 'sub_district', 'district', 'department', 'status', 'grad', 'phone', 'telegram', 'group',
     ];
 
     /**

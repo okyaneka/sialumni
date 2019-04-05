@@ -23,9 +23,11 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
 	Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
+
+	Route::middleware('is_admin')->group(function () {
+		Route::get('/admin', 'AdminController@admin')->name('admin');
+		Route::resource('department', 'DepartmentController', ['except' => ['show']]);
+		Route::resource('status', 'StatusController');
+	});
 });
 
-Route::middleware('is_admin')->group(function () {
-	Route::get('/admin', 'AdminController@admin')->name('admin');
-	Route::resource('department', 'DepartmentController', ['except' => ['show']]);
-});

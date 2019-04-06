@@ -98,18 +98,21 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Request::is('department*') || Request::is('status*') ? 'active' : '' }}" href="#master-data" data-toggle="collapse" role="button" aria-expanded="true"
+                    <a class="nav-link {{ Request::is('department*') || Request::is('status*') || Request::is('group*') ? 'active' : '' }}" href="#master-data" data-toggle="collapse" role="button" aria-expanded="true"
                         aria-controls="master-data">
                         <i class="ni ni-folder-17 text-blue"></i> {{ __('Master Data') }}
                     </a>
 
-                    <div class="collapse {{ Request::is('department*') || Request::is('status*') ? 'show' : '' }} bg-secondary" id="master-data">
+                    <div class="collapse {{ Request::is('department*') || Request::is('status*') || Request::is('group*') ? 'show' : '' }} bg-secondary" id="master-data">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item {{ Request::is('department*') ? 'active' : '' }}">
                                 <a class="nav-link" href="{{ route('department.index') }} ">Jurusan</a>
                             </li>
                             <li class="nav-item {{ Request::is('status*') ? 'active' : '' }}">
                                 <a class="nav-link" href="{{ route('status.index') }}">Status lulusan</a>
+                            </li>
+                            <li class="nav-item {{ Request::is('group*') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('group.index') }}">Grup alumni</a>
                             </li>
                         </ul>
                     </div>

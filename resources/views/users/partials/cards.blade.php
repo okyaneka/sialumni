@@ -8,21 +8,42 @@
             </div>
         </div>
     </div>
-    <div class="card-body pt-0 pt-md-4">
+    <div class="card-body pt-0 pt-md-4 pb-5">
         <div class="text-center mt-md-7">
             <h3>
-                {{ auth()->user()->name }}<span class="font-weight-light">, {{ \Carbon\Carbon::parse(auth()->user()->dob)->age }} tahun</span>
+                {{ auth()->user()->name }}
+                @empty ( !auth()->user()->dob )
+                    <span class="font-weight-light">, {{ \Carbon\Carbon::parse(auth()->user()->dob)->age }} tahun</span>
+                @endempty
             </h3>
             <div class="h5 font-weight-300">
-                <i class="ni pin-3 mr-2"></i>{{ __(auth()->user()->street.', '.auth()->user()->address.', '.auth()->user()->sub_district) }}
+                @empty ( !auth()->user()->street )
+                    <i class="ni pin-3 mr-2"></i>{{ auth()->user()->street }}
+                @endempty
+                @empty ( !auth()->user()->address )
+                    {{ ', '.auth()->user()->address }}
+                @endempty
+                @empty ( !auth()->user()->sub_district )
+                    {{ ', '.auth()->user()->sub_district }}
+                @endempty
+                @empty ( !auth()->user()->district )
+                    {{ ', '.auth()->user()->district }}
+                @endempty
             </div>
             <div class="h5">
                 <span>
-                    Lulusan tahun {{ __(auth()->user()->grad) }} jurusan {{ auth()->user()->department }}
+                @empty ( !auth()->user()->grad )
+                    Lulusan tahun {{ __(auth()->user()->grad) }} 
+                @endempty
+                @empty ( !auth()->user()->department )
+                    jurusan {{ auth()->user()->department }}
+                @endempty
                 </span>
             </div>
+            @empty ( !auth()->user()->group )
             <hr>
-            <div class="h4"><span class="font-weight-light">Link grup telegram : </span><a href="{!! auth()->user()->group ?: '#' !!}">{{ auth()->user()->group ?: '-' }}</a></div>
+            <div class="h4"><span class="font-weight-light">Link grup telegram : </span><a href="{{ auth()->user()->group }}">{{ auth()->user()->group }}</a></div>
+            @endempty
         </div>
     </div>
 </div>

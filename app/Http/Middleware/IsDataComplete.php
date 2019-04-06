@@ -3,9 +3,8 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
-class IsAdmin
+class IsDataComplete
 {
     /**
      * Handle an incoming request.
@@ -16,12 +15,10 @@ class IsAdmin
      */
     public function handle($request, Closure $next)
     {
-        if(auth()->user()->isAdmin()) {
+        if(auth()->user()->isDataComplete()) {
             return $next($request);
         }
-
-        return abort(403);
         
-        // return redirect('home')->withStatus(__('Only Administrator can access that page'));
+        return redirect('home')->withStatus(__('Silahkan lengkapi data berikut terlebih dahulu'));
     }
 }

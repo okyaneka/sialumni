@@ -2,8 +2,18 @@
 <nav class="navbar navbar-top navbar-expand-md navbar-dark" id="navbar-main">
     <div class="container-fluid">
         <!-- Brand -->
-        <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" href="{{ route('home') }}">{{ __('Dashboard') }}</a>
-        
+        <div class="breadcrumb bg-transparent">
+            @if (Route::is('home'))
+                <a class="h4 mb-0 text-white breadcrumb-item active text-uppercase d-none d-lg-inline-block" href="{{ route('home') }}">{{ __('Dashboard') }}</a>
+            @else                
+                <a class="h4 mb-0 text-light breadcrumb-item text-uppercase d-none d-lg-inline-block" href="{{ route('home') }}">{{ __('Dashboard') }}</a>
+                @if (Route::is('profile*'))
+                    <a class="h4 mb-0 text-white breadcrumb-item active text-uppercase d-none d-lg-inline-block" href="{{ route('profile') }}">{{ __('Profil') }}</a>
+                @elseif (Route::is('user*'))
+                    <a class="h4 mb-0 text-white breadcrumb-item active text-uppercase d-none d-lg-inline-block" href="{{ route('user.index') }}">{{ __('Alumni') }}</a>
+                @endif
+            @endif
+        </div>
         <!-- User -->
         <ul class="navbar-nav align-items-center d-none d-md-flex">
             <li class="nav-item dropdown">

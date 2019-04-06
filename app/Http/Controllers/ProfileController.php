@@ -5,9 +5,22 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProfileRequest;
 use App\Http\Requests\PasswordRequest;
 use Illuminate\Support\Facades\Hash;
+use Auth;
 
 class ProfileController extends Controller
 {
+    /**
+     * Show the profile
+     *
+     * @return \Illuminate\View\View
+     */
+    public function show($id = '')
+    {
+        $profile = $id ? Auth::user() : \App\User::find($id);
+
+        return view('profile.index', compact('profile'));
+    }
+
     /**
      * Show the form for editing the profile.
      *

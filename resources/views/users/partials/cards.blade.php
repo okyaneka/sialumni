@@ -14,10 +14,12 @@
                 {{ auth()->user()->name }}<span class="font-weight-light">, {{ \Carbon\Carbon::parse(auth()->user()->dob)->age }} tahun</span>
             </h3>
             <div class="h5 font-weight-300">
-                <i class="ni location_pin mr-2"></i>{{ __(auth()->user()->street.', '.auth()->user()->address.', '.auth()->user()->sub_district) }}
+                <i class="ni pin-3 mr-2"></i>{{ __(auth()->user()->street.', '.auth()->user()->address.', '.auth()->user()->sub_district) }}
             </div>
             <div class="h5">
-                <i class="ni business_briefcase-24 mr-2"></i>{{ __('Lulusan tahun '.auth()->user()->grad) }}
+                <span>
+                    Lulusan tahun {{ __(auth()->user()->grad) }} jurusan {{ auth()->user()->department }}
+                </span>
             </div>
             <hr>
             <div class="h4"><span class="font-weight-light">Link grup telegram : </span><a href="{!! auth()->user()->group ?: '#' !!}">{{ auth()->user()->group ?: '-' }}</a></div>

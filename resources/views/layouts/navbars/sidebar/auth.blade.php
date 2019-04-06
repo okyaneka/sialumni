@@ -86,9 +86,20 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Request::is('profile') ? 'active' : '' }}" href="{{ route('profile.edit') }}">
+                    <a class="nav-link {{ Request::is('profile*') ? 'active' : '' }}" href="#profile" data-toggle="collapse" role="button" aria-expanded="true">
                         <i class="ni ni-circle-08 text-pink"></i> {{ __('Profil') }}
                     </a>
+
+                    <div id="profile" class="collapse bg-secondary {{ Request::is('profile*') ? 'show' : '' }}">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item {{ Request::is('profile') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('profile') }}">Profil saya</a>
+                            </li>
+                            <li class="nav-item {{ Request::is('profile/edit') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('profile.edit') }}">Edit profil</a>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('user*') ? 'active' : '' }}" href="{{ route('user.index') }}">

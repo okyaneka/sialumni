@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class Resource extends Seeder
+class ResourceTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,6 +15,8 @@ class Resource extends Seeder
         	[
         		'code' => 'TKJ',
         		'department' => 'Teknik Komputer Jaringan',
+                'created_at' => now(),
+                'updated_at' => now()
         	],
         ]);
 
@@ -22,6 +24,8 @@ class Resource extends Seeder
         	[
         		'code' => 'L',
         		'status' => 'Melanjutkan Studi',
+                'created_at' => now(),
+                'updated_at' => now()
         	],
         ]);
     }

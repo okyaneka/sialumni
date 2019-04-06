@@ -21,9 +21,10 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::group(['middleware' => 'auth'], function () {
 	Route::post('/home', 'HomeController@update')->name('home.update');
 
-	Route::resource('user', 'UserController', ['except' => ['show']]);
-	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
-	Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
+	Route::resource('user', 'UserController');
+	Route::get('profile', ['as' => 'profile', 'uses' => 'ProfileController@show']);
+	Route::get('profile/edit', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
+	Route::put('profile/edit', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
 
 	Route::middleware('is_admin')->group(function () {

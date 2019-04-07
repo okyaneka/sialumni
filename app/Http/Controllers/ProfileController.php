@@ -13,12 +13,9 @@ class ProfileController extends Controller
 
     function __construct()
     {
-        // if (!Auth::user()->isAdmin()) {
-        //     return redirect('home');
-        // };
         $this->middleware('is_data_complete');
-
     }
+
     /**
      * Show the profile
      *
@@ -26,9 +23,6 @@ class ProfileController extends Controller
      */
     public function show($id = '')
     {
-        throw new Exception("Error Processing Request", 404);
-        
-
         $profile = $id ? Auth::user() : \App\User::find($id);
 
         return view('profile.index', compact('profile'));

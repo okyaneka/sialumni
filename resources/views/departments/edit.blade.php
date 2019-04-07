@@ -4,8 +4,8 @@
     @include('users.partials.header', ['title' => __('Edit Jurusan')])
 
     <div class="container-fluid mt-5">
-        <div class="row">
-            <div class="col-xl-12 order-xl-1">
+        <div class="row justify-content-center">
+            <div class="col-xl-8 order-xl-1">
                 <div class="card bg-secondary shadow">
                     <div class="card-header bg-white border-0">
                         <div class="row align-items-center">

@@ -11,6 +11,12 @@
                     <a class="h4 mb-0 text-white breadcrumb-item active text-uppercase d-none d-lg-inline-block" href="{{ route('profile') }}">{{ __('Profil') }}</a>
                 @elseif (Route::is('user*'))
                     <a class="h4 mb-0 text-white breadcrumb-item active text-uppercase d-none d-lg-inline-block" href="{{ route('user.index') }}">{{ __('Alumni') }}</a>
+                @elseif (Route::is('department*'))
+                    <a class="h4 mb-0 text-white breadcrumb-item active text-uppercase d-none d-lg-inline-block" href="{{ route('department.index') }}">{{ __('Jurusan') }}</a>
+                @elseif (Route::is('status*'))
+                    <a class="h4 mb-0 text-white breadcrumb-item active text-uppercase d-none d-lg-inline-block" href="{{ route('status.index') }}">{{ __('Status') }}</a>
+                @elseif (Route::is('group*'))
+                    <a class="h4 mb-0 text-white breadcrumb-item active text-uppercase d-none d-lg-inline-block" href="{{ route('group.index') }}">{{ __('Group') }}</a>
                 @endif
             @endif
         </div>

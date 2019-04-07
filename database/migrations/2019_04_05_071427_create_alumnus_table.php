@@ -25,7 +25,6 @@ class CreateAlumnusTable extends Migration
             $table->year('grad')->nullable();
             $table->string('phone', 14)->nullable();
             $table->string('telegram', 14)->nullable();
-            $table->string('group')->nullable();
         });
     }
 
@@ -49,7 +48,6 @@ class CreateAlumnusTable extends Migration
                 'grad',
                 'phone',
                 'telegram',
-                'group',
             ]);
         });
     }

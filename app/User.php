@@ -21,7 +21,6 @@ class User extends Authenticatable
     public function isDataComplete()
     {
         foreach ($this->fillable as $column) {
-            if ($column == 'group') continue;
             if(empty($this->$column)) return FALSE;
         }
         return TRUE;
@@ -33,7 +32,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'pob', 'dob', 'street', 'address', 'sub_district', 'district', 'department', 'status', 'grad', 'phone', 'telegram', 'group',
+        'name', 'email', 'password', 'pob', 'dob', 'street', 'address', 'sub_district', 'district', 'department', 'status', 'grad', 'phone', 'telegram',
     ];
 
     /**

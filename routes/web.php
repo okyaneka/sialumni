@@ -30,7 +30,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::middleware('is_admin')->group(function () {
 		Route::get('/admin', 'AdminController@admin')->name('admin');
 		Route::resource('department', 'DepartmentController', ['except' => ['show']]);
-		Route::resource('status', 'StatusController');
+		Route::resource('status', 'StatusController', ['except' => ['show']]);
+		Route::resource('group', 'GroupController', ['except' => ['show']]);
 	});
 });
 

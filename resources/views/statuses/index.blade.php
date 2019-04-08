@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => __('Status lulusan')])
+@extends('layouts.app', ['title' => __('Status Lulusan')])
 
 @section('content')
     @include('users.partials.header', ['title' => __('Daftar Status Lulusan')])

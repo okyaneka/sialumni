@@ -66,8 +66,8 @@ class HomeController extends Controller
         $user->update($request->all());
         // $link = \App\Group::where('grad',$user->grad);
         $link = '#';
-        $link = '<a href="'.$link.'" target="_blank" class="btn btn-primary">'.$link.'</a>';
+        $link = '<a href="'.$link.'" target="_blank">'.$link.'</a>';
 
-        return redirect()->route('home')->withStatus(__('Profil telah diperbaharui, klik link berikut untuk bergabung dengan grup alumni anda<br>'.$link));
+        return redirect()->route('home')->withStatus(__('Profil telah diperbaharui, klik link berikut untuk bergabung dengan grup alumni anda '.$link));
     }
 }

@@ -93,7 +93,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Request::is('statistic*') ? 'active' : '' }}" href="#">
+                    <a class="nav-link {{ Request::is('statistic*') ? 'active' : '' }}" href="{{ route('statistic.index') }}">
                         <i class="ni ni-chart-bar-32 text-green"></i> {{ __('Statistik') }}
                     </a>
                 </li>

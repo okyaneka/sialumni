@@ -20,12 +20,11 @@
 </div>
 @endsection
 
-@section('script')
-
-<script>
-    /* particlesJS.load(@dom-id, @path-json, @callback (optional)); */
-    particlesJS.load('particles-js', 'assets/particlesjs-config.json', function() {
-        // console.log('callback - particles.js config loaded');
-    });
-</script>
-@endsection
+@push('js')
+    <script>
+        /* particlesJS.load(@dom-id, @path-json, @callback (optional)); */
+        particlesJS.load('particles-js', 'assets/particlesjs-config.json', function() {
+            // console.log('callback - particles.js config loaded');
+        });
+    </script>
+@endpush

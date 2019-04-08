@@ -14,6 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -26,6 +27,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('profile/edit', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
 	Route::put('profile/edit', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
+	Route::get('statistic', ['as' => 'statistic.index', 'uses' => 'StatisticController@index']);
 
 	Route::middleware('is_admin')->group(function () {
 		Route::get('/admin', 'AdminController@admin')->name('admin');

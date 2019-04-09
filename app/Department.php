@@ -14,4 +14,14 @@ class Department extends Model
     protected $fillable = [
         'code', 'department',
     ];
+
+    /**
+     * Get the user of the department
+     *
+     * @return User
+     */
+    public function user()
+    {
+        return $this->hasMany('App\User','department','code');
+    }
 }

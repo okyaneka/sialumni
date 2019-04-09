@@ -14,4 +14,14 @@ class Status extends Model
     protected $fillable = [
     	'code','status',
     ];
+
+    /**
+     * Get the user of the status
+     *
+     * @return User
+     */
+    public function user()
+    {
+        return $this->hasMany('App\User','status','code');
+    }
 }

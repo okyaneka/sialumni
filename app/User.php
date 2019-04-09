@@ -27,6 +27,36 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the department for the user.
+     *
+     * @return Department
+     */
+    public function department()
+    {
+        return $this->hasOne('App\Department','code','department');
+    }
+
+    /**
+     * Get the status for the user.
+     *
+     * @return Status
+     */
+    public function status()
+    {
+        return $this->hasOne('App\Status','code','status');
+    }
+
+    /**
+     * Get the status for the user.
+     *
+     * @return Group
+     */
+    public function group()
+    {
+        return $this->hasOne('App\Group','grad','grad');
+    }
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array

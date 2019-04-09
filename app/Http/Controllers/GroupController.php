@@ -86,7 +86,7 @@ class GroupController extends Controller
     {
         //
         $request->validate([
-           'grad'  => 'required|numeric|digits:4|unique:groups,'.Rule::unique('groups')->ignore(Status::find($id)), 
+           'grad'  => 'required|numeric|digits:4|'.Rule::unique('groups')->ignore(Group::find($id)), 
            'link'  => 'required|url'
         ]);
 

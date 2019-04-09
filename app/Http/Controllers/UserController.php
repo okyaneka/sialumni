@@ -69,7 +69,6 @@ class UserController extends Controller
             'departments' => \App\Department::all(),
             'statuses' => \App\Status::all(),
         ], $user);
-        dd($user);
         return view('users.edit', $user);
     }
 

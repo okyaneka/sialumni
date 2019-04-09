@@ -42,7 +42,7 @@
             </div>
             @empty ( !auth()->user()->group )
             <hr>
-            <div class="h4"><span class="font-weight-light">Link grup telegram : </span><a href="{{ auth()->user()->group }}">{{ auth()->user()->group }}</a></div>
+            <div class="h4"><span class="font-weight-light">Link grup telegram : </span><a href="{{ auth()->user()->group->link }}" target="_blank">{{ auth()->user()->group->link }}</a></div>
             @endempty
         </div>
     </div>

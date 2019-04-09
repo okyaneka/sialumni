@@ -74,7 +74,7 @@
                         <div class="d-flex justify-content-between mb-3">
                             <div class="col text-left">Link grup telegram</div>
                             <div class="col text-right">
-                                <a href="{!! auth()->user()->group ?: '#' !!}">{{ auth()->user()->group ?: '-' }}
+                                <a href="{!! auth()->user()->group->link ?: '#' !!}" target="_blank">{{ auth()->user()->group->link ?: '-' }}
                             </div>
                         </div>
                     </div>

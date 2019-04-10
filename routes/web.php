@@ -15,6 +15,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::match(['get', 'post'], '/telegram', 'TelegramController@handle');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

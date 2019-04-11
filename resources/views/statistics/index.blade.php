@@ -94,9 +94,15 @@
 		var ctx = $('#byAlumnus');
 		var labels = [ @foreach ($by_alumnus as $data) {{ $data['Tahun'].',' }} @endforeach ];
 		var datas = [ @foreach ($by_alumnus as $data) {{ $data['Jumlah'].',' }} @endforeach ];
-		var color = '{{ rand(0,255).','.rand(0,255).','.rand(0,255) }}';
-		var backgrounds = 'rgba('+color+',0.2)';
-		var borderColors = 'rgb('+color+')';
+		var color = []
+		var backgrounds = [];
+		var borderColors = [];
+		color[0] = '{{ rand(0,255).','.rand(0,255).','.rand(0,255) }}';
+		color[1] = '{{ rand(0,255).','.rand(0,255).','.rand(0,255) }}';
+		backgrounds[0] = 'rgba('+color[0]+',0.2)';
+		backgrounds[1] = 'rgba('+color[1]+',0.2)';
+		borderColors[0] = 'rgb('+color[0]+')';
+		borderColors[1] = 'rgb('+color[1]+')';
 
 		var byAlumnus = new Chart(ctx, {
 			type: 'bar',
@@ -105,39 +111,39 @@
 				datasets: [{
 					label: ['Jumlah Pendaftar'],
 					data: datas,
-					backgroundColor: backgrounds,
-					borderColor: borderColors,
+					backgroundColor: backgrounds[0],
+					borderColor: borderColors[0],
 					borderWidth: 1,
 				}, {
 					label: 'Jumlah Pendaftar',
 					data: datas,
-					backgroundColor: backgrounds[0],
-					borderColor: borderColors[0],
-        		    type: 'line'
-        		}]
-        	},
-        	options: {
-        		scales: {
-        			yAxes: [{
-        				ticks: {
-        					beginAtZero: true
-        				}
-        			}]
-        		}
-        	}
-        });
+					backgroundColor: backgrounds[1],
+					borderColor: borderColors[1],
+					type: 'line'
+				}]
+			},
+			options: {
+				scales: {
+					yAxes: [{
+						ticks: {
+							beginAtZero: true
+						}
+					}]
+				}
+			}
+		});
 
 		ctx = $('#byDepartment');
-		labels = [ @foreach ($by_department as $data) '{{ $data['Jurusan'] }}', @endforeach ];
+		labels = [ @foreach ($by_department as $data) '{{ $data['Jurusan'] ?: 'Invalid' }}', @endforeach ];
 		datas = [ @foreach ($by_department as $data) {{ $data['Jumlah'].',' }} @endforeach ];
 		color = [ @foreach ($by_department as $data) '{{ rand(0,255).','.rand(0,255).','.rand(0,255) }}', @endforeach ];
 		backgrounds = [];
-		for (var i = 0; i < color.length; i++) {
-			backgrounds[i] = 'rgba('+color+',0.2)';
-		}
 		borderColors = [];
 		for (var i = 0; i < color.length; i++) {
-			borderColors[i] = 'rgb('+color+')';
+			backgrounds[i] = 'rgba('+color[i]+',0.2)';
+		}
+		for (var i = 0; i < color.length; i++) {
+			borderColors[i] = 'rgb('+color[i]+')';
 		}
 
 		var byDepartment = new Chart(ctx, {        	
@@ -155,16 +161,23 @@
 		});
 
 		ctx = $('#byStatus');
-		labels = [ @foreach ($by_status as $data) '{{ App\Status::where('code', $data['Status'])->first()->status }}', @endforeach ];
+		labels = [ @foreach ($by_status as $data) 
+		@if (is_null(App\Status::where('code', $data['Status'])->first()))
+		'{{ 'Invalid' }}'
+		@else
+		'{{ App\Status::where('code', $data['Status'])->first()->status }}'
+		@endif, 
+		@endforeach ];
 		datas = [ @foreach ($by_status as $data) {{ $data['Jumlah'].',' }} @endforeach ];
 		color = [ @foreach ($by_status as $data) '{{ rand(0,255).','.rand(0,255).','.rand(0,255) }}', @endforeach ];
+		
 		backgrounds = [];
 		for (var i = 0; i < color.length; i++) {
-			backgrounds[i] = 'rgba('+color+',0.2)';
+			backgrounds[i] = 'rgba('+color[i]+',0.2)';
 		}
 		borderColors = [];
 		for (var i = 0; i < color.length; i++) {
-			borderColors[i] = 'rgb('+color+')';
+			borderColors[i] = 'rgb('+color[i]+')';
 		}
 
 		var byDepartment = new Chart(ctx, {        	
@@ -182,16 +195,16 @@
 		});
 
 		ctx = $('#byGrad');
-		labels = [ @foreach ($by_grad as $data) '{{ $data['Lulusan'] }}', @endforeach ];
+		labels = [ @foreach ($by_grad as $data) '{{ $data['Lulusan'] ?: 'Invalid' }}', @endforeach ];
 		datas = [ @foreach ($by_grad as $data) {{ $data['Jumlah'].',' }} @endforeach ];
 		color = [ @foreach ($by_grad as $data) '{{ rand(0,255).','.rand(0,255).','.rand(0,255) }}', @endforeach ];
 		backgrounds = [];
 		for (var i = 0; i < color.length; i++) {
-			backgrounds[i] = 'rgba('+color+',0.2)';
+			backgrounds[i] = 'rgba('+color[i]+',0.2)';
 		}
 		borderColors = [];
 		for (var i = 0; i < color.length; i++) {
-			borderColors[i] = 'rgb('+color+')';
+			borderColors[i] = 'rgb('+color[i]+')';
 		}
 
 		var byDepartment = new Chart(ctx, {        	
@@ -209,16 +222,16 @@
 		});
 
 		ctx = $('#byRegion');
-		labels = [ @foreach ($by_region as $data) '{{ $data['Desa'] }}', @endforeach ];
+		labels = [ @foreach ($by_region as $data) '{{ $data['Desa'] ?: 'Invalid' }}', @endforeach ];
 		datas = [ @foreach ($by_region as $data) {{ $data['Jumlah'].',' }} @endforeach ];
 		color = [ @foreach ($by_region as $data) '{{ rand(0,255).','.rand(0,255).','.rand(0,255) }}', @endforeach ];
 		backgrounds = [];
 		for (var i = 0; i < color.length; i++) {
-			backgrounds[i] = 'rgba('+color+',0.2)';
+			backgrounds[i] = 'rgba('+color[i]+',0.2)';
 		}
 		borderColors = [];
 		for (var i = 0; i < color.length; i++) {
-			borderColors[i] = 'rgb('+color+')';
+			borderColors[i] = 'rgb('+color[i]+')';
 		}
 
 		var byDepartment = new Chart(ctx, {        	

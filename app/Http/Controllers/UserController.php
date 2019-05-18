@@ -16,7 +16,26 @@ class UserController extends Controller
      */
     public function index(User $model)
     {
-        return view('users.index', ['users' => $model->where('type',User::DEFAULT_TYPE)->paginate(15)]);
+        $filter = [['type','=',User::DEFAULT_TYPE]];
+        if (!empty($_GET['submit'])) {
+            if (!empty($_GET['nama'])) 
+                $filter[] = ['name', 'like', '%'.$_GET['nama'].'%'];
+
+            if (!empty($_GET['jurusan'])) 
+                $filter[] =  ['department', '=', $_GET['jurusan']];
+
+            if (!empty($_GET['status']))
+                $filter[] = ['status', '=', $_GET['status']];
+
+            if (!empty($_GET['tahun']))
+                $filter[] = ['grad', '=', $_GET['tahun']];
+
+        } elseif (!empty($_GET['nama'])) {
+            $filter[] = ['name', 'like', '%'.$_GET['nama'].'%'];
+        }
+
+        $users = $model->where($filter)->paginate(15);
+        return view('users.index', ['users' => $users]);
     }
 
     /**
@@ -83,9 +102,9 @@ class UserController extends Controller
     {
         $user->update(
             $request->merge(['password' => Hash::make($request->get('password'))])
-                ->except(
-                    [$request->get('password') ? '' : 'password']
-                )
+            ->except(
+                [$request->get('password') ? '' : 'password']
+            )
         );
 
         return redirect()->route('user.index')->withStatus(__('User successfully updated.'));

@@ -29,7 +29,13 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('profile/edit', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
 	Route::put('profile/edit', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
+
 	Route::get('statistic', ['as' => 'statistic.index', 'uses' => 'StatisticController@index']);
+	Route::get('statistic/last5years', ['as' => 'statistic.last5years', 'uses' => 'StatisticController@last5years']);
+	Route::get('statistic/department', ['as' => 'statistic.department', 'uses' => 'StatisticController@department']);
+	Route::get('statistic/status', ['as' => 'statistic.status', 'uses' => 'StatisticController@status']);
+	Route::get('statistic/grad', ['as' => 'statistic.grad', 'uses' => 'StatisticController@grad']);
+	Route::get('statistic/region', ['as' => 'statistic.region', 'uses' => 'StatisticController@region']);
 
 	Route::middleware('is_admin')->group(function () {
 		Route::get('/admin', 'AdminController@admin')->name('admin');

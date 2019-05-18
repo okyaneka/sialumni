@@ -3,8 +3,8 @@
         <div class="col-lg-3 order-lg-2">
             <div class="card-profile-image">
                 <a href="#">
-                        <img src="{{ asset('argon') }}/img/theme/user.png" class="rounded-circle">
-                    </a>
+                    <img src="{{ asset('argon') }}/img/theme/user.png" class="rounded-circle">
+                </a>
             </div>
         </div>
     </div>
@@ -16,6 +16,10 @@
 
             @if (auth()->user()->id == $user->id)
             <a href="{{ route('profile.edit') }}" class="btn btn-sm btn-default float-right">{{ __('Edit profil') }}</a>
+            @endif
+
+            @if (auth()->user()->isAdmin())
+            <a href="{{ route('user.edit', $user) }}" class="btn btn-sm btn-default float-right">{{ __('Edit alumni') }}</a>
             @endif
         </div>
     </div>
@@ -69,7 +73,11 @@
             <div class="d-flex justify-content-between mb-3">
                 <div class="col text-left">Link grup telegram</div>
                 <div class="col text-right">
-                    <a href="{!! $user->group->link ?: '#' !!}" target="_blank">{{ substr($user->group->link ,0,25).'...' ?: '-' }}
+                    @isset ($user->group->link)
+                    <a href="{!! $user->group->link ?: '#' !!}" target="_blank">{{ substr($user->group->link ,0,25).'...' ?: '-' }}</a>
+                    @else
+                    <span class="text-muted">Belum terdapat link grup yang terdaftar</span>
+                    @endisset
                 </div>
             </div>
         </div>

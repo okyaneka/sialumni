@@ -28,9 +28,9 @@
                     @endif
                     @endforeach
                     @if (count($_GET) > 1)
-                        <span class="px-2 mx-1 badge badge-default text-white">
-                            <a href="{{ url()->current() }}">Hapus semua filter</a>
-                        </span> 
+                    <span class="px-2 mx-1 badge badge-default text-white">
+                        <a href="{{ url()->current() }}">Hapus semua filter</a>
+                    </span> 
                     @endif
                 </form>
 
@@ -76,7 +76,7 @@
                                                 @for ($i = DB::table('users')->min('grad'); $i <= DB::table('users')->max('grad'); $i++)
                                                 <option {{ isset($_GET['tahun']) && ($_GET['tahun'] == $i) ? 'selected' : '' }} value="{{ $i }}">{{ $i }}</option>
                                                 @endfor
-                                                
+
                                             </select>
                                         </div>
                                     </div>
@@ -90,16 +90,14 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12">
-                @if (session('status'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ $users }}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                @endif
+            @if (session('status'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('status') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
+            @endif
             <div class="alert alert-primary alert-dismissible fade show">
                 @if($users->total() == 0)
                 {{ 'Tidak ada entri' }}
@@ -111,9 +109,8 @@
                 </button>
             </div>
             <div class="card shadow">
-
                 <div class="table-responsive">
-                    <table class="table align-items-center table-flush">
+                    <table class="table align-items-center">
                         <thead class="thead-light">
                             <tr>
                                 <th scope="col">{{ __('Name') }}</th>

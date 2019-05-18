@@ -84,11 +84,14 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        $user = array_push([
+        // $user = array_push([
+            // 'departments' => \App\Department::all(),
+            // 'statuses' => \App\Status::all(),
+        // ], $user);
+        return view('users.edit', ['user' => $user,
             'departments' => \App\Department::all(),
             'statuses' => \App\Status::all(),
-        ], $user);
-        return view('users.edit', $user);
+        ]);
     }
 
     /**
@@ -98,7 +101,7 @@ class UserController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(UserRequest $request, User  $user)
+    public function update(UserRequest $request, User $user)
     {
         $user->update(
             $request->merge(['password' => Hash::make($request->get('password'))])

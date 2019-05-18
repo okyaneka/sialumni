@@ -93,9 +93,32 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Request::is('statistic*') ? 'active' : '' }}" href="{{ route('statistic.index') }}">
+                    <a class="nav-link {{ Request::is('statistic*') ? 'active' : '' }}" href="#statistic" data-toggle="collapse" role="button" aria-expanded="true">
                         <i class="ni ni-chart-bar-32 text-green"></i> {{ __('Statistik') }}
                     </a>
+
+                    <div id="statistic" class="collapse bg-secondary {{ Request::is('statistic*') ? 'show' : '' }}">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item {{ Request::is('statistic') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('statistic.index') }}">Rangkuman</a>
+                            </li>
+                            <li class="nav-item {{ Request::is('statistic/last5years') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('statistic.last5years') }}">5 Tahun Terakhir</a>
+                            </li>
+                            <li class="nav-item {{ Request::is('statistic/department') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('statistic.department') }}">Jurusan</a>
+                            </li>
+                            <li class="nav-item {{ Request::is('statistic/status') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('statistic.status') }}">Status</a>
+                            </li>
+                            <li class="nav-item {{ Request::is('statistic/grad') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('statistic.grad') }}">Tahun Lulus</a>
+                            </li>
+                            <li class="nav-item {{ Request::is('statistic/region') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('statistic.region') }}">Wilayah</a>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('department*') || Request::is('status*') || Request::is('group*') ? 'active' : '' }}" href="#master-data" data-toggle="collapse" role="button" aria-expanded="true"

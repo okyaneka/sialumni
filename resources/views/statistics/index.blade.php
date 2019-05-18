@@ -185,7 +185,7 @@
 			borderColors[i] = 'rgb('+color[i]+')';
 		}
 
-		var byDepartment = new Chart(ctx, {        	
+		var byStatus = new Chart(ctx, {        	
 			type: 'pie',
 			data: {
 				labels: labels,
@@ -212,7 +212,7 @@
 			borderColors[i] = 'rgb('+color[i]+')';
 		}
 
-		var byDepartment = new Chart(ctx, {        	
+		var byGrad = new Chart(ctx, {        	
 			type: 'pie',
 			data: {
 				labels: labels,
@@ -239,7 +239,7 @@
 			borderColors[i] = 'rgb('+color[i]+')';
 		}
 
-		var byDepartment = new Chart(ctx, {        	
+		var byRegion = new Chart(ctx, {        	
 			type: 'pie',
 			data: {
 				labels: labels,

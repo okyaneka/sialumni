@@ -58,31 +58,47 @@ class StatisticController extends Controller
     function last5yearS()
     {
         $statistics = User::selectRaw('year(created_at) as Tahun, count(name) as Jumlah')
-                ->where('type','default')
-                ->groupBy('Tahun')
-                ->orderBy('Tahun', 'asc')
-                ->limit('5')
-                ->get();
+            ->where('type','default')
+            ->groupBy('Tahun')
+            ->orderBy('Tahun', 'asc')
+            ->limit('5')
+            ->get();
         return view('statistics.last5years', ['statistics' => $statistics]);
     }
 
     function department()
     {
-        echo 'Department';
+        $statistics = User::selectRaw('department as Jurusan, count(name) as Jumlah')
+            ->where('type','default')
+            ->groupBy('Jurusan')
+            ->get();
+        return view('statistics.department', ['statistics' => $statistics]);
     }
 
     function status()
     {
-        echo 'Status';
+        $statistics = User::selectRaw('status as Status, count(name) as Jumlah')
+            ->where('type','default')
+            ->groupBy('Status')
+            ->get();
+        return view('statistics.status', ['statistics' => $statistics]);
     }
 
     function grad()
     {
-        echo 'Grad';
+        $statistics = User::selectRaw('grad as Lulusan, count(name) as Jumlah')
+            ->where('type','default')
+            ->groupBy('Lulusan')
+            ->get();
+        return view('statistics.grad', ['statistics' => $statistics]);
     }
     
     function region()
     {
-        echo 'Region';
+        $statistics = User::selectRaw('address as Desa, count(name) as Jumlah')
+            ->where('type','default')
+            ->groupBy('Desa')
+            ->get();
+        return view('statistics.region', ['statistics' => $statistics]);
     }
 }

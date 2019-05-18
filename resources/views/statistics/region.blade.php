@@ -1,7 +1,7 @@
-@extends('layouts.app', ['title' => __('Pendaftar 5 Tahun Terakhir')])
+@extends('layouts.app', ['title' => __('Wilayah')])
 
 @section('content')
-@include('users.partials.header', ['title' => __('Pendaftar 5 Tahun Terakhir')])
+@include('users.partials.header', ['title' => __('Wilayah')])
 
 <div class="container-fluid mt-5">
 	<div class="row align-items-center">
@@ -21,14 +21,14 @@
 						<table class="table bg-white">
 							<thead class="thead-light">
 								<tr>
-									<th scope="col">Tahun</th>
+									<th scope="col">Desa</th>
 									<th scope="col" class="text-right">Jumlah</th>
 								</tr>
 							</thead>
 							<tbody>
 								@foreach ($statistics as $data)
 								<tr>
-									<td>{{ $data->Tahun }}</td>
+									<td>{{ $data->Desa }}</td>
 									<td class="text-right">{{ $data->Jumlah }}</td>
 								</tr>
 								@endforeach
@@ -49,45 +49,30 @@
 <script type="text/javascript">
 	$(function () {
 		var ctx = $('#chart');
-		var labels = [ @foreach ($statistics as $data) {{ $data['Tahun'].',' }} @endforeach ];
+		var labels = [ @foreach ($statistics as $data) '{{ $data['Desa'] ?: 'Invalid' }}', @endforeach ];
 		var datas = [ @foreach ($statistics as $data) {{ $data['Jumlah'].',' }} @endforeach ];
-		var color = []
+		var color = [ @foreach ($statistics as $data) '{{ rand(0,255).','.rand(0,255).','.rand(0,255) }}', @endforeach ];
 		var backgrounds = [];
-		var borderColors = [];
-		color[0] = '{{ rand(0,255).','.rand(0,255).','.rand(0,255) }}';
-		color[1] = '{{ rand(0,255).','.rand(0,255).','.rand(0,255) }}';
-		backgrounds[0] = 'rgba('+color[0]+',0.2)';
-		backgrounds[1] = 'rgba('+color[1]+',0.2)';
-		borderColors[0] = 'rgb('+color[0]+')';
-		borderColors[1] = 'rgb('+color[1]+')';
+		var borderColors = [];		
+		for (var i = 0; i < color.length; i++) {
+			backgrounds[i] = 'rgba('+color[i]+',0.2)';
+		}
+		for (var i = 0; i < color.length; i++) {
+			borderColors[i] = 'rgb('+color[i]+')';
+		}
 
-		var statistics = new Chart(ctx, {
-			type: 'bar',
+		var statistics = new Chart(ctx, {        	
+			type: 'pie',
 			data: {
 				labels: labels,
 				datasets: [{
-					label: ['Jumlah Pendaftar'],
 					data: datas,
-					backgroundColor: backgrounds[0],
-					borderColor: borderColors[0],
+					backgroundColor: backgrounds,
+					borderColor: borderColors,
 					borderWidth: 1,
-				}, {
-					label: 'Jumlah Pendaftar',
-					data: datas,
-					backgroundColor: backgrounds[1],
-					borderColor: borderColors[1],
-					type: 'line'
 				}]
 			},
-			options: {
-				scales: {
-					yAxes: [{
-						ticks: {
-							beginAtZero: true
-						}
-					}]
-				}
-			}
+			options : {}
 		});
 	});
 </script>

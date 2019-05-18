@@ -24,13 +24,13 @@
                         <a class="h4 mb-0 text-light breadcrumb-item text-uppercase d-none d-lg-inline-block" href="{{ route('statistic.index') }}">{{ __('Statistik') }}</a>
                         @if (Route::is('statistic.last5years'))
                             <a class="h4 mb-0 text-white breadcrumb-item active text-uppercase d-none d-lg-inline-block" href="{{ route('statistic.last5years') }}">5 Tahun Terakhir</a>
-                        @elseif (Route::is('statistic/department'))
+                        @elseif (Route::is('statistic.department'))
                             <a class="h4 mb-0 text-white breadcrumb-item active text-uppercase d-none d-lg-inline-block" href="{{ route('statistic.department') }}">Jurusan</a>
-                        @elseif (Route::is('statistic/status'))
+                        @elseif (Route::is('statistic.status'))
                             <a class="h4 mb-0 text-white breadcrumb-item active text-uppercase d-none d-lg-inline-block" href="{{ route('statistic.status') }}">Status</a>
-                        @elseif (Route::is('statistic/grad'))
+                        @elseif (Route::is('statistic.grad'))
                             <a class="h4 mb-0 text-white breadcrumb-item active text-uppercase d-none d-lg-inline-block" href="{{ route('statistic.grad') }}">Tahun Lulus</a>
-                        @elseif (Route::is('statistic/region'))
+                        @elseif (Route::is('statistic.region'))
                             <a class="h4 mb-0 text-white breadcrumb-item active text-uppercase d-none d-lg-inline-block" href="{{ route('statistic.region') }}">Wilayah</a>
                         @endif
                     @endif

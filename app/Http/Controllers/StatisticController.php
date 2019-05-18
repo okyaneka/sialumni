@@ -54,4 +54,35 @@ class StatisticController extends Controller
 
     	return view('statistics.index', $statistics);
     }
+
+    function last5yearS()
+    {
+        $statistics = User::selectRaw('year(created_at) as Tahun, count(name) as Jumlah')
+                ->where('type','default')
+                ->groupBy('Tahun')
+                ->orderBy('Tahun', 'asc')
+                ->limit('5')
+                ->get();
+        return view('statistics.last5years', ['statistics' => $statistics]);
+    }
+
+    function department()
+    {
+        echo 'Department';
+    }
+
+    function status()
+    {
+        echo 'Status';
+    }
+
+    function grad()
+    {
+        echo 'Grad';
+    }
+    
+    function region()
+    {
+        echo 'Region';
+    }
 }

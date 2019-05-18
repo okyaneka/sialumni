@@ -8,76 +8,81 @@
 	<div class="row">
 		{{-- By Alumnus --}}
 		<div class="col-lg-6 mb-3">
-			<div class="card bg-secondary shadow">
+			<div class="card bg-secondary shadow text-center">
 				<div class="card-header bg-white border-0">
-					<div class="row align-items-center">
-						<div class="col">
-							<h3 class="mb-0">{{ __('Jumlah Pendaftar 5 Tahun Terakhir') }}</h3>
-						</div>
+					<div class="col">
+						<h3 class="mb-0">{{ __('Jumlah Pendaftar 5 Tahun Terakhir') }}</h3>
 					</div>
 				</div>
 				<div class="card-body">
 					<canvas id="byAlumnus"></canvas>
 				</div>
+				<div class="card-footer text-muted">
+					<a href="{{ route('statistic.last5years') }}">Selengkapnya...</a>
+				</div>
 			</div>
 		</div>
 		{{-- By Department --}}
 		<div class="col-lg-6 mb-3">
-			<div class="card bg-secondary shadow">
+			<div class="card bg-secondary shadow text-center">
 				<div class="card-header bg-white border-0">
-					<div class="row align-items-center">
-						<div class="col">
-							<h3 class="mb-0">{{ __('Berdasarkan Jurusan') }}</h3>
-						</div>
+					<div class="col">
+						<h3 class="mb-0">{{ __('Berdasarkan Jurusan') }}</h3>
 					</div>
 				</div>
 				<div class="card-body">
 					<canvas id="byDepartment"></canvas>
 				</div>
+				<div class="card-footer text-muted">
+					<a href="{{ route('statistic.department') }}">Selengkapnya...</a>
+				</div>
 			</div>
 		</div>
 		{{-- By Status --}}
 		<div class="col-lg-6 mb-3">
-			<div class="card bg-secondary shadow">
+			<div class="card bg-secondary shadow text-center">
 				<div class="card-header bg-white border-0">
-					<div class="row align-items-center">
-						<div class="col">
-							<h3 class="mb-0">{{ __('Berdasarkan Status Lulusan') }}</h3>
-						</div>
+					<div class="col">
+						<h3 class="mb-0">{{ __('Berdasarkan Status Lulusan') }}</h3>
 					</div>
 				</div>
 				<div class="card-body">
 					<canvas id="byStatus"></canvas>
 				</div>
+				<div class="card-footer text-muted">
+					<a href="{{ route('statistic.status') }}">Selengkapnya...</a>
+				</div>
 			</div>
 		</div>
 		{{-- By Grad --}}
 		<div class="col-lg-6 mb-3">
-			<div class="card bg-secondary shadow">
+			<div class="card bg-secondary shadow text-center">
 				<div class="card-header bg-white border-0">
-					<div class="row align-items-center">
-						<div class="col">
-							<h3 class="mb-0">{{ __('Tahun Lulusan') }}</h3>
-						</div>
+					<div class="col">
+						<h3 class="mb-0">{{ __('Tahun Lulusan') }}</h3>
 					</div>
 				</div>
 				<div class="card-body">
 					<canvas id="byGrad"></canvas>
 				</div>
+				<div class="card-footer text-muted">
+					<a href="{{ route('statistic.grad') }}">Selengkapnya...</a>
+				</div>
 			</div>
 		</div>
 		{{-- By Region --}}
 		<div class="col-lg-6 mb-3">
-			<div class="card bg-secondary shadow">
+			<div class="card bg-secondary shadow text-center">
 				<div class="card-header bg-white border-0">
-					<div class="row align-items-center">
-						<div class="col">
-							<h3 class="mb-0">{{ __('Berdasarkan Wilayah') }}</h3>
-						</div>
+					<div class="col">
+						<h3 class="mb-0">{{ __('Berdasarkan Wilayah') }}</h3>
 					</div>
 				</div>
 				<div class="card-body">
 					<canvas id="byRegion"></canvas>
+				</div>
+				<div class="card-footer text-muted">
+					<a href="{{ route('statistic.region') }}">Selengkapnya...</a>
 				</div>
 			</div>
 		</div>

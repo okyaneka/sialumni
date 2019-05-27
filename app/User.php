@@ -23,6 +23,9 @@ class User extends Authenticatable
         foreach ($this->fillable as $column) {
             if(empty($this->$column)) return FALSE;
         }
+
+        if (empty($this->statuses()->get()->toArray())) return FALSE;
+
         return TRUE;
     }
 
@@ -41,9 +44,9 @@ class User extends Authenticatable
      *
      * @return Status
      */
-    public function status()
+    public function statuses()
     {
-        return $this->hasOne('App\Status','code','status');
+        return $this->belongsToMany('App\Status', 'user_statuses', 'user_id', 'status_id')->withPivot('year', 'info');
     }
 
     /**
@@ -56,13 +59,75 @@ class User extends Authenticatable
         return $this->hasOne('App\Group','grad','grad');
     }
 
+    function getProvince()
+    {
+        try {
+            $provinces = json_decode(file_get_contents('http://dev.farizdotid.com/api/daerahindonesia/provinsi'))->semuaprovinsi;
+        } catch (\Exception $e) {
+            return $this->province;
+        }
+
+        foreach ($provinces as $province) {
+            if ($this->province == $province->id) {
+                return $province->nama;
+            }
+        }
+    }
+
+    function getDistrict()
+    {
+        try {
+
+            $districts = json_decode(file_get_contents("http://dev.farizdotid.com/api/daerahindonesia/provinsi/$this->province/kabupaten"))->kabupatens;
+        } catch (\Exception $e) {
+            return $this->district;
+        }
+
+        foreach ($districts as $district) {
+            if ($this->district == $district->id) {
+                return $district->nama;
+            }
+        }
+    }
+
+    function getSubDistrict()
+    {
+        try {
+            $subdistricts = json_decode(file_get_contents("http://dev.farizdotid.com/api/daerahindonesia/provinsi/kabupaten/$this->district/kecamatan"))->kecamatans;
+        } catch (\Exception $e) {
+            return $this->sub_district;
+        }
+
+        foreach ($subdistricts as $subdistrict) {
+            if ($this->sub_district == $subdistrict->id) {
+                return $subdistrict->nama;
+            }
+        }
+    }
+
+
+    function getAddress()
+    {
+        try {
+            $addresses = json_decode(file_get_contents("http://dev.farizdotid.com/api/daerahindonesia/provinsi/kabupaten/kecamatan/$this->sub_district/desa"))->desas;
+        } catch (\Exception $e) {
+            return $this->address;
+        }
+
+        foreach ($addresses as $address) {
+            if ($this->address == $address->id) {
+                return $address->nama;
+            }
+        }
+    }
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'pob', 'dob', 'street', 'address', 'sub_district', 'district', 'department', 'status', 'grad', 'phone', 'telegram',
+        'name', 'nis', 'email', 'password', 'pob', 'dob', 'street', 'province', 'gender', 'address', 'sub_district', 'district', 'department', 'grad', 'phone', 'telegram',
     ];
 
     /**

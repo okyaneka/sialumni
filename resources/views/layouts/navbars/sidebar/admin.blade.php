@@ -108,9 +108,9 @@
                             <li class="nav-item {{ Request::is('statistic/department') ? 'active' : '' }}">
                                 <a class="nav-link" href="{{ route('statistic.department') }}">Jurusan</a>
                             </li>
-                            <li class="nav-item {{ Request::is('statistic/status') ? 'active' : '' }}">
+                            {{-- <li class="nav-item {{ Request::is('statistic/status') ? 'active' : '' }}">
                                 <a class="nav-link" href="{{ route('statistic.status') }}">Status</a>
-                            </li>
+                            </li> --}}
                             <li class="nav-item {{ Request::is('statistic/grad') ? 'active' : '' }}">
                                 <a class="nav-link" href="{{ route('statistic.grad') }}">Tahun Lulus</a>
                             </li>

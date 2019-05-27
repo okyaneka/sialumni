@@ -22,10 +22,10 @@ class StatisticController extends Controller
     			->where('type','default')
     			->groupBy('Jurusan')
     			->get()->toArray(),
-    		'by_status'	=> User::selectRaw('status as Status, count(name) as Jumlah')
-    			->where('type','default')
-    			->groupBy('Status')
-    			->get()->toArray(),
+    		// 'by_status'	=> User::selectRaw('status as Status, count(name) as Jumlah')
+    		// 	->where('type','default')
+    		// 	->groupBy('Status')
+    		// 	->get()->toArray(),
     		'by_region' => User::selectRaw('address as Desa, count(name) as Jumlah')
     			->where('type','default')
     			->groupBy('Desa')

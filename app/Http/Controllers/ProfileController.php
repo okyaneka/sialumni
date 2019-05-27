@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProfileRequest;
 use App\Http\Requests\PasswordRequest;
 use Illuminate\Support\Facades\Hash;
+use DB;
 use Auth;
 use Exception;
 
@@ -23,9 +24,9 @@ class ProfileController extends Controller
      */
     public function show($id = '')
     {
-        $profile = $id ? Auth::user() : \App\User::find($id);
+        $user = $id ? Auth::user() : \App\User::find($id);
 
-        return view('profile.index', compact('profile'));
+        return view('profile.index', compact('user'));
     }
 
     /**
@@ -49,7 +50,48 @@ class ProfileController extends Controller
      */
     public function update(ProfileRequest $request)
     {
-        Auth::user()->update($request->all());
+        // Auth::user()->update($request->all());
+
+        $user = Auth::user();
+
+        $user->name = $request->name;
+        $user->gender = $request->gender;
+        $user->email = $request->email;
+        $user->province = $request->province;
+        $user->district = $request->district;
+        $user->sub_district = $request->sub_district;
+        $user->address = $request->address;
+        $user->street = $request->street;
+        $user->pob = $request->pob;
+        $user->dob = $request->dob;
+        $user->department = $request->department;
+        $user->grad = $request->grad;
+        $user->phone = $request->phone;
+        $user->telegram = $request->telegram;
+
+        // dd($request->toArray());
+
+        foreach ($request->status as $status) {
+            if (isset($status['id'])) {
+                DB::table('user_statuses')
+                    ->where('id', $status['id'])
+                    ->update([
+                        'user_id' => $user->id,
+                        'status_id' => $status['status_id'],
+                        'info' => $status['info'],
+                        'year' => $status['year'],
+                    ]);
+            } elseif(!empty($status['status_id'])) {
+                DB::table('user_statuses')->insert([
+                    'user_id' => $user->id,
+                    'status_id' => $status['status_id'],
+                    'info' => $status['info'],
+                    'year' => $status['year'],
+                ]);
+            }
+        }
+
+        $user->update();
 
         return back()->withStatus(__('Profile successfully updated.'));
     }

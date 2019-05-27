@@ -12,7 +12,7 @@ class Status extends Model
      * @var array
      */
     protected $fillable = [
-    	'code','status',
+    	'status',
     ];
 
     /**
@@ -20,8 +20,8 @@ class Status extends Model
      *
      * @return User
      */
-    public function user()
+    public function users()
     {
-        return $this->hasMany('App\User','status','code');
+        return $this->belongsToMany('App\User', 'user_statuses', 'status_id', 'user_id')->withPivot('year', 'info');;
     }
 }

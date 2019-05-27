@@ -8,7 +8,9 @@
             </div>
         </div>
     </div>
+
     <div class="card-body pt-0 pt-md-4 pb-5">
+
         <div class="text-center mt-md-7">
             <h3>
                 {{ auth()->user()->name }}
@@ -21,13 +23,16 @@
                     <i class="ni pin-3 mr-2"></i>{{ auth()->user()->street }}
                 @endempty
                 @empty ( !auth()->user()->address )
-                    {{ ', '.auth()->user()->address }}
+                    {{ ', '.auth()->user()->getAddress() }}
                 @endempty
                 @empty ( !auth()->user()->sub_district )
-                    {{ ', '.auth()->user()->sub_district }}
+                    {{ ', '.auth()->user()->getSubDistrict() }}
                 @endempty
                 @empty ( !auth()->user()->district )
-                    {{ ', '.auth()->user()->district }}
+                    {{ ', '.auth()->user()->getDistrict() }}
+                @endempty
+                @empty ( !auth()->user()->province )
+                    {{ ', '.auth()->user()->getProvince() }}
                 @endempty
             </div>
             <div class="h5">

@@ -52,19 +52,57 @@ class HomeController extends Controller
             'street' => 'required', 
             'address' => 'required', 
             'sub_district' => 'required', 
+            'province' => 'required',
             'district' => 'required', 
+            'gender' => 'required',
             'pob' => 'required|alpha', 
             'dob' => 'required|date', 
             'department' => 'required', 
-            'status' => 'required', 
             'grad' => 'required|numeric|digits:4', 
             'phone' => 'required|numeric|digits_between:9,14', 
             'telegram' => 'required|numeric|digits_between:9,14',
         ]);
 
         $user = Auth::user();
-        $user->update($request->all());
-        // $link = \App\Group::where('grad',$user->grad);
+
+        $user->name = $request->name;
+        $user->gender = $request->gender;
+        $user->email = $request->email;
+        $user->province = $request->province;
+        $user->district = $request->district;
+        $user->sub_district = $request->sub_district;
+        $user->address = $request->address;
+        $user->street = $request->street;
+        $user->pob = $request->pob;
+        $user->dob = $request->dob;
+        $user->department = $request->department;
+        $user->grad = $request->grad;
+        $user->phone = $request->phone;
+        $user->telegram = $request->telegram;
+
+        // dd($request->toArray());
+
+        foreach ($request->status as $status) {
+            if (isset($status['id'])) {
+                DB::table('user_statuses')
+                    ->where('id', $status['id'])
+                    ->update([
+                        'user_id' => $user->id,
+                        'status_id' => $status['status_id'],
+                        'info' => $status['info'],
+                        'year' => $status['year'],
+                    ]);
+            } else {
+                DB::table('user_statuses')->insert([
+                    'user_id' => $user->id,
+                    'status_id' => $status['status_id'],
+                    'info' => $status['info'],
+                    'year' => $status['year'],
+                ]);
+            }
+        }
+
+        $user->update();
         $link = '#';
         $link = '<a href="'.$link.'" target="_blank">'.$link.'</a>';
 

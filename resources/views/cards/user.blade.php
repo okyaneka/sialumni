@@ -29,7 +29,7 @@
                 {{ $user->name }}<span class="font-weight-light">, {{ \Carbon\Carbon::parse($user->dob)->age }} tahun</span>
             </h3>
             <div class="h5 font-weight-300">
-                <i class="ni location_pin mr-2"></i>{{ __($user->street.', '.$user->address.', '.$user->sub_district.', '.$user->district) }}
+                <i class="ni location_pin mr-2"></i>{{ __($user->street.', '.$user->getAddress().', '.$user->getSubDistrict().', '.$user->getDistrict()).', '.$user->getProvince() }}
             </div>
             <div class="h5">
                 <i class="ni business_briefcase-24 mr-2"></i>{{ __('Lulusan tahun '.$user->grad) }}
@@ -52,10 +52,18 @@
                 <div class="col text-left">Tahun lulus</div>
                 <div class="col text-right">{{ $user->grad }}</div>
             </div>
+            <hr>
             <div class="d-flex justify-content-between mb-3">
-                <div class="col text-left">Status</div>
-                <div class="col text-right">{{ \App\Status::where('code',$user->status)->first()->status }}</div>
+                <div class="col text-left"><strong>Status</strong></div>
             </div>
+            <?php $statuses = $user->statuses()->get() ?>
+            @foreach ($statuses as $status)
+            <div class="d-flex justify-content-between mb-3">
+                <div class="col text-left">
+                    {{ $status->status }} di <strong>{{ $status->pivot->info }}</strong> sampai {{ $status->pivot->year }}.
+                </div>
+            </div>
+            @endforeach
             <hr>
             <div class="d-flex justify-content-between mb-3">
                 <div class="col text-left">Nomor Telepon</div>

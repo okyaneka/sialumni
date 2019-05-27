@@ -45,8 +45,10 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        if (User::find($id)->isDataComplete()) {
-            return view('users.show', ['user' => User::find($id)]);
+        $user = User::find($id);
+
+        if ($user->isDataComplete()) {
+            return view('users.show', ['user' => $user]);
         }
 
         return abort(503, 'Invalid user data');

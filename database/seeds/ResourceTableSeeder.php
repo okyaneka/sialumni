@@ -17,16 +17,25 @@ class ResourceTableSeeder extends Seeder
         		'department' => 'Teknik Komputer Jaringan',
                 'created_at' => now(),
                 'updated_at' => now()
-        	],
+            ],
         ]);
 
         DB::table('statuses')->insert([
         	[
-        		'code' => 'L',
         		'status' => 'Melanjutkan Studi',
                 'created_at' => now(),
                 'updated_at' => now()
-        	],
+            ],
+            [
+                'status' => 'Bekerja',
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'status' => 'Wiraswasta',
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
         ]);
     }
 }

@@ -14,15 +14,16 @@ class CreateAlumnusTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
+            $table->enum('gender', ['M', 'F']);
             $table->string('pob')->nullable();
             $table->date('dob')->nullable();
             $table->string('street')->nullable();
             $table->string('address')->nullable();
             $table->string('sub_district')->nullable();
             $table->string('district')->nullable();
+            $table->string('province')->nullable();
             $table->string('department', 5)->nullable();
-            $table->string('status', 5)->nullable();
-            $table->year('grad')->nullable();
+            $table->string('grad', 4)->nullable();
             $table->string('phone', 14)->nullable();
             $table->string('telegram', 14)->nullable();
         });
@@ -38,13 +39,14 @@ class CreateAlumnusTable extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn([
                 'pob',
+                'gender',
                 'dob',
                 'street',
                 'address',
                 'sub_district',
                 'district',
+                'province',
                 'department',
-                'status',
                 'grad',
                 'phone',
                 'telegram',

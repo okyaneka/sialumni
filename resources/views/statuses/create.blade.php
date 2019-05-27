@@ -22,16 +22,6 @@
                             @csrf
 
                             <div class="pl-lg-4">
-                                <div class="form-group{{ $errors->has('code') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-code">{{ __('Kode Status Lulusan') }}</label>
-                                    <input type="text" name="code" id="input-code" class="form-control form-control-alternative{{ $errors->has('code') ? ' is-invalid' : '' }}" placeholder="{{ __('Kode Status Lulusan') }}" value="{{ old('code') }}" required>
-
-                                    @if ($errors->has('code'))
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $errors->first('code') }}</strong>
-                                        </span>
-                                    @endif
-                                </div>
                                 <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-status">{{ __('Status Lulusan') }}</label>
                                     <input type="text" name="status" id="input-status" class="form-control form-control-alternative{{ $errors->has('status') ? ' is-invalid' : '' }}" placeholder="{{ __('Status Lulusan') }}" value="{{ old('status') }}" required>

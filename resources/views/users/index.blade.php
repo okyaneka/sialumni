@@ -127,7 +127,7 @@
                             <tr>
                                 <td><a href="{{ route('user.show', $user->id) }}">{{ $user->name }}</a></td>
                                 <td>
-                                    {{ $user->street }}, {{ $user->address }}, {{ $user->sub_district }}, {{ $user->district }}
+                                    {{ $user->street.', '.$user->getAddress().', '.$user->getSubDistrict().', '.$user->getDistrict().', '.$user->getProvince() }}
                                 </td>
                                 <td>
                                     {{ $user->department }}

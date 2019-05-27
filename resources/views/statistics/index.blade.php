@@ -39,7 +39,7 @@
 			</div>
 		</div>
 		{{-- By Status --}}
-		<div class="col-lg-6 mb-3">
+		{{-- <div class="col-lg-6 mb-3">
 			<div class="card bg-secondary shadow text-center">
 				<div class="card-header bg-white border-0">
 					<div class="col">
@@ -53,7 +53,7 @@
 					<a href="{{ route('statistic.status') }}">Selengkapnya...</a>
 				</div>
 			</div>
-		</div>
+		</div> --}}
 		{{-- By Grad --}}
 		<div class="col-lg-6 mb-3">
 			<div class="card bg-secondary shadow text-center">
@@ -165,6 +165,7 @@
 			options : {}
 		});
 
+		{{-- 
 		ctx = $('#byStatus');
 		labels = [ @foreach ($by_status as $data) 
 		@if (is_null(App\Status::where('code', $data['Status'])->first()))
@@ -197,7 +198,8 @@
 				}]
 			},
 			options : {}
-		});
+		}); 
+		--}}
 
 		ctx = $('#byGrad');
 		labels = [ @foreach ($by_grad as $data) '{{ $data['Lulusan'] ?: 'Invalid' }}', @endforeach ];

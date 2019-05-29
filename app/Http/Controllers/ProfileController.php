@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProfileRequest;
 use App\Http\Requests\PasswordRequest;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
 use DB;
 use Auth;
 use Exception;
@@ -74,13 +75,13 @@ class ProfileController extends Controller
         foreach ($request->status as $status) {
             if (isset($status['id'])) {
                 DB::table('user_statuses')
-                    ->where('id', $status['id'])
-                    ->update([
-                        'user_id' => $user->id,
-                        'status_id' => $status['status_id'],
-                        'info' => $status['info'],
-                        'year' => $status['year'],
-                    ]);
+                ->where('id', $status['id'])
+                ->update([
+                    'user_id' => $user->id,
+                    'status_id' => $status['status_id'],
+                    'info' => $status['info'],
+                    'year' => $status['year'],
+                ]);
             } elseif(!empty($status['status_id'])) {
                 DB::table('user_statuses')->insert([
                     'user_id' => $user->id,
@@ -94,6 +95,24 @@ class ProfileController extends Controller
         $user->update();
 
         return back()->withStatus(__('Profile successfully updated.'));
+    }
+
+    public function update_avatar(Request $request){
+
+        $request->validate([
+            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        $user = Auth::user();
+
+        $avatarName = $user->id.'_avatar'.time().'.'.request()->avatar->getClientOriginalExtension();
+
+        $request->avatar->storeAs('avatars',$avatarName);
+
+        $user->avatar = $avatarName;
+        $user->update();
+
+        return back()->withStatus('You have successfully upload image.');
     }
 
     /**

@@ -92,7 +92,7 @@ class HomeController extends Controller
                         'info' => $status['info'],
                         'year' => $status['year'],
                     ]);
-            } else {
+            } elseif(!empty($status['status_id'])) {
                 DB::table('user_statuses')->insert([
                     'user_id' => $user->id,
                     'status_id' => $status['status_id'],

@@ -1,9 +1,9 @@
-<div class="card card-profile shadow">
+<div class="card card-profile shadow mt-lg-0 mt-md-7">
     <div class="row justify-content-center">
         <div class="col-lg-3 order-lg-2">
             <div class="card-profile-image">
                 <a href="#">
-                    <img src="{{ asset('argon') }}/img/theme/user.png" class="rounded-circle">
+                    <img src="{{ asset('storage/avatars/'.$user->avatar) }}" class="rounded-circle">
                 </a>
             </div>
         </div>
@@ -25,6 +25,11 @@
     </div>
     <div class="card-body pt-0 pt-md-4">
         <div class="text-center mt-md-5">
+            @if (Auth::user()->nis == $user->nis || Auth::user()->isAdmin())
+                <h4>
+                    NIS : {{ $user->nis }}
+                </h4>
+            @endif
             <h3>
                 {{ $user->name }}<span class="font-weight-light">, {{ \Carbon\Carbon::parse($user->dob)->age }} tahun</span>
             </h3>

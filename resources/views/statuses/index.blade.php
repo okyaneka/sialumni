@@ -33,7 +33,7 @@
                         <table class="table align-items-center table-flush">
                             <thead class="thead-light">
                                 <tr>
-                                    <th scope="col">{{ __('Kode') }}</th>
+                                    <th scope="col">{{ __('id') }}</th>
                                     <th scope="col">{{ __('Status Lulusan') }}</th>
                                     <th scope="col"></th>
                                 </tr>
@@ -41,7 +41,7 @@
                             <tbody>
                                 @foreach ($statuses as $status)
                                     <tr>
-                                        <td>{{ $status->code }}</td>
+                                        <td>{{ $status->id }}</td>
                                         <td>{{ $status->status }}</td>
                                         <td class="text-right">
                                             <div class="dropdown">

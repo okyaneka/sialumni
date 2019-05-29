@@ -15,7 +15,7 @@
                 <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <div class="media align-items-center">
                         <span class="avatar avatar-sm rounded-circle">
-                            <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/user.png">
+                            <img alt="Image placeholder" src="{{ asset('storage/avatars/'.auth()->user()->avatar) }}">
                         </span>
                     </div>
                 </a>
@@ -135,7 +135,7 @@
                 </div>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ Request::is('setting*') ? 'active' : '' }}" href="#">
+                <a class="nav-link {{ Request::is('setting*') ? 'active' : '' }}" href="{{ route('setting.get') }}">
                     <i class="ni ni-settings text-red"></i> {{ __('Pengaturan') }}
                 </a>
             </li>

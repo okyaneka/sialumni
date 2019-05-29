@@ -49,14 +49,10 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Status', 'user_statuses', 'user_id', 'status_id')->withPivot('year', 'info');
     }
 
-    /**
-     * Get the status for the user.
-     *
-     * @return Group
-     */
-    public function group()
+    function alumniStatus()
     {
-        return $this->hasOne('App\Group','grad','grad');
+        return empty($this->grad) ? 'Belum Aktif' : (date('Y') - $this->grad > 5 ? 'Tidak Aktif' : 'Aktif');
+        // ;
     }
 
     function getProvince()

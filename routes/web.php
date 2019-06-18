@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+	return view('welcome');
 });
 
 Route::match(['get', 'post'], '/telegram', 'TelegramController@handle');
@@ -30,23 +30,34 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/home', 'HomeController@update')->name('home.update');
 
 	Route::resource('user', 'UserController');
+
 	Route::get('profile', ['as' => 'profile', 'uses' => 'ProfileController@show']);
 	Route::get('profile/edit', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
 	Route::put('profile/edit', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
-	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
+	Route::put('setting/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
+	Route::put('setting/avatar', ['as' => 'profile.avatar', 'uses' => 'ProfileController@update_avatar']);
+	// Route::put('setting/email', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
 
 	Route::get('statistic', ['as' => 'statistic.index', 'uses' => 'StatisticController@index']);
-	Route::get('statistic/last5years', ['as' => 'statistic.last5years', 'uses' => 'StatisticController@last5years']);
+	Route::get('statistic/grad', ['as' => 'statistic.grad', 'uses' => 'StatisticController@grad']);
+	Route::get('statistic/origin', ['as' => 'statistic.origin', 'uses' => 'StatisticController@origin']);
 	Route::get('statistic/department', ['as' => 'statistic.department', 'uses' => 'StatisticController@department']);
 	Route::get('statistic/status', ['as' => 'statistic.status', 'uses' => 'StatisticController@status']);
-	Route::get('statistic/grad', ['as' => 'statistic.grad', 'uses' => 'StatisticController@grad']);
-	Route::get('statistic/region', ['as' => 'statistic.region', 'uses' => 'StatisticController@region']);
+	Route::get('statistic/gender', ['as' => 'statistic.gender', 'uses' => 'StatisticController@gender']);
 
 	Route::middleware('is_admin')->group(function () {
 		Route::get('/admin', 'AdminController@admin')->name('admin');
 		Route::resource('department', 'DepartmentController', ['except' => ['show']]);
 		Route::resource('status', 'StatusController', ['except' => ['show']]);
 		Route::resource('group', 'GroupController', ['except' => ['show']]);
+
+		Route::get('batch/user', 'UserBatchController@batch')->name('user.batch');
+		Route::put('batch/user', 'UserBatchController@insertBatch')->name('user.insert_batch');
+
+		Route::get('download', 'DownloadDataController@index')->name('download');
 	});
+
+	Route::get('setting', 'SettingController@get')->name('setting.get');
+	Route::post('setting', 'SettingController@set')->name('setting.set');
 });
 

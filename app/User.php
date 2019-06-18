@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
@@ -49,71 +50,82 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Status', 'user_statuses', 'user_id', 'status_id')->withPivot('year', 'info');
     }
 
-    function alumniStatus()
+    public function alumniStatus()
     {
         return empty($this->grad) ? 'Belum Aktif' : (date('Y') - $this->grad > 5 ? 'Tidak Aktif' : 'Aktif');
         // ;
     }
 
-    function getProvince()
+    public function getProvince()
     {
         try {
-            $provinces = json_decode(file_get_contents('http://dev.farizdotid.com/api/daerahindonesia/provinsi'))->semuaprovinsi;
-        } catch (\Exception $e) {
-            return $this->province;
-        }
-
-        foreach ($provinces as $province) {
-            if ($this->province == $province->id) {
-                return $province->nama;
+            if (empty($this->province)) {
+                return 'Belum terdata';
             }
+
+            foreach (json_decode(Storage::get('/origin/province')) as $province) {
+                if ($this->province == $province->id) {
+                    return trim($province->nama);
+                }
+            }
+        } catch (\Exception $e) {
+            Storage::put('/origin/province', json_encode(json_decode(file_get_contents('http://dev.farizdotid.com/api/daerahindonesia/provinsi'))->semuaprovinsi));
+            return $this->getProvince();
         }
     }
 
-    function getDistrict()
+    public function getDistrict()
     {
         try {
-
-            $districts = json_decode(file_get_contents("http://dev.farizdotid.com/api/daerahindonesia/provinsi/$this->province/kabupaten"))->kabupatens;
-        } catch (\Exception $e) {
-            return $this->district;
-        }
-
-        foreach ($districts as $district) {
-            if ($this->district == $district->id) {
-                return $district->nama;
+            if (empty($this->district)) {
+                return 'Belum terdata';
             }
+
+            foreach (json_decode(Storage::get('/origin/district/'.substr($this->district, 0, 2))) as $district) {
+                if ($this->district == $district->id) {
+                    return trim($district->nama);   
+                }
+            }
+        } catch (\Exception $e) {
+            Storage::put('/origin/district/'.$this->province, json_encode(json_decode(file_get_contents('http://dev.farizdotid.com/api/daerahindonesia/provinsi/'.substr($this->district, 0, 2).'/kabupaten'))->kabupatens));
+            return $this->getDistrict();
         }
     }
 
-    function getSubDistrict()
+    public function getSubDistrict()
     {
         try {
-            $subdistricts = json_decode(file_get_contents("http://dev.farizdotid.com/api/daerahindonesia/provinsi/kabupaten/$this->district/kecamatan"))->kecamatans;
-        } catch (\Exception $e) {
-            return $this->sub_district;
-        }
-
-        foreach ($subdistricts as $subdistrict) {
-            if ($this->sub_district == $subdistrict->id) {
-                return $subdistrict->nama;
+            if (empty($this->sub_district)) {
+                return 'Belum terdata';
             }
+
+            foreach (json_decode(Storage::get('/origin/sub_district/'.$this->district)) as $subdistrict) {
+                if ($this->sub_district == $subdistrict->id) {
+                    return trim($subdistrict->nama);
+                }
+            }
+        } catch (\Exception $e) {
+            Storage::put('/origin/sub_district/'.$this->district, json_encode(json_decode(file_get_contents("http://dev.farizdotid.com/api/daerahindonesia/provinsi/kabupaten/$this->district/kecamatan"))->kecamatans));
+            return $this->getSubDistrict();
         }
     }
 
 
-    function getAddress()
+    public function getAddress()
     {
         try {
-            $addresses = json_decode(file_get_contents("http://dev.farizdotid.com/api/daerahindonesia/provinsi/kabupaten/kecamatan/$this->sub_district/desa"))->desas;
-        } catch (\Exception $e) {
-            return $this->address;
-        }
-
-        foreach ($addresses as $address) {
-            if ($this->address == $address->id) {
-                return $address->nama;
+            if (empty($this->address)) {
+                return 'Belum terdata';
             }
+
+            foreach (json_decode(Storage::get('/origin/village/'.$this->sub_district)) as $address) {
+                if ($this->address == $address->id) {
+                    return trim($address->nama);
+                }
+            }
+        } catch (\Exception $e) {
+            Storage::put('/origin/village/'.$id, json_encode(json_decode(file_get_contents("http://dev.farizdotid.com/api/daerahindonesia/provinsi/kabupaten/kecamatan/$this->sub_district/desa"))->desas));
+            return $this->getAddress();
         }
     }
 

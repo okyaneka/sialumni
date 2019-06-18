@@ -6,7 +6,7 @@
 
     @if (session('status'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ session('status') }}
+        {!! session('status') !!}
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
@@ -20,7 +20,7 @@
             <input type="text" name="name" id="input-name" class="form-control form-control-alternative{{ $errors->has('name') ? ' is-invalid' : '' }}"
             placeholder="{{ __('Nama') }}" value="{{ old('name', $user->name) }}" required>                                
             @if ($errors->has('name'))
-            <span class="invalid-feedback" role="alert">
+            <span class="invalid-feedback" role="alert" style="display: block;">
                 <strong>{{ $errors->first('name') }}</strong>
             </span> 
             @endif
@@ -36,7 +36,7 @@
             </select>
 
             @if ($errors->has('gender'))
-            <span class="invalid-feedback" role="alert">
+            <span class="invalid-feedback" role="alert" style="display: block;">
                 <strong>{{ $errors->first('gender') }}</strong>
             </span> 
             @endif
@@ -45,11 +45,11 @@
         {{-- Provinsi --}}
         <div class="form-group{{ $errors->has('province') ? ' has-danger' : '' }}">
             <label class="form-control-label" for="input-province">Provinsi</label>
-            <select type="text" name="province" id="input-province" class="form-control form-control-alternative {{ $errors->has('province') ? ' is-invalid' : '' }}" placeholder="Provinsi" value="{{ old('province', $user->province) }}" required>
+            <select type="text" name="province" id="input-province" class="form-control form-control-alternative {{ $errors->has('province') ? ' is-invalid' : '' }}" placeholder="Provinsi">
 
             </select>
             @if ($errors->has('province'))
-            <span class="invalid-feedback" role="alert">
+            <span class="invalid-feedback" role="alert" style="display: block;">
                 <strong>{{ $errors->first('province') }}</strong>
             </span> 
             @endif
@@ -58,10 +58,10 @@
         {{-- Kabupaten --}}
         <div class="form-group{{ $errors->has('district') ? ' has-danger' : '' }}">
             <label class="form-control-label" for="input-district">{{ __('Kabupaten') }}</label>
-            <select type="text" name="district" id="input-district" class="form-control form-control-alternative {{ $errors->has('district') ? ' is-invalid' : '' }}" placeholder="{{ __('Kabupaten') }}" value="{{ old('district', $user->district) }}" required>
+            <select type="text" name="district" id="input-district" class="form-control form-control-alternative {{ $errors->has('district') ? ' is-invalid' : '' }}" placeholder="{{ __('Kabupaten') }}">
             </select>
             @if ($errors->has('district'))
-            <span class="invalid-feedback" role="alert">
+            <span class="invalid-feedback" role="alert" style="display: block;">
                 <strong>{{ $errors->first('district') }}</strong>
             </span> 
             @endif
@@ -70,10 +70,10 @@
         {{-- Kecamatan --}}
         <div class="form-group{{ $errors->has('sub_district') ? ' has-danger' : '' }}">
             <label class="form-control-label" for="input-sub_district">{{ __('Kecamatan') }}</label>
-            <select type="text" name="sub_district" id="input-sub_district" class="form-control form-control-alternative {{ $errors->has('sub_district') ? ' is-invalid' : '' }}" placeholder="{{ __('Kecamatan') }}" value="{{ old('sub_district', $user->sub_district) }}" required>
+            <select type="text" name="sub_district" id="input-sub_district" class="form-control form-control-alternative {{ $errors->has('sub_district') ? ' is-invalid' : '' }}" placeholder="{{ __('Kecamatan') }}">
             </select>
             @if ($errors->has('sub_district'))
-            <span class="invalid-feedback" role="alert">
+            <span class="invalid-feedback" role="alert" style="display: block;">
                 <strong>{{ $errors->first('sub_district') }}</strong>
             </span> 
             @endif
@@ -82,13 +82,13 @@
         {{-- Desa --}}
         <div class="form-group{{ $errors->has('address') ? ' has-danger' : '' }}">
             <label class="form-control-label" for="input-address">{{ __('Desa') }}</label>
-            <select type="text" name="address" id="input-address" class="form-control form-control-alternative {{ $errors->has('address') ? ' is-invalid' : '' }}" placeholder="{{ __('Desa') }}" value="{{ old('address',   $user->address) }}" required>
+            <select type="text" name="address" id="input-address" class="form-control form-control-alternative {{ $errors->has('address') ? ' is-invalid' : '' }}" placeholder="{{ __('Desa') }}">
             </select>
             <small class="form-text text-muted">
                 Desa / Kelurahan
             </small>
             @if ($errors->has('address'))
-            <span class="invalid-feedback" role="alert">
+            <span class="invalid-feedback" role="alert" style="display: block;">
                 <strong>{{ $errors->first('address') }}</strong>
             </span> 
             @endif
@@ -97,12 +97,12 @@
         {{-- Alamat --}}
         <div class="form-group{{ $errors->has('street') ? ' has-danger' : '' }}">
             <label class="form-control-label" for="input-street">{{ __('Alamat') }}</label>
-            <input type="text" name="street" id="input-street" class="form-control form-control-alternative {{ $errors->has('street') ? ' is-invalid' : '' }}" placeholder="{{ __('Alamat') }}" value="{{ old('street',  $user->street) }}" required>
+            <input type="text" name="street" id="input-street" class="form-control form-control-alternative {{ $errors->has('street') ? ' is-invalid' : '' }}" placeholder="{{ __('Alamat') }}" value="{{ old('street',  $user->street) }}">
             <small class="form-text text-muted">
                 Jalan / Dusun / RT / RW
             </small>
             @if ($errors->has('street'))
-            <span class="invalid-feedback" role="alert">
+            <span class="invalid-feedback" role="alert" style="display: block;">
                 <strong>{{ $errors->first('street') }}</strong>
             </span> 
             @endif
@@ -112,9 +112,9 @@
         {{-- Tempat Lahir --}}
         <div class="form-group{{ $errors->has('pob') ? ' has-danger' : '' }}">
             <label class="form-control-label" for="input-pob">{{ __('Tempat Lahir') }}</label>
-            <input type="text" name="pob" id="input-pob" class="form-control form-control-alternative {{ $errors->has('pob') ? ' is-invalid' : '' }}" placeholder="{{ __('Tempat Lahir') }}" value="{{ old('pob', $user->pob) }}" required>
+            <input type="text" name="pob" id="input-pob" class="form-control form-control-alternative {{ $errors->has('pob') ? ' is-invalid' : '' }}" placeholder="{{ __('Tempat Lahir') }}" value="{{ old('pob', $user->pob) }}">
             @if ($errors->has('pob'))
-            <span class="invalid-feedback" role="alert">
+            <span class="invalid-feedback" role="alert" style="display: block;">
                 <strong>{{ $errors->first('pob') }}</strong>
             </span> 
             @endif
@@ -123,9 +123,9 @@
         {{-- Tanggal Lahir --}}
         <div class="form-group{{ $errors->has('dob') ? ' has-danger' : '' }}">
             <label class="form-control-label" for="input-dob">{{ __('Tanggal Lahir') }}</label>
-            <input type="date" name="dob" id="input-dob" class="form-control form-control-alternative {{ $errors->has('dob') ? ' is-invalid' : '' }}" placeholder="{{ __('Tanggal Lahir') }}" value="{{ old('dob', $user->dob) }}" required>
+            <input type="text" name="dob" id="input-dob" class="form-control form-control-alternative datepicker {{ $errors->has('dob') ? ' is-invalid' : '' }}" placeholder="{{ __('Tanggal Lahir') }}" value="{{ old('dob', date('m/d/Y', strtotime($user->dob))) }}">
             @if ($errors->has('dob'))
-            <span class="invalid-feedback" role="alert">
+            <span class="invalid-feedback" role="alert" style="display: block;">
                 <strong>{{ $errors->first('dob') }}</strong>
             </span> 
             @endif
@@ -135,15 +135,15 @@
         {{-- Jurusan --}}
         <div class="form-group{{ $errors->has('department') ? ' has-danger' : '' }}">
             <label class="form-control-label" for="input-department">{{ __('Jurusan') }}</label>
-            <select name="department" id="input-department" class="form-control form-control-alternative {{ $errors->has('department') ? ' is-invalid' : '' }}" {{ empty($departments) ? 'disabled' : '' }}>
+            <select name="department" id="input-department" class="form-control form-control-alternative {{ $errors->has('department') ? ' is-invalid' : '' }}" {{ empty(\App\Department::all()) ? 'disabled' : '' }}>
                 <option {{ $user->department == '' ? 'selected' : '' }} value=''>- Silahkan pilih -</option>
-                @foreach ($departments as $department)
+                @foreach (\App\Department::all() as $department)
                 <option {{ $user->department == $department->code ? 'selected' : '' }} value="{{ $department->code }}">{{ $department->department }}</option>
                 @endforeach
             </select>
 
             @if ($errors->has('department'))
-            <span class="invalid-feedback" role="alert">
+            <span class="invalid-feedback" role="alert" style="display: block;">
                 <strong>{{ $errors->first('department') }}</strong>
             </span> 
             @endif
@@ -152,10 +152,10 @@
         {{-- Tahun Lulus --}}
         <div class="form-group{{ $errors->has('grad') ? ' has-danger' : '' }}">
             <label class="form-control-label" for="input-grad">{{ __('Tahun Lulus') }}</label>
-            <input type="text" name="grad" id="input-grad" class="form-control form-control-alternative {{ $errors->has('grad') ? ' is-invalid' : '' }}" placeholder="{{ __('Tahun Lulus') }}" value="{{ old('grad', $user->grad) }}" required>
+            <input type="text" name="grad" id="input-grad" class="form-control form-control-alternative {{ $errors->has('grad') ? ' is-invalid' : '' }}" placeholder="{{ __('Tahun Lulus') }}" value="{{ old('grad', $user->grad) }}">
 
             @if ($errors->has('grad'))
-            <span class="invalid-feedback" role="alert">
+            <span class="invalid-feedback" role="alert" style="display: block;">
                 <strong>{{ $errors->first('grad') }}</strong>
             </span> 
             @endif
@@ -166,9 +166,9 @@
         @if (count($user->statuses()->get()) == 0)
         <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
             <label class="form-control-label">{{ __('Status') }}</label>
-            <select name="status[n][status_id]" class="input-status form-control form-control-alternative {{ $errors->has('status') ? ' is-invalid' : '' }}" {{ empty($statuses) ? 'disabled' : '' }}>
+            <select name="status[n][status_id]" class="input-status form-control form-control-alternative {{ $errors->has('status') ? ' is-invalid' : '' }}" {{ empty(\App\Status::all()) ? 'disabled' : '' }}>
                 <option {{ $user->status == '' ? 'selected' : '' }} value=''>- Silahkan pilih -</option>
-                @foreach ($statuses as $status)
+                @foreach (\App\Status::all() as $status)
                 <option value="{{ $status->id }}">{{ $status->status }}</option>
                 @endforeach
             </select>
@@ -179,7 +179,7 @@
         <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
             <input type="hidden" name="status[{{ $s->id }}][id]" value="{{ $s->id }}">
             <label class="form-control-label">{{ __('Status') }}</label>
-            <select name="status[{{ $s->id }}][status_id]" class="input-status form-control form-control-alternative {{ $errors->has('status') ? ' is-invalid' : '' }}" {{ empty($statuses) ? 'disabled' : '' }}>
+            <select name="status[{{ $s->id }}][status_id]" class="input-status form-control form-control-alternative {{ $errors->has('status') ? ' is-invalid' : '' }}" {{ empty(\App\Status::all()) ? 'disabled' : '' }}>
                 <option value=''>- Silahkan pilih -</option>
                 @foreach ($statuses as $status)
                 <option {{ $s->pivot->status_id == $status->id ? 'selected' : '' }} value="{{ $status->id }}">{{ $status->status }}</option>
@@ -205,7 +205,7 @@
         @if ($s->id == 1 && count($user->statuses()->get()) < 2)
         <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
             <label class="form-control-label">{{ __('Status 2') }}</label>
-            <select name="status[n][status_id]" class="input-status form-control form-control-alternative {{ $errors->has('status') ? ' is-invalid' : '' }}" {{ empty($statuses) ? 'disabled' : '' }}>
+            <select name="status[n][status_id]" class="input-status form-control form-control-alternative {{ $errors->has('status') ? ' is-invalid' : '' }}" {{ empty(\App\Status::all()) ? 'disabled' : '' }}>
                 <option {{ $user->status == '' ? 'selected' : '' }} value=''>- Silahkan pilih -</option>
                 @foreach ($statuses as $status)
                 <option value="{{ $status->id }}">{{ $status->status }}</option>
@@ -220,7 +220,7 @@
         {{-- Telepon --}}
         <div class="form-group{{ $errors->has('phone') ? ' has-danger' : '' }}">
             <label class="form-control-label" for="input-phone">{{ __('Nomor Handphone') }}</label>
-            <input type="text" name="phone" id="input-phone" class="form-control form-control-alternative {{ $errors->has('phone') ? ' is-invalid' : '' }}" placeholder="{{ __('Nomor Handphone') }}" value="{{ old('phone', $user->phone) }}" required>
+            <input type="text" name="phone" id="input-phone" class="form-control form-control-alternative {{ $errors->has('phone') ? ' is-invalid' : '' }}" placeholder="{{ __('Nomor Handphone') }}" value="{{ old('phone', $user->phone) }}">
             @if ($errors->has('phone'))
             <span class="invalid-feedback" role="alert">
                 <strong>{{ $errors->first('phone') }}</strong>
@@ -231,9 +231,9 @@
         {{-- Telegram --}}
         <div class="form-group{{ $errors->has('telegram') ? ' has-danger' : '' }}">
             <label class="form-control-label" for="input-telegram">{{ __('Nomor Telegram') }}</label>
-            <input type="text" name="telegram" id="input-telegram" class="form-control form-control-alternative {{ $errors->has('telegram') ? ' is-invalid' : '' }}" placeholder="{{ __('Nomor Telegram') }}" value="{{ old('telegram', $user->telegram) }}" required>
+            <input type="text" name="telegram" id="input-telegram" class="form-control form-control-alternative {{ $errors->has('telegram') ? ' is-invalid' : '' }}" placeholder="{{ __('Nomor Telegram') }}" value="{{ old('telegram', $user->telegram) }}">
             @if ($errors->has('telegram'))
-            <span class="invalid-feedback" role="alert">
+            <span class="invalid-feedback" role="alert" style="display: block;">
                 <strong>{{ $errors->first('telegram') }}</strong>
             </span> 
             @endif
@@ -246,8 +246,11 @@
 </form>
 
 @push('js')
+<script src="{{ asset('argon') }}/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript">
     $(function() {
+        $('.datepicker').datepicker();
+
         function refresh(input, index) {
             if ($(input).nextAll().length == 0) {
                 $(input).after('<div class="form-row mt-3">'+
@@ -273,9 +276,9 @@
             if ($('.input-status').length < 2 && $(this).val() == 1) {
                 $(this).parent().after('<div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">'+
                     '<label class="form-control-label">{{ __('Status 2') }}</label>'+
-                    '<select name="status[m][status_id]" class="input-status form-control form-control-alternative {{ $errors->has('status') ? ' is-invalid' : '' }}" {{ empty($statuses) ? 'disabled' : '' }}>'+
+                    '<select name="status[m][status_id]" class="input-status form-control form-control-alternative {{ $errors->has('status') ? ' is-invalid' : '' }}" {{ empty(\App\Status::all()) ? 'disabled' : '' }}>'+
                     '<option {{ $user->status == '' ? 'selected' : '' }} value="">- Silahkan pilih -</option>'+
-                    @foreach ($statuses as $status)
+                    @foreach (\App\Status::all() as $status)
                     '<option value="{{ $status->id }}">{{ $status->status }}</option>'+
                     @endforeach
                     '</select></div>');
@@ -288,10 +291,10 @@
             }
         });
 
-        var prov_id = {{ $user->province }};
-        var kab_id = {{ $user->district }};
-        var kec_id = {{ $user->sub_district }};
-        var kel_id = {{ $user->address }};
+        var prov_id = {{ old('province', $user->province) ?: 'false' }};
+        var kab_id = {{ old('district', $user->district) ?: 'false' }};
+        var kec_id = {{ old('sub_district', $user->sub_district) ?: 'false' }};
+        var kel_id = {{ old('address', $user->address) ?: 'false' }};
 
         $.get('/api/provinsi', function(data, status) {
             selected = '';
@@ -303,7 +306,7 @@
                     selected = '';
                 }
 
-                if (val.id == null) {
+                if (val.id == false) {
                     $('#input-province').append('<option value="'+prov_id+'" selected>'+prov_id+'</option>');
                 } else {
                     $('#input-province').append('<option value="'+val.id+'" '+selected+'>'+val.nama+'</option>');
@@ -311,7 +314,7 @@
             });
         });
 
-        if (kab_id != false) {
+        if (prov_id != false) {
             $.get('/api/kabupaten/'+prov_id, function(data, status) {
                 $('#input-district').append('<option value="">- Silahkan pilih -</option>');
                 $.each(data, function(i, val) {

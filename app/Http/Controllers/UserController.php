@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use App\User;
+use App\Status;
+use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Hash;
 
@@ -15,27 +18,56 @@ class UserController extends Controller
      * @return \Illuminate\View\View
      */
     public function index(User $model)
-    {
-        $filter = [['type','=',User::DEFAULT_TYPE]];
-        if (!empty($_GET['submit'])) {
-            if (!empty($_GET['nama'])) 
-                $filter[] = ['name', 'like', '%'.$_GET['nama'].'%'];
+    {        
+        if (!empty($_GET['status']))
+            $model = Status::find($_GET['status'])->users();
+        // dd($model);
+            // $filter[] = ['status', '=', $_GET['status']];
 
-            if (!empty($_GET['jurusan'])) 
-                $filter[] =  ['department', '=', $_GET['jurusan']];
+        $model = $model->where('type','=',User::DEFAULT_TYPE);
 
-            if (!empty($_GET['status']))
-                $filter[] = ['status', '=', $_GET['status']];
+        $filter = [];
 
-            if (!empty($_GET['tahun']))
-                $filter[] = ['grad', '=', $_GET['tahun']];
-
-        } elseif (!empty($_GET['nama'])) {
+        // if (!empty($_GET['submit'])) {
+        if (!empty($_GET['nama'])) 
             $filter[] = ['name', 'like', '%'.$_GET['nama'].'%'];
+
+        if (!empty($_GET['jurusan'])) 
+            $filter[] =  ['department', '=', $_GET['jurusan']];
+
+        if (!empty($_GET['tahun']))
+            $filter[] = ['grad', '=', $_GET['tahun']];
+
+        if (!empty($_GET['gender']))
+            $filter[] = ['gender', '=', $_GET['gender']];
+
+        // return empty($this->grad) ? 'Belum Aktif' : (date('Y') - $this->grad > 5 ? 'Tidak Aktif' : 'Aktif');
+
+        // } elseif (!empty($_GET['nama'])) {
+        //     $filter[] = ['name', 'like', '%'.$_GET['nama'].'%'];
+        // }
+
+        if (!empty($_GET['alumnistatus'])) {
+            switch ($_GET['alumnistatus']) {
+                case 'aktif':
+                    $model = $model->whereBetween('grad',[(date('Y') - 5), date('Y')]);
+                    $filter[] = ['grad', 'like', '%%'];
+                    break;
+                case 'belum_aktif':
+                    $model = $model->whereNull('grad');
+                    $filter[] = ['grad', 'like', '%%'];
+                    break;
+                case 'tidak_aktif':
+                    $filter[] = ['grad','<',(date('Y') - 5)];
+                    break;
+                default:
+                    // code...
+                break;
+            }
         }
 
         $users = $model->where($filter)->paginate(15);
-        return view('users.index', ['users' => $users]);
+        return view('users.index', ['users' => $users, 'filter' => $filter]);
     }
 
     /**
@@ -47,11 +79,11 @@ class UserController extends Controller
     {
         $user = User::find($id);
 
-        if ($user->isDataComplete()) {
-            return view('users.show', ['user' => $user]);
-        }
+        // if ($user->isDataComplete()) {
+        return view('users.show', ['user' => $user]);
+        // }
 
-        return abort(503, 'Invalid user data');
+        // return abort(503, 'Invalid user data');
     }
 
     /**
@@ -103,14 +135,47 @@ class UserController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(UserRequest $request, User $user)
+    public function update(Request $request, User $user)
     {
-        $user->update(
-            $request->merge(['password' => Hash::make($request->get('password'))])
-            ->except(
-                [$request->get('password') ? '' : 'password']
-            )
-        );
+
+        $user->name = $request->name;
+        $user->gender = $request->gender;
+        $user->province = $request->province;
+        $user->district = $request->district;
+        $user->sub_district = $request->sub_district;
+        $user->address = $request->address;
+        $user->street = $request->street;
+        $user->pob = $request->pob;
+        $user->dob = date('Y-m-d', strtotime($request->dob));
+        $user->department = $request->department;
+        $user->grad = $request->grad;
+        $user->phone = $request->phone;
+        $user->telegram = $request->telegram;
+
+        // dd($request->toArray());
+
+        foreach ($request->status as $status) {
+            if (isset($status['id'])) {
+                DB::table('user_statuses')
+                ->where('id', $status['id'])
+                ->update([
+                    'user_id' => $user->id,
+                    'status_id' => $status['status_id'],
+                    'info' => $status['info'],
+                    'year' => $status['year'],
+                ]);
+            } elseif(!empty($status['status_id'])) {
+                DB::table('user_statuses')->insert([
+                    'user_id' => $user->id,
+                    'status_id' => $status['status_id'],
+                    'info' => $status['info'],
+                    'year' => $status['year'],
+                ]);
+            }
+        }
+
+        $user->update();
+
 
         return redirect()->route('user.index')->withStatus(__('User successfully updated.'));
     }

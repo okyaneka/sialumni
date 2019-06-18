@@ -23,9 +23,9 @@ class ProfileController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function show($id = '')
+    public function show()
     {
-        $user = $id ? Auth::user() : \App\User::find($id);
+        $user = Auth::user();
 
         return view('profile.index', compact('user'));
     }
@@ -57,14 +57,13 @@ class ProfileController extends Controller
 
         $user->name = $request->name;
         $user->gender = $request->gender;
-        $user->email = $request->email;
         $user->province = $request->province;
         $user->district = $request->district;
         $user->sub_district = $request->sub_district;
         $user->address = $request->address;
         $user->street = $request->street;
         $user->pob = $request->pob;
-        $user->dob = $request->dob;
+        $user->dob = date('Y-m-d', strtotime($request->dob));
         $user->department = $request->department;
         $user->grad = $request->grad;
         $user->phone = $request->phone;

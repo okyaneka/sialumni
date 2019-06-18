@@ -18,16 +18,20 @@
                     <span class="px-2">&nbsp;</span>
                     <a class="mb-2 mr-sm-2" href="#advancedSearch" data-toggle="modal">Pencarian lanjutan</a>
                     @foreach ($_GET as $key => $value)
-                    @if (!empty($value) && $key != 'submit')
+                    @if (!empty($value) && $key != 'submit' && $key != 'page')
+                    <?php $link = str_replace($key.'='.$value, '', url()->full());
+                    $link = str_replace('&&', '&', $link);
+                    $link = str_replace('?&', '?', $link);
+                    $value = $key == 'status' ? \App\Status::find($value)->status : $value;
+                    $value = $key == 'gender' ? $value == 'M' ? 'Laki-laki' : 'Perempuan' : $value;
+                    ?>
                     <span class="px-2 mx-1 badge badge-default text-white">{{ $key }} : "{{ $value }}" | 
-                        <?php $link = str_replace($key.'='.$value, '', url()->full());
-                        $link = str_replace('&&', '&', $link);
-                        $link = str_replace('?&', '?', $link);?>
                         <a href="{{ $link }}">&times;</a>
                     </span> 
                     @endif
                     @endforeach
-                    @if (count($_GET) > 1)
+
+                    @if (empty(!$filter))
                     <span class="px-2 mx-1 badge badge-default text-white">
                         <a href="{{ url()->current() }}">Hapus semua filter</a>
                     </span> 
@@ -55,6 +59,7 @@
                                         <div class="form-group">
                                             <label for="jurusan" class="form-control-label">Jurusan</label>
                                             <select name="jurusan" id="jurusan" class="form-control form-control-alternative">
+                                                <option value="">Semua Jurusan</option>
                                                 @foreach (\App\Department::all() as $department)
                                                 <option {{ isset($_GET['jurusan']) && ($_GET['jurusan'] == $department->code) ? 'selected' : '' }} value="{{ $department->code }}">{{ $department->department }}</option>
                                                 @endforeach
@@ -64,8 +69,9 @@
                                         <div class="form-group">
                                             <label for="status" class="form-control-label">Status lulusan</label>
                                             <select name="status" id="status" class="form-control form-control-alternative">
+                                                <option value="">Semua Status</option>
                                                 @foreach (\App\Status::all() as $status)
-                                                <option {{ isset($_GET['status']) && ($_GET['status'] == $status->code) ? 'selected' : '' }} value="{{ $status->code }}">{{ $status->status }}</option>
+                                                <option {{ isset($_GET['status']) && ($_GET['status'] == $status->id) ? 'selected' : '' }} value="{{ $status->id }}">{{ $status->status }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -73,8 +79,11 @@
                                         <div class="form-group">
                                             <label for="tahun" class="form-control-label">Tahun lulus</label>
                                             <select name="tahun" id="tahun" class="form-control form-control-alternative">
+                                                <option value="">Semua Tahun</option>
                                                 @for ($i = DB::table('users')->min('grad'); $i <= DB::table('users')->max('grad'); $i++)
+                                                @empty ($i) @else
                                                 <option {{ isset($_GET['tahun']) && ($_GET['tahun'] == $i) ? 'selected' : '' }} value="{{ $i }}">{{ $i }}</option>
+                                                @endempty
                                                 @endfor
 
                                             </select>
@@ -136,16 +145,16 @@
                                 <td>{{ $user->grad }}</td>
                                 <td>
                                     @switch($user->alumniStatus())
-                                        @case('Aktif')
-                                            <span class="badge badge-success">{{ $user->alumniStatus() }}</span>
-                                            @break
-                                        @case('Belum Aktif')
-                                            <span class="badge badge-warning">{{ $user->alumniStatus() }}</span>
-                                            @break
-                                        @case('Tidak Aktif')
-                                            <span class="badge badge-danger">{{ $user->alumniStatus() }}</span>
-                                            @break
-                                        @default
+                                    @case('Aktif')
+                                    <span class="badge badge-success">{{ $user->alumniStatus() }}</span>
+                                    @break
+                                    @case('Belum Aktif')
+                                    <span class="badge badge-warning">{{ $user->alumniStatus() }}</span>
+                                    @break
+                                    @case('Tidak Aktif')
+                                    <span class="badge badge-danger">{{ $user->alumniStatus() }}</span>
+                                    @break
+                                    @default
                                     @endswitch
                                     
                                     @if (auth()->user()->isAdmin())
@@ -179,7 +188,7 @@
                     </div>
                     <div class="card-footer py-4">
                         <nav class="d-flex justify-content-end" aria-label="...">
-                            {{ $users->links() }}
+                            {{ $users->appends($_GET)->links() }}
                         </nav>
                     </div>
                 </div>

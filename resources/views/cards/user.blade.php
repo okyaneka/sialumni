@@ -26,9 +26,9 @@
     <div class="card-body pt-0 pt-md-4">
         <div class="text-center mt-md-5">
             @if (Auth::user()->nis == $user->nis || Auth::user()->isAdmin())
-                <h4>
-                    NIS : {{ $user->nis }}
-                </h4>
+            <h4>
+                NIS : {{ $user->nis }}
+            </h4>
             @endif
             <h3>
                 {{ $user->name }}<span class="font-weight-light">, {{ \Carbon\Carbon::parse($user->dob)->age }} tahun</span>
@@ -65,7 +65,13 @@
             @foreach ($statuses as $status)
             <div class="d-flex justify-content-between mb-3">
                 <div class="col text-left">
-                    {{ $status->status }} di <strong>{{ $status->pivot->info }}</strong> sampai {{ $status->pivot->year }}.
+                    {{ $status->status }}
+                    @if (!empty($status->pivot->info))
+                    di <strong>{{ $status->pivot->info }}</strong>
+                    @endif
+                    @if (!empty($status->pivot->year))
+                    sampai {{ $status->pivot->year }}
+                    @endif
                 </div>
             </div>
             @endforeach

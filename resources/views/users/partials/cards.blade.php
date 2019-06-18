@@ -3,8 +3,8 @@
         <div class="col-lg-3 order-lg-2">
             <div class="card-profile-image">
                 <a href="#">
-                        <img src="{{ asset('storage/avatars/'.auth()->user()->avatar) }}" class="rounded-circle">
-                    </a>
+                    <img src="{{ asset('storage/avatars/'.auth()->user()->avatar) }}" class="rounded-circle">
+                </a>
             </div>
         </div>
     </div>
@@ -15,34 +15,35 @@
             <h3>
                 {{ auth()->user()->name }}
                 @empty ( !auth()->user()->dob )
-                    <span class="font-weight-light">, {{ \Carbon\Carbon::parse(auth()->user()->dob)->age }} tahun</span>
+                <span class="font-weight-light">, {{ \Carbon\Carbon::parse(auth()->user()->dob)->age }} tahun</span>
                 @endempty
             </h3>
             <div class="h5 font-weight-300">
+                <i class="ni ni-pin-3 mr-2"></i>
                 @empty ( !auth()->user()->street )
-                    <i class="ni pin-3 mr-2"></i>{{ auth()->user()->street }}
+                <span>{{ auth()->user()->street }},</span>
                 @endempty
                 @empty ( !auth()->user()->address )
-                    {{ ', '.auth()->user()->getAddress() }}
+                <span>{{ auth()->user()->getAddress() }},</span>
                 @endempty
                 @empty ( !auth()->user()->sub_district )
-                    {{ ', '.auth()->user()->getSubDistrict() }}
+                <span>{{ auth()->user()->getSubDistrict() }},</span>
                 @endempty
                 @empty ( !auth()->user()->district )
-                    {{ ', '.auth()->user()->getDistrict() }}
+                <span>{{ auth()->user()->getDistrict() }},</span>
                 @endempty
                 @empty ( !auth()->user()->province )
-                    {{ ', '.auth()->user()->getProvince() }}
+                <span>{{ auth()->user()->getProvince() }}</span>
                 @endempty
             </div>
             <div class="h5">
                 <span>
-                @empty ( !auth()->user()->grad )
+                    @empty ( !auth()->user()->grad )
                     Lulusan tahun {{ __(auth()->user()->grad) }} 
-                @endempty
-                @empty ( !auth()->user()->department )
+                    @endempty
+                    @empty ( !auth()->user()->department )
                     jurusan {{ auth()->user()->department }}
-                @endempty
+                    @endempty
                 </span>
             </div>
             @empty ( !auth()->user()->group )

@@ -3,7 +3,7 @@
 @section('content')
 @include('users.partials.header', [
     'title' => __('Profil') . ' '. $user->name,
-    'class' => 'col-lg-7',
+    'class' => 'mb-lg-7',
     ])
 
 <div class="container-fluid mt--5">

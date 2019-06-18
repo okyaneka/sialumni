@@ -27,10 +27,10 @@ class HomeController extends Controller
     {
         $alumnus = [
             'total' => User::where('type','=','default')->count(),
-            'notActiveYet' => User::where('type','=','default')->whereNull('grad')->count(),
             'active' => User::where('type','=','default')
-                ->whereBetween('grad',[date('Y'), (date('Y') - 5)])
+                ->whereBetween('grad',[(date('Y') - 5), date('Y')])
                 ->count(),
+            'notActiveYet' => User::where('type','=','default')->whereNull('grad')->count(),
             'notActive' => User::where([
                 ['type','=','default'],
                 ['grad','<',(date('Y') - 5)]

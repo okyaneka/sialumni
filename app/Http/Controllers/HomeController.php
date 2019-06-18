@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
+use App\User;
 use DB;
 use Auth;
 
@@ -25,22 +26,15 @@ class HomeController extends Controller
     public function index()
     {
         $alumnus = [
-            'total' => '124',
-            'inputed' => DB::table('users')->where('type','default')->count(),
-            'last_year' => DB::table('users')
-                ->where('type','default')
-                ->whereYear('created_at',(date('Y')-1))
+            'total' => User::where('type','=','default')->count(),
+            'notActiveYet' => User::where('type','=','default')->whereNull('grad')->count(),
+            'active' => User::where('type','=','default')
+                ->whereBetween('grad',[date('Y'), (date('Y') - 5)])
                 ->count(),
-            'this_year' => DB::table('users')
-                ->where('type','default')
-                ->whereYear('created_at',date('Y'))
-                ->count(),
-            'max' => [
-                'count' => 1,
-                'field' => 'TKJ'
-            ],
-            'departments' => \App\Department::all(),
-            'statuses' => \App\Status::all(),
+            'notActive' => User::where([
+                ['type','=','default'],
+                ['grad','<',(date('Y') - 5)]
+            ])->count(),
         ];
 
         return view('dashboard', $alumnus);
@@ -58,6 +52,7 @@ class HomeController extends Controller
             'pob' => 'required|alpha', 
             'dob' => 'required|date', 
             'department' => 'required', 
+            'status' => 'required', 
             'grad' => 'required|numeric|digits:4', 
             'phone' => 'required|numeric|digits_between:9,14', 
             'telegram' => 'required|numeric|digits_between:9,14',
@@ -67,14 +62,14 @@ class HomeController extends Controller
 
         $user->name = $request->name;
         $user->gender = $request->gender;
-        $user->email = $request->email;
+        // $user->email = $request->email;
         $user->province = $request->province;
         $user->district = $request->district;
         $user->sub_district = $request->sub_district;
         $user->address = $request->address;
         $user->street = $request->street;
         $user->pob = $request->pob;
-        $user->dob = $request->dob;
+        $user->dob = date('Y-m-d', strtotime($request->dob));
         $user->department = $request->department;
         $user->grad = $request->grad;
         $user->phone = $request->phone;

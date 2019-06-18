@@ -21,14 +21,15 @@
                                 <span class="h2 font-weight-bold mb-0">{{ number_format($total) }} </span>
                             </div>
                             <div class="col-auto">
-                                <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
-                                    <i class="fas fa-chart-bar"></i>
+                                <div class="icon icon-shape bg-primary text-white rounded-circle shadow">
+                                    <i class="fas fa-users"></i>
                                 </div>
                             </div>
                         </div>
-                        <p class="mt-3 mb-0 text-muted text-sm">
-                            <span class="text-nowrap">Sejak 2018</span>
-                        </p>
+                    </div>
+
+                    <div class="card-footer">
+                        <a href="{{ route('user.index') }}" target="_blank">Lihat detail</a>
                     </div>
                 </div>
             </div>
@@ -37,19 +38,23 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col">
-                                <h5 class="card-title text-uppercase text-muted mb-0">Alumni Terdata</h5>
-                                <span class="h2 font-weight-bold mb-0">{{ number_format($inputed) }}</span>
+                                <h5 class="card-title text-uppercase text-muted mb-0">Alumni Aktif</h5>
+                                <span class="h2 font-weight-bold mb-0">{{ number_format($active) }}</span>
                             </div>
                             <div class="col-auto">
-                                <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
-                                    <i class="fas fa-chart-pie"></i>
+                                <div class="icon icon-shape bg-success text-white rounded-circle shadow">
+                                    <i class="fas fa-users"></i>
                                 </div>
                             </div>
                         </div>
-                        <p class="mt-3 mb-0 text-muted text-sm">
+                        {{-- <p class="mt-3 mb-0 text-muted text-sm">
                             <span class="text-warning mr-2"><i class="fas fa-percentage"></i> {{ number_format($inputed/$total*100, 2).'%' }}</span>
                             <span class="text-nowrap">total alumni</span>
-                        </p>
+                        </p> --}}
+                    </div>
+
+                    <div class="card-footer">
+                        <a href="{{ route('user.index').'?alumnistatus=aktif' }}" target="_blank">Lihat detail</a>
                     </div>
                 </div>
             </div>
@@ -58,8 +63,8 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col">
-                                <h5 class="card-title text-uppercase text-muted mb-0">Alumni Baru</h5>
-                                <span class="h2 font-weight-bold mb-0">{{ number_format($this_year) }}</span>
+                                <h5 class="card-title text-uppercase text-muted mb-0">Alumni Belum Aktif</h5>
+                                <span class="h2 font-weight-bold mb-0">{{ number_format($notActiveYet) }}</span>
                             </div>
                             <div class="col-auto">
                                 <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
@@ -67,11 +72,10 @@
                                 </div>
                             </div>
                         </div>
-                        <p class="mt-3 mb-0 text-muted text-sm">
-                            @if ($last_year)
-                            <span class="text-warning mr-2"><i class="fas fa-arrow-down"></i> {{ number_format($this_year/$last_year*100, 2).'%' }}</span>
-                            <span class="text-nowrap">tahun terakhir</span> @endif
-                        </p>
+                    </div>
+
+                    <div class="card-footer">
+                        <a href="{{ route('user.index').'?alumnistatus=belum_aktif' }}" target="_blank">Lihat detail</a>
                     </div>
                 </div>
             </div>
@@ -80,18 +84,23 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col">
-                                <h5 class="card-title text-uppercase text-muted mb-0">Alumni terbanyak</h5>
-                                <span class="h2 font-weight-bold mb-0">{{ number_format($max['count']) }}</span>
+                                <h5 class="card-title text-uppercase text-muted mb-0">Alumni Tidak Aktif</h5>
+                                <span class="h2 font-weight-bold mb-0">{{ number_format($notActive) }}</span>
                             </div>
                             <div class="col-auto">
-                                <div class="icon icon-shape bg-success text-white rounded-circle shadow">
-                                    <i class="fas fa-chart-line"></i>
+                                <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+                                    <i class="fas fa-users"></i>
                                 </div>
                             </div>
                         </div>
-                        <p class="mt-3 mb-0 text-muted text-sm">
-                            <span class="text-nowrap">{{ 'Jurusan '.$max['field'] }}</span>
-                        </p>
+                        {{-- <p class="mt-3 mb-0 text-muted text-sm">
+                            @if ($last_year)
+                            <span class="text-warning mr-2"><i class="fas fa-arrow-down"></i> {{ number_format($this_year/$last_year*100, 2).'%' }}</span>
+                            <span class="text-nowrap">tahun terakhir</span> @endif
+                        </p> --}}
+                    </div>
+                    <div class="card-footer">
+                        <a href="{{ route('user.index').'?alumnistatus=tidak_aktif' }}" target="_blank">Lihat detail</a>
                     </div>
                 </div>
             </div>

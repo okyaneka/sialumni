@@ -1,85 +1,182 @@
-@extends('layouts.app', ['title' => __('Status')])
+@extends('statistics.part.layout', ['title' => 'Statistik Berdasarkan Jurusan'])
 
-@section('content')
-@include('users.partials.header', ['title' => __('Status')])
+@section('tab-1')
+<table class="table">
+	<thead class="thead-light">
+		<tr>
+			<th scope="col">{{ $key }}</th>
+			@foreach ($status as $s)
+			<th scope="col" class="text-right">{{ $s->status }}</th>
+			@endforeach
+		</tr>
+	</thead>
+	<tbody>
+		@foreach ($total as $d)
+		<tr>
+			<td>{{ $d->grad }}</td>
+			@foreach ($status as $s)
+			<?php $k = $s->status; ?>
+			<td class="text-right">{{ $d->$k }}</td>
+			@endforeach
+		</tr>
+		@endforeach
+	</tbody>
+</table>
+@endsection
 
-<div class="container-fluid mt-5">
-	<div class="row align-items-center">
-		{{-- By Alumnus --}}
-		<div class="col-lg-8 offset-lg-2 mb-5">
-			<canvas id="chart"></canvas>
-		</div>
-		<div class="col-12">
-			<div class="card bg-secondary shadow">
-				<div class="card-header bg-white border-0">
-					<div class="col">
-						<h3 class="mb-0">Rincian data</h3>
-					</div>
-				</div>
-				<div class="card-body">
-					<div class="table-responsive">
-						<table class="table bg-white">
-							<thead class="thead-light">
-								<tr>
-									<th scope="col">Status</th>
-									<th scope="col" class="text-right">Jumlah</th>
-								</tr>
-							</thead>
-							<tbody>
-								@foreach ($statistics as $data)
-								<tr>
-									<td>{{ App\Status::where('code', $data->Status)->first()->status }}</td>
-									<td class="text-right">{{ $data->Jumlah }}</td>
-								</tr>
-								@endforeach
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+@section('tab-2')
+<table class="table">
+	<thead class="thead-light">
+		<tr>
+			<th scope="col">{{ $key }}</th>
+			@foreach ($status as $s)
+			<th scope="col" class="text-right">{{ $s->status }}</th>
+			@endforeach
+		</tr>
+	</thead>
+	<tbody>
+		@foreach ($five as $d)
+		<tr>
+			<td>{{ $d->grad }}</td>
+			@foreach ($status as $s)
+			<?php $k = $s->status; ?>
+			<td class="text-right">{{ $d->$k }}</td>
+			@endforeach
+		</tr>
+		@endforeach
+	</tbody>
+</table>
+@endsection
 
-	@include('layouts.footers.auth')
-</div>
+@section('tab-3')
+<table class="table">
+	<thead class="thead-light">
+		<tr>
+			<th scope="col">{{ $key }}</th>
+			@foreach ($status as $s)
+			<th scope="col" class="text-right">{{ $s->status }}</th>
+			@endforeach
+		</tr>
+	</thead>
+	<tbody>
+		@foreach ($three as $d)
+		<tr>
+			<td>{{ $d->grad }}</td>
+			@foreach ($status as $s)
+			<?php $k = $s->status; ?>
+			<td class="text-right">{{ $d->$k }}</td>
+			@endforeach
+		</tr>
+		@endforeach
+	</tbody>
+</table>
+@endsection
+
+@section('tab-4')
+<table class="table">
+	<thead class="thead-light">
+		<tr>
+			<th scope="col">{{ $key }}</th>
+			@foreach ($status as $s)
+			<th scope="col" class="text-right">{{ $s->status }}</th>
+			@endforeach
+		</tr>
+	</thead>
+	<tbody>
+		@foreach ($one as $d)
+		<tr>
+			<td>{{ $d->grad }}</td>
+			@foreach ($status as $s)
+			<?php $k = $s->status; ?>
+			<td class="text-right">{{ $d->$k }}</td>
+			@endforeach
+		</tr>
+		@endforeach
+	</tbody>
+</table>
 @endsection
 
 @push('js')
-<script src="{{ asset('argon') }}/vendor/chart.js/dist/Chart.min.js"></script>
 <script type="text/javascript">
 	$(function () {
-		var ctx = $('#chart');
-		var labels = [ @foreach ($statistics as $data) 
-		@if (is_null(App\Status::where('code', $data['Status'])->first()))
-		'{{ 'Invalid' }}'
-		@else
-		'{{ App\Status::where('code', $data['Status'])->first()->status }}'
-		@endif, 
-		@endforeach ];
-		var datas = [ @foreach ($statistics as $data) {{ $data['Jumlah'].',' }} @endforeach ];
-		var color = [ @foreach ($statistics as $data) '{{ rand(0,255).','.rand(0,255).','.rand(0,255) }}', @endforeach ];
-		var backgrounds = [];
-		var borderColors = [];		
-		for (var i = 0; i < color.length; i++) {
-			backgrounds[i] = 'rgba('+color[i]+',0.2)';
-		}
-		for (var i = 0; i < color.length; i++) {
-			borderColors[i] = 'rgb('+color[i]+')';
+		var data = [
+		{
+			labels: [ @foreach ($total as $d) {{ $d->grad.',' }} @endforeach ],
+			datas: []
+		},
+		{
+			labels: [ @foreach ($five as $d) {{ $d->grad.',' }} @endforeach ],
+			datas: []
+		},
+		{
+			labels: [ @foreach ($three as $d) {{ $d->grad.',' }} @endforeach ],
+			datas: []
+		},
+		{
+			labels: [ @foreach ($one as $d) {{ $d->grad.',' }} @endforeach ],
+			datas: []
+		}];
+
+		@foreach ($status as $s)
+		<?php $k = $s->status; ?>
+		data[0].datas['{{ $k }}'] = [ @foreach ($total as $d) {{ $d->$k.',' }} @endforeach ];
+		data[1].datas['{{ $k }}'] = [ @foreach ($five as $d) {{ $d->$k.',' }} @endforeach ];
+		data[2].datas['{{ $k }}'] = [ @foreach ($three as $d) {{ $d->$k.',' }} @endforeach ];
+		data[3].datas['{{ $k }}'] = [ @foreach ($one as $d) {{ $d->$k.',' }} @endforeach ];
+		@endforeach
+
+		function generateChart(data) {
+			var ctx = $('#chart');
+			var color = []
+			var backgrounds = [];
+			var borderColors = [];
+			var datasets = [];
+			
+			for (var i = 0; i < Object.keys(data.datas).length; i++) {
+				color[i] = Math.round(Math.random()*255)+','+Math.round(Math.random()*255)+','+Math.round(Math.random()*255);
+			}
+			for (var i = 0; i < color.length; i++) {
+				backgrounds[i] = 'rgba('+color[i]+',0.2)';
+			}
+			for (var i = 0; i < color.length; i++) {
+				borderColors[i] = 'rgb('+color[i]+')';
+			}
+			for (var i = 0; i < Object.keys(data.datas).length; i++) {
+				datasets[i] = {
+					label: Object.keys(data.datas)[i],
+					data: data.datas[Object.keys(data.datas)[i]],
+					backgroundColor: backgrounds[i],
+					borderColor: borderColors[i],
+					borderWidth: 1,
+				}
+			}
+
+			return new Chart(ctx, {
+				type: 'bar',
+				data: {
+					labels: data.labels,
+					datasets: datasets
+				},
+				options: {
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero: true
+							}
+						}]
+					}
+				}
+			});
 		}
 
-		var statistics = new Chart(ctx, {        	
-			type: 'pie',
-			data: {
-				labels: labels,
-				datasets: [{
-					data: datas,
-					backgroundColor: backgrounds,
-					borderColor: borderColors,
-					borderWidth: 1,
-				}]
-			},
-			options : {}
-		});
+		var chart = generateChart(data[0]);
+		$('.nav-link[role="tab"]').click(function() {
+			if (chart != null) {
+				chart.destroy();
+			}
+
+			chart = generateChart(data[ $(this).attr('href').substr(-1,1) -1 ]);
+		})
 	});
 </script>
 @endpush

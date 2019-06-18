@@ -1,23 +1,20 @@
-@extends('statistics.part.layout', ['title' => 'Statistik Berdasarkan Jurusan'])
+@extends('statistics.part.layout', ['title' => 'Statistik Berdasarkan Jenis Kelamin'])
 
 @section('tab-1')
 <table class="table">
 	<thead class="thead-light">
 		<tr>
 			<th scope="col">{{ $key }}</th>
-			@foreach ($department as $d)
-			<th scope="col" class="text-right">{{ $d->code }}</th>
-			@endforeach
+			<th scope="col" class="text-right">Laki-laki</th>
+			<th scope="col" class="text-right">Perempuan</th>
 		</tr>
 	</thead>
 	<tbody>
 		@foreach ($total as $s)
 		<tr>
 			<td>{{ $s->grad }}</td>
-			@foreach ($department as $d)
-			<?php $k = $d->code; ?>
-			<td class="text-right">{{ $s->$k }}</td>
-			@endforeach
+			<td class="text-right">{{ $s->M }}</td>
+			<td class="text-right">{{ $s->F }}</td>
 		</tr>
 		@endforeach
 	</tbody>
@@ -29,19 +26,16 @@
 	<thead class="thead-light">
 		<tr>
 			<th scope="col">{{ $key }}</th>
-			@foreach ($department as $d)
-			<th scope="col" class="text-right">{{ $d->code }}</th>
-			@endforeach
+			<th scope="col" class="text-right">Laki-laki</th>
+			<th scope="col" class="text-right">Perempuan</th>
 		</tr>
 	</thead>
 	<tbody>
 		@foreach ($five as $s)
 		<tr>
 			<td>{{ $s->grad }}</td>
-			@foreach ($department as $d)
-			<?php $k = $d->code; ?>
-			<td class="text-right">{{ $s->$k }}</td>
-			@endforeach
+			<td class="text-right">{{ $s->M }}</td>
+			<td class="text-right">{{ $s->F }}</td>
 		</tr>
 		@endforeach
 	</tbody>
@@ -53,19 +47,16 @@
 	<thead class="thead-light">
 		<tr>
 			<th scope="col">{{ $key }}</th>
-			@foreach ($department as $d)
-			<th scope="col" class="text-right">{{ $d->code }}</th>
-			@endforeach
+			<th scope="col" class="text-right">Laki-laki</th>
+			<th scope="col" class="text-right">Perempuan</th>
 		</tr>
 	</thead>
 	<tbody>
 		@foreach ($three as $s)
 		<tr>
 			<td>{{ $s->grad }}</td>
-			@foreach ($department as $d)
-			<?php $k = $d->code; ?>
-			<td class="text-right">{{ $s->$k }}</td>
-			@endforeach
+			<td class="text-right">{{ $s->M }}</td>
+			<td class="text-right">{{ $s->F }}</td>
 		</tr>
 		@endforeach
 	</tbody>
@@ -77,19 +68,16 @@
 	<thead class="thead-light">
 		<tr>
 			<th scope="col">{{ $key }}</th>
-			@foreach ($department as $d)
-			<th scope="col" class="text-right">{{ $d->code }}</th>
-			@endforeach
+			<th scope="col" class="text-right">Laki-laki</th>
+			<th scope="col" class="text-right">Perempuan</th>
 		</tr>
 	</thead>
 	<tbody>
 		@foreach ($one as $s)
 		<tr>
 			<td>{{ $s->grad }}</td>
-			@foreach ($department as $d)
-			<?php $k = $d->code; ?>
-			<td class="text-right">{{ $s->$k }}</td>
-			@endforeach
+			<td class="text-right">{{ $s->M }}</td>
+			<td class="text-right">{{ $s->F }}</td>
 		</tr>
 		@endforeach
 	</tbody>
@@ -117,13 +105,14 @@
 			datas: []
 		}];
 
-		@foreach ($department as $de)
-		<?php $k = $de->code; ?>
-		data[0].datas['{{ $k }}'] = [ @foreach ($total as $d) {{ $d->$k.',' }} @endforeach ];
-		data[1].datas['{{ $k }}'] = [ @foreach ($five as $d) {{ $d->$k.',' }} @endforeach ];
-		data[2].datas['{{ $k }}'] = [ @foreach ($three as $d) {{ $d->$k.',' }} @endforeach ];
-		data[3].datas['{{ $k }}'] = [ @foreach ($one as $d) {{ $d->$k.',' }} @endforeach ];
-		@endforeach
+		data[0].datas['M'] = [ @foreach ($total as $d) {{ $d->M.',' }} @endforeach ];
+		data[1].datas['M'] = [ @foreach ($five as $d) {{ $d->M.',' }} @endforeach ];
+		data[2].datas['M'] = [ @foreach ($three as $d) {{ $d->M.',' }} @endforeach ];
+		data[3].datas['M'] = [ @foreach ($one as $d) {{ $d->M.',' }} @endforeach ];
+		data[0].datas['F'] = [ @foreach ($total as $d) {{ $d->F.',' }} @endforeach ];
+		data[1].datas['F'] = [ @foreach ($five as $d) {{ $d->F.',' }} @endforeach ];
+		data[2].datas['F'] = [ @foreach ($three as $d) {{ $d->F.',' }} @endforeach ];
+		data[3].datas['F'] = [ @foreach ($one as $d) {{ $d->F.',' }} @endforeach ];
 
 		function generateChart(data) {
 			var ctx = $('#chart');
@@ -142,8 +131,13 @@
 				borderColors[i] = 'rgb('+color[i]+')';
 			}
 			for (var i = 0; i < Object.keys(data.datas).length; i++) {
+				if (Object.keys(data.datas)[i] == 'M') {
+					var label = 'Laki-laki';
+				} else {
+					var label = 'Perempuan';
+				}
 				datasets[i] = {
-					label: 'Jurusan '+Object.keys(data.datas)[i],
+					label: label,
 					data: data.datas[Object.keys(data.datas)[i]],
 					backgroundColor: backgrounds[i],
 					borderColor: borderColors[i],

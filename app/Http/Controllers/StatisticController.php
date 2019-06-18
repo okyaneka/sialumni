@@ -11,94 +11,250 @@ class StatisticController extends Controller
     //
     public function index()
     {
-    	$statistics = [
-    		'by_alumnus' => User::selectRaw('year(created_at) as Tahun, count(name) as Jumlah')
-    			->where('type','default')
-    			->groupBy('Tahun')
-    			->orderBy('Tahun', 'asc')
-    			->limit('5')
-    			->get()->toArray(),
-    		'by_department' => User::selectRaw('department as Jurusan, count(name) as Jumlah')
-    			->where('type','default')
-    			->groupBy('Jurusan')
-    			->get()->toArray(),
-    		// 'by_status'	=> User::selectRaw('status as Status, count(name) as Jumlah')
-    		// 	->where('type','default')
-    		// 	->groupBy('Status')
-    		// 	->get()->toArray(),
-    		'by_region' => User::selectRaw('address as Desa, count(name) as Jumlah')
-    			->where('type','default')
-    			->groupBy('Desa')
-    			->get()->toArray(),
-    		'by_grad' => User::selectRaw('grad as Lulusan, count(name) as Jumlah')
-    			->where('type','default')
-    			->groupBy('Lulusan')
-    			->get()->toArray(),
-    		'total' => '124',
-    		'inputed' => DB::table('users')->where('type','default')->count(),
-    		'last_year' => DB::table('users')
-    		    ->where('type','default')
-    		    ->whereYear('created_at',(date('Y')-1))
-    		    ->count(),
-    		'this_year' => DB::table('users')
-    		    ->where('type','default')
-    		    ->whereYear('created_at',date('Y'))
-    		    ->count(),
-    		'max' => [
-    		    'count' => 1,
-    		    'field' => 'TKJ'
-    		],
-    		'departments' => \App\Department::all(),
-    		'statuses' => \App\Status::all(),
-    	];
+        $statistics = [
+            'total' => User::where('type','=','default')->count(),
+            'notActiveYet' => User::where('type','=','default')->whereNull('grad')->count(),
+            'active' => User::where('type','=','default')
+            ->whereBetween('grad',[(date('Y') - 5), date('Y')])
+            ->count(),
+            'notActive' => User::where([
+                ['type','=','default'],
+                ['grad','<',(date('Y') - 5)]
+            ])->count(),
+            'grads' =>  User::groupBy('grad')
+            ->select('grad', DB::raw('count(*) as total'))
+            ->where('type','default')
+            ->whereNotNull('grad')
+            ->orderBy('grad', 'desc')
+            ->get(),
+            'origin' => User::groupBy('district')
+            ->select('district', DB::raw('count(*) as total'))
+            ->where('type','default')
+            ->orderBy('total', 'desc')
+            ->get(),
+            'departments' => User::groupBy('department')
+            ->select('department', DB::raw('count(*) as total'))
+            ->where('type','default')
+            ->orderBy('total', 'desc')
+            ->get(),
+            'statuses' => DB::table('statuses')
+            ->join('user_statuses','statuses.id','=','user_statuses.status_id')
+            ->select(DB::raw('statuses.id, statuses.status, count(*) as total'))
+            ->groupBy('id')
+            ->get(),
+            'gender' => User::groupBy('gender')
+            ->select('gender', DB::raw('count(*) as total'))
+            ->where('type','default')
+            ->orderBy('total', 'desc')
+            ->get(),
+            [
+                'M' => User::where(['type' => 'default', 'gender' => 'M'])->count(),
+                'F' => User::where(['type' => 'default', 'gender' => 'F'])->count(),
+            ],
 
-    	return view('statistics.index', $statistics);
+        ];
+
+        return view('statistics.index', $statistics);
     }
 
-    function last5yearS()
+    public function grad()
     {
-        $statistics = User::selectRaw('year(created_at) as Tahun, count(name) as Jumlah')
-            ->where('type','default')
-            ->groupBy('Tahun')
-            ->orderBy('Tahun', 'asc')
-            ->limit('5')
-            ->get();
-        return view('statistics.last5years', ['statistics' => $statistics]);
+        $statistics = [
+            'total' => User::groupBy('grad')
+                ->select( DB::raw('grad as `key`, count(*) as total'))
+                ->where('type', 'default')
+                ->whereNotNull('grad')
+                ->orderBy('key', 'desc')
+                ->get(),
+            'five' => User::groupBy('grad')
+                ->select( DB::raw('grad as `key`, count(*) as total'))
+                ->where('type', 'default')
+                ->whereNotNull('grad')
+                ->orderBy('key', 'desc')
+                ->limit(5)
+                ->get(),
+            'three' => User::groupBy('grad')
+                ->select(DB::raw('grad as `key`, count(*) as total'))
+                ->where('type', 'default')
+                ->whereNotNull('grad')
+                ->orderBy('key', 'desc')
+                ->limit(3)
+                ->get(),
+            'one' => User::groupBy('grad')
+                ->select( DB::raw('grad as `key`, count(*) as total'))
+                ->where('type', 'default')
+                ->whereNotNull('grad')
+                ->orderBy('key', 'desc')
+                ->limit(1)
+                ->get(),
+            'key' => 'Tahun',
+        ];
+
+        return view('statistics.grad', $statistics);
     }
 
-    function department()
+    public function origin()
     {
-        $statistics = User::selectRaw('department as Jurusan, count(name) as Jumlah')
-            ->where('type','default')
-            ->groupBy('Jurusan')
-            ->get();
-        return view('statistics.department', ['statistics' => $statistics]);
+        $statistics = [
+            'total' => User::groupBy('district')
+                ->select(DB::raw('district'), DB::raw('count(*) as total'))
+                ->where('type', 'default')
+                ->whereNotNull('grad')
+                ->get(),
+            'five' => User::groupBy('district')
+                ->select(DB::raw('district'), DB::raw('count(*) as total'))
+                ->where('type', 'default')
+                ->whereNotNull('grad')
+                ->where('grad', '>', date('Y') - 5)
+                ->get(),
+            'three' => User::groupBy('district')
+                ->select(DB::raw('district'), DB::raw('count(*) as total'))
+                ->where('type', 'default')
+                ->whereNotNull('grad')
+                ->where('grad', '>', date('Y') - 3)
+                ->get(),
+            'one' => User::groupBy('district')
+                ->select(DB::raw('district'), DB::raw('count(*) as total'))
+                ->where('type', 'default')
+                ->whereNotNull('grad')
+                ->where('grad', '>', date('Y') - 1)
+                ->get(),
+            'key' => 'Asal Kabupaten',
+        ];
+
+        return view('statistics.origin', $statistics);
     }
 
-    function status()
+    public function department()
     {
-        $statistics = User::selectRaw('status as Status, count(name) as Jumlah')
-            ->where('type','default')
-            ->groupBy('Status')
-            ->get();
-        return view('statistics.status', ['statistics' => $statistics]);
+        $column = 'grad';
+        foreach (\App\Department::all() as $d) {
+            $column .= ",SUM(IF(department = '$d->code', total, 0)) as $d->code";
+        }
+
+        $user = User::groupBy('grad','department')
+            ->select(DB::raw('grad, department, count(*) as total'))
+            ->where('type', 'default')
+            ->whereNotNull('grad')
+            ->orderBy('grad', 'desc');
+
+        $statistics = [
+            'department' => \App\Department::all(),
+            'total' => DB::table(DB::raw("({$user->toSql()}) as user"))
+                ->mergeBindings($user->getQuery())
+                ->groupBy('grad')
+                ->select(DB::raw($column))
+                ->get(),
+            'five' => DB::table(DB::raw("({$user->toSql()}) as user"))
+                ->mergeBindings($user->getQuery())
+                ->groupBy('grad')
+                ->select(DB::raw($column))
+                ->where('grad', '>', date('Y') - 5)
+                ->get(),
+            'three' => DB::table(DB::raw("({$user->toSql()}) as user"))
+                ->mergeBindings($user->getQuery())
+                ->groupBy('grad')
+                ->select(DB::raw($column))
+                ->where('grad', '>', date('Y') - 3)
+                ->get(),
+            'one' => DB::table(DB::raw("({$user->toSql()}) as user"))
+                ->mergeBindings($user->getQuery())
+                ->groupBy('grad')
+                ->select(DB::raw($column))
+                ->where('grad', '>', date('Y') - 1)
+                ->get(),
+            'key' => 'Tahun',
+        ];
+
+        return view('statistics.department', $statistics);
     }
 
-    function grad()
+    public function status()
     {
-        $statistics = User::selectRaw('grad as Lulusan, count(name) as Jumlah')
-            ->where('type','default')
-            ->groupBy('Lulusan')
-            ->get();
-        return view('statistics.grad', ['statistics' => $statistics]);
+        $user = User::groupBy('users.grad', 'statuses.id')
+            ->join('user_statuses','users.id','=','user_statuses.user_id')
+            ->join('statuses','statuses.id','=','user_statuses.status_id')
+            ->select(DB::raw('users.grad, statuses.status, count(*) as total'))
+            ->where('users.type', 'default')
+            ->whereNotNull('users.grad')
+            // ->
+            ->orderBy('grad', 'desc');
+
+        $column = 'grad';
+        foreach (\App\Status::all() as $s) {
+            $column .= ",SUM(IF(status = '$s->status', total, 0)) as `$s->status`";
+        }
+
+        $statistics = [
+            'status' => \App\Status::all(),
+            'total' => DB::table(DB::raw("({$user->toSql()}) as user"))
+                ->mergeBindings($user->getQuery())
+                ->groupBy('grad')
+                ->select(DB::raw($column))
+                ->get(),
+            'five' => DB::table(DB::raw("({$user->toSql()}) as user"))
+                ->mergeBindings($user->getQuery())
+                ->groupBy('grad')
+                ->select(DB::raw($column))
+                ->where('grad', '>', date('Y') - 5)
+                ->get(),
+            'three' => DB::table(DB::raw("({$user->toSql()}) as user"))
+                ->mergeBindings($user->getQuery())
+                ->groupBy('grad')
+                ->select(DB::raw($column))
+                ->where('grad', '>', date('Y') - 3)
+                ->get(),
+            'one' => DB::table(DB::raw("({$user->toSql()}) as user"))
+                ->mergeBindings($user->getQuery())
+                ->groupBy('grad')
+                ->select(DB::raw($column))
+                ->where('grad', '>', date('Y') - 1)
+                ->get(),
+            'key' => 'Tahun Lulus'
+        ];
+
+        return view('statistics.status', $statistics);
     }
-    
-    function region()
+
+    public function gender()
     {
-        $statistics = User::selectRaw('address as Desa, count(name) as Jumlah')
-            ->where('type','default')
-            ->groupBy('Desa')
-            ->get();
-        return view('statistics.region', ['statistics' => $statistics]);
+        $column = 'grad';
+        $column .= ",SUM(IF(gender = 'M', total, 0)) as M";
+        $column .= ",SUM(IF(gender = 'F', total, 0)) as F";
+
+        $user = User::groupBy('grad','gender')
+            ->select(DB::raw('grad, gender, count(*) as total'))
+            ->where('type', 'default')
+            ->whereNotNull('grad')
+            ->orderBy('grad', 'desc');
+
+        $statistics = [
+            'total' => DB::table(DB::raw("({$user->toSql()}) as user"))
+                ->mergeBindings($user->getQuery())
+                ->groupBy('grad')
+                ->select(DB::raw($column))
+                ->get(),
+            'five' => DB::table(DB::raw("({$user->toSql()}) as user"))
+                ->mergeBindings($user->getQuery())
+                ->groupBy('grad')
+                ->select(DB::raw($column))
+                ->where('grad', '>', date('Y') - 5)
+                ->get(),
+            'three' => DB::table(DB::raw("({$user->toSql()}) as user"))
+                ->mergeBindings($user->getQuery())
+                ->groupBy('grad')
+                ->select(DB::raw($column))
+                ->where('grad', '>', date('Y') - 3)
+                ->get(),
+            'one' => DB::table(DB::raw("({$user->toSql()}) as user"))
+                ->mergeBindings($user->getQuery())
+                ->groupBy('grad')
+                ->select(DB::raw($column))
+                ->where('grad', '>', date('Y') - 1)
+                ->get(),
+            'key' => 'Jenis Kelamin',
+        ];
+
+        return view('statistics.gender', $statistics);
     }
 }

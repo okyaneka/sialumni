@@ -31,8 +31,8 @@ class SettingController extends Controller
         foreach ($request->toArray() as $k => $d) {
             if(strstr($k, '_')) continue;
             DB::table('settings')->updateOrInsert(
-                ['name' => $k, 'config' => $d],
-                ['name' => $k]
+                ['name' => $k],
+                ['name' => $k, 'config' => $d]
             );
         }
 

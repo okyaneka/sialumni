@@ -25,7 +25,7 @@ class UsersImport implements ToModel, WithHeadingRow
             'nis' => $row['nis'],
             'name' => $row['nama'],
             'email' => $row['email'],
-            'password' => Hash::make(Setting::get()['defaultpassword']),
+            'password' => Hash::make(empty(Setting::get()['defaultpassword']) ? '123456' : Setting::get()['defaultpassword']),
             'gender' => $row['jenis_kelamin'] == 'L' || strtolower($row['jenis_kelamin']) == 'laki-laki' ? 'M' : 'F',
             'dob' => date('Y-m-d', \PhpOffice\PhpSpreadsheet\Shared\Date::excelToTimestamp($row['tanggal_lahir'])) ,
             'department' => $row['jurusan'],

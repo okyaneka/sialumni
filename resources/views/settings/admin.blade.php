@@ -20,7 +20,7 @@
 				<div class="pl-lg-4">
 					<div class="form-group{{ $errors->has('defaultpassword') ? ' has-danger' : '' }}">
 						<label class="form-control-label" for="input-defaultpassword">Password bawaan</label>
-						<input type="text" name="defaultpassword" id="input-defaultpassword" class="form-control form-control-alternative{{ $errors->has('defaultpassword') ? ' is-invalid' : '' }}" placeholder="Password bawaan" value="{{ old('defaultpassword', $defaultpassword) }}" required>
+						<input type="text" name="defaultpassword" id="input-defaultpassword" class="form-control form-control-alternative{{ $errors->has('defaultpassword') ? ' is-invalid' : '' }}" placeholder="Password bawaan" value="{{ old('defaultpassword', isset($defaultpassword) ? $defaultpassword : '') }}" required>
 						@if ($errors->has('defaultpassword'))
 						<span class="invalid-feedback" role="alert">
 							<strong>{{ $errors->first('defaultpassword') }}</strong>
@@ -29,7 +29,7 @@
 
 					<div class="form-group{{ $errors->has('grouplink') ? ' has-danger' : '' }}">
 						<label class="form-control-label" for="input-grouplink">Link grup telegram</label>
-						<input type="text" name="grouplink" id="input-grouplink" class="form-control form-control-alternative{{ $errors->has('grouplink') ? ' is-invalid' : '' }}" placeholder="Link grup telegram" value="{{ old('grouplink', $grouplink) }}" required>
+						<input type="text" name="grouplink" id="input-grouplink" class="form-control form-control-alternative{{ $errors->has('grouplink') ? ' is-invalid' : '' }}" placeholder="Link grup telegram" value="{{ old('grouplink', isset($grouplink) ? $grouplink : '') }}" required>
 						@if ($errors->has('grouplink'))
 						<span class="invalid-feedback" role="alert">
 							<strong>{{ $errors->first('grouplink') }}</strong>

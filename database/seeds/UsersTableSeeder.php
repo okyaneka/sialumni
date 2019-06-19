@@ -27,21 +27,21 @@ class UsersTableSeeder extends Seeder
 		]);
 
 		DB::table('users')->insert([
-			[
-				'name' => 'User User',
-				'nis' => '0001',
-				'email' => 'user@argon.com',
-				'email_verified_at' => now(),
-				'password' => Hash::make('secret'),
-				'type' => 'default',
-				'province' => '33',
-				'district' => '3323',
-				'sub_district' => '3323060',
-				'address' => '3323060006',
-				'gender' => 'M',
-				'created_at' => now(),
-				'updated_at' => now()
-			]
+			// [
+			// 	'name' => 'User User',
+			// 	'nis' => '0001',
+			// 	'email' => 'user@argon.com',
+			// 	'email_verified_at' => now(),
+			// 	'password' => Hash::make('secret'),
+			// 	'type' => 'default',
+			// 	'province' => '33',
+			// 	'district' => '3323',
+			// 	'sub_district' => '3323060',
+			// 	'address' => '3323060006',
+			// 	'gender' => 'M',
+			// 	'created_at' => now(),
+			// 	'updated_at' => now()
+			// ]
 		]);
 
 		// DB::table('user_statuses')->insert([

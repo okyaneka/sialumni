@@ -3,7 +3,7 @@
 namespace App\Imports;
 
 use App\User;
-use App\Config;
+use App\Setting;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -25,7 +25,7 @@ class UsersImport implements ToModel, WithHeadingRow
             'nis' => $row['nis'],
             'name' => $row['nama'],
             'email' => $row['email'],
-            'password' => Hash::make('123456'),
+            'password' => Hash::make(Setting::get()['defaultpassword']),
             'gender' => $row['jenis_kelamin'] == 'L' || strtolower($row['jenis_kelamin']) == 'laki-laki' ? 'M' : 'F',
             'dob' => date('Y-m-d', \PhpOffice\PhpSpreadsheet\Shared\Date::excelToTimestamp($row['tanggal_lahir'])) ,
             'department' => $row['jurusan'],

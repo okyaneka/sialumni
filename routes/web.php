@@ -58,6 +58,6 @@ Route::group(['middleware' => 'auth'], function () {
 	});
 
 	Route::get('setting', 'SettingController@get')->name('setting.get');
-	Route::post('setting', 'SettingController@set')->name('setting.set');
+	Route::put('setting', 'SettingController@set')->name('setting.set');
 });
 

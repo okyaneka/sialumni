@@ -92,8 +92,8 @@
             <div class="d-flex justify-content-between mb-3">
                 <div class="col text-left">Link grup telegram</div>
                 <div class="col text-right">
-                    @isset ($user->group->link)
-                    <a href="{!! $user->group->link ?: '#' !!}" target="_blank">{{ substr($user->group->link ,0,25).'...' ?: '-' }}</a>
+                    @isset (\App\Setting::get()['grouplink'])
+                    <a href="{!! \App\Setting::get()['grouplink'] !!}" target="_blank">{{ substr(\App\Setting::get()['grouplink'] ,0,25).'...' }}</a>
                     @else
                     <span class="text-muted">Belum terdapat link grup yang terdaftar</span>
                     @endisset

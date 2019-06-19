@@ -7,9 +7,9 @@
     <div class="row">
         <div class="col-xl-6 offset-xl-3 order-xl-1">
             @if (session('status'))
-            <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+            <div class="alert alert-{{ session('status')['status'] }} alert-dismissible fade show mt-3" role="alert">
                 <span>
-                    {{ session('status') }}. Klik link <a href="{{ route('user.index') }}">berikut</a> untuk info lebih lanjut.
+                    {{ session('status')['message'] }}
                 </span>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>

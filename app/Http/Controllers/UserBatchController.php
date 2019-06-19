@@ -27,15 +27,23 @@ class UserBatchController extends Controller
 		// dd($request->file->getMimeType());
 
 		$messages = [
-		    'mimetypes' => 'Format berkas yang di unggah harus .xlsx.',
+			'mimetypes' => 'Format berkas yang di unggah harus .xlsx.',
 		];
 
 		$request->validate([
 			'file' => 'required|mimetypes:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
 		], $messages);
 
-		Excel::import(new UsersImport, $request->file);
+		try {
+			Excel::import(new UsersImport, $request->file);	
+		} catch (\Exception $e) {
+			return back()->withStatus([
+				'status' => 'danger',
+				'message' => (strlen($e->getMessage()) > 100) ? substr($e->getMessage(), 0, 100).'...' : $e->getMessage()
+			]);
+		}
 
-		return back()->withStatus('Berkas berhasil di-import');
+
+		return back()->withStatus(['status' => 'success', 'message' => 'Berkas berhasil di-import']);
 	}
 }

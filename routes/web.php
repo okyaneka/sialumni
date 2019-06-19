@@ -55,6 +55,7 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::put('batch/user', 'UserBatchController@insertBatch')->name('user.insert_batch');
 
 		Route::get('download', 'DownloadDataController@index')->name('download');
+		Route::put('download', 'DownloadDataController@download')->name('download.download');
 	});
 
 	Route::get('setting', 'SettingController@get')->name('setting.get');

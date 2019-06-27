@@ -24,8 +24,10 @@ class CreateAlumnusTable extends Migration
             $table->string('province')->nullable();
             $table->string('department', 5)->nullable();
             $table->string('grad', 4)->nullable();
-            $table->string('phone', 14)->nullable();
-            $table->string('telegram', 14)->nullable();
+            $table->string('phone', 14)->nullable()->unique();
+            $table->string('telegram', 14)->nullable()->unique();
+            $table->string('telegram_id')->nullable()->unique();
+            $table->string('temp_password')->nullable();
         });
     }
 
@@ -50,6 +52,8 @@ class CreateAlumnusTable extends Migration
                 'grad',
                 'phone',
                 'telegram',
+                'telegram_id',
+                'temp_password'
             ]);
         });
     }

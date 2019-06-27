@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use BotMan\BotMan\BotMan;
 use BotMan\BotMan\BotManFactory;
 use BotMan\BotMan\Drivers\DriverManager;
-use App\Conversations\ExampleConversation;
 
 class TelegramController extends Controller
 {
@@ -19,7 +18,10 @@ class TelegramController extends Controller
 		    // Your driver-specific configuration
 			"telegram" => [
 				"token" => env('TELEGRAM_TOKEN')
-			]
+			],
+            'botman' => [
+                'conversation_cache_time' => 30
+            ],
 		];
 
 		// Load the driver(s) you want to use
@@ -38,5 +40,25 @@ class TelegramController extends Controller
     	$botman = app('botman');
 
     	$botman->listen();
+    }
+
+    function info(BotMan $bot)
+    {
+    	return $bot->startConversation(new \App\Conversations\InfoConversation());
+    }
+
+    function daftar(BotMan $bot)
+    {
+    	return $bot->startConversation(new \App\Conversations\RegisterConversation());
+    }
+
+    function update(BotMan $bot)
+    {
+    	return $bot->startConversation(new \App\Conversations\UpdateConversation());
+    }
+
+    function carialumni(BotMan $bot)
+    {
+    	return $bot->startConversation(new \App\Conversations\FindAlumniConversation());
     }
 }

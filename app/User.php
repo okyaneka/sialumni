@@ -56,7 +56,7 @@ class User extends Authenticatable
         // ;
     }
 
-    public function getProvince()
+    public function getProvinces()
     {
         try {
             if (empty($this->province)) {
@@ -70,11 +70,11 @@ class User extends Authenticatable
             }
         } catch (\Exception $e) {
             Storage::put('/origin/province', json_encode(json_decode(file_get_contents('http://dev.farizdotid.com/api/daerahindonesia/provinsi'))->semuaprovinsi));
-            return $this->getProvince();
+            return $this->getProvinces();
         }
     }
 
-    public function getDistrict()
+    public function getDistricts()
     {
         try {
             if (empty($this->district)) {
@@ -88,11 +88,11 @@ class User extends Authenticatable
             }
         } catch (\Exception $e) {
             Storage::put('/origin/district/'.$this->province, json_encode(json_decode(file_get_contents('http://dev.farizdotid.com/api/daerahindonesia/provinsi/'.substr($this->district, 0, 2).'/kabupaten'))->kabupatens));
-            return $this->getDistrict();
+            return $this->getDistricts();
         }
     }
 
-    public function getSubDistrict()
+    public function getSubDistricts()
     {
         try {
             if (empty($this->sub_district)) {
@@ -106,7 +106,7 @@ class User extends Authenticatable
             }
         } catch (\Exception $e) {
             Storage::put('/origin/sub_district/'.$this->district, json_encode(json_decode(file_get_contents("http://dev.farizdotid.com/api/daerahindonesia/provinsi/kabupaten/$this->district/kecamatan"))->kecamatans));
-            return $this->getSubDistrict();
+            return $this->getSubDistricts();
         }
     }
 
@@ -135,7 +135,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'nis', 'email', 'password', 'pob', 'dob', 'street', 'province', 'gender', 'address', 'sub_district', 'district', 'department', 'grad', 'phone', 'telegram',
+        'name', 'nis', 'email', 'password', 'pob', 'dob', 'street', 'province', 'gender', 'address', 'sub_district', 'district', 'department', 'grad', 'phone', 'telegram', 'temp_password'
     ];
 
     /**

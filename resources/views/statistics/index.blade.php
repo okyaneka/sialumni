@@ -104,7 +104,7 @@
 							@foreach ($origin as $d)
 							<li>
 								<a href="{{ route('user.index').'?asal='.$d->district }}" target="_blank">
-									{{ $d->getDistrict() }} : <strong>{{ $d->total }}</strong>
+									{{ $d->getDistricts() }} : <strong>{{ $d->total }}</strong>
 								</a>
 							</li>
 							@endforeach
@@ -286,7 +286,7 @@
 		});
 
 		ctx = $('#originChart');
-		labels = [ @foreach ($origin as $d) '{{ $d->getDistrict() }}', @endforeach ];
+		labels = [ @foreach ($origin as $d) '{{ $d->getDistricts() }}', @endforeach ];
 		datas = [ @foreach ($origin as $d) {{ $d->total.',' }} @endforeach ];
 		color = [ @foreach ($origin as $d) '{{ rand(0,255).','.rand(0,255).','.rand(0,255) }}', @endforeach ];
 		backgrounds = [];

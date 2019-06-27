@@ -27,13 +27,13 @@
                 <span>{{ auth()->user()->getAddress() }},</span>
                 @endempty
                 @empty ( !auth()->user()->sub_district )
-                <span>{{ auth()->user()->getSubDistrict() }},</span>
+                <span>{{ auth()->user()->getSubDistricts() }},</span>
                 @endempty
                 @empty ( !auth()->user()->district )
-                <span>{{ auth()->user()->getDistrict() }},</span>
+                <span>{{ auth()->user()->getDistricts() }},</span>
                 @endempty
                 @empty ( !auth()->user()->province )
-                <span>{{ auth()->user()->getProvince() }}</span>
+                <span>{{ auth()->user()->getProvinces() }}</span>
                 @endempty
             </div>
             <div class="h5">

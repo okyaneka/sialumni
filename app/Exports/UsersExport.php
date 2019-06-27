@@ -27,9 +27,9 @@ class UsersExport implements FromCollection, WithHeadings, ShouldAutoSize
 
     		$array[$k]->gender = $array[$k]->gender == 'M' ? 'Laki-laki' : 'Perempuan';
     		$array[$k]->address = $d->getAddress();
-    		$array[$k]->sub_district = $d->getSubDistrict();
-    		$array[$k]->district = $d->getDistrict();
-    		$array[$k]->province = $d->getProvince();
+    		$array[$k]->sub_district = $d->getSubDistricts();
+    		$array[$k]->district = $d->getDistricts();
+    		$array[$k]->province = $d->getProvinces();
 
     		foreach ($d->statuses()->get() as $k2 => $d2) {
     			$array[$k]->$k2 = $d2->status;

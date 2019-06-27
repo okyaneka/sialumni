@@ -34,7 +34,7 @@
                 {{ $user->name }}<span class="font-weight-light">, {{ \Carbon\Carbon::parse($user->dob)->age }} tahun</span>
             </h3>
             <div class="h5 font-weight-300">
-                <i class="ni location_pin mr-2"></i>{{ __($user->street.', '.$user->getAddress().', '.$user->getSubDistrict().', '.$user->getDistrict()).', '.$user->getProvince() }}
+                <i class="ni location_pin mr-2"></i>{{ __($user->street.', '.$user->getAddress().', '.$user->getSubDistricts().', '.$user->getDistricts()).', '.$user->getProvinces() }}
             </div>
             <div class="h5">
                 <i class="ni business_briefcase-24 mr-2"></i>{{ __('Lulusan tahun '.$user->grad) }}

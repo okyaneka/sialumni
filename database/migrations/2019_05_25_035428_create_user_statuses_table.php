@@ -20,7 +20,7 @@ class CreateUserStatusesTable extends Migration
             $table->string('info')->nullable();
             $table->string('year')->nullable();
 
-            $table->unique(['user_id', 'status_id']);
+            // $table->unique(['user_id', 'status_id']);
 
             $table->foreign('user_id')
                   ->references('id')->on('users')

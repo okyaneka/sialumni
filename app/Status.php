@@ -22,6 +22,6 @@ class Status extends Model
      */
     public function users()
     {
-        return $this->belongsToMany('App\User', 'user_statuses', 'status_id', 'user_id')->withPivot('year', 'info');;
+        return $this->belongsToMany('App\User', 'user_statuses', 'status_id', 'user_id')->withPivot('id', 'year', 'info');;
     }
 }

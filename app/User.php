@@ -47,7 +47,7 @@ class User extends Authenticatable
      */
     public function statuses()
     {
-        return $this->belongsToMany('App\Status', 'user_statuses', 'user_id', 'status_id')->withPivot('year', 'info');
+        return $this->belongsToMany('App\Status', 'user_statuses', 'user_id', 'status_id')->withPivot('id', 'year', 'info');
     }
 
     public function alumniStatus()

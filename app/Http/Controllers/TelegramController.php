@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use BotMan\BotMan\BotMan;
 use BotMan\BotMan\BotManFactory;
 use BotMan\BotMan\Drivers\DriverManager;
+use BotMan\Drivers\Telegram\TelegramDriver;
+use App\User;
 
 class TelegramController extends Controller
 {
@@ -22,14 +24,14 @@ class TelegramController extends Controller
             'botman' => [
                 'conversation_cache_time' => 30
             ],
-		];
+        ];
 
 		// Load the driver(s) you want to use
-		DriverManager::loadDriver(\BotMan\Drivers\Telegram\TelegramDriver::class);
+        DriverManager::loadDriver(TelegramDriver::class);
 
 		// Create an instance
-		$this->botman = BotManFactory::create($this->config);
-	}
+        $this->botman = BotManFactory::create($this->config);
+    }
 
     //
     /**
@@ -49,12 +51,19 @@ class TelegramController extends Controller
 
     function daftar(BotMan $bot)
     {
-    	return $bot->startConversation(new \App\Conversations\RegisterConversation());
+        if($bot->getMessage()->getPayload()['chat']['type'] == 'group') {
+            $bot->reply("Hai : ".$bot->getUser()->getFirstname().".\nSilahkan check pesan pribadi ya");
+        }
+        return $bot->startConversation(new \App\Conversations\RegisterConversation(), $bot->getUser()->getId(), TelegramDriver::class);
     }
 
     function update(BotMan $bot)
     {
-    	return $bot->startConversation(new \App\Conversations\UpdateConversation());
+        if ($bot->getMessage()->getPayload()['chat']['type'] == 'group') {
+            $bot->reply("Hai : ".$bot->getUser()->getFirstname().".\nSilahkan check pesan pribadi ya");
+        }
+
+    	return $bot->startConversation(new \App\Conversations\UpdateConversation(), $bot->getUser()->getId(), TelegramDriver::class);
     }
 
     function carialumni(BotMan $bot)

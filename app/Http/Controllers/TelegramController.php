@@ -68,6 +68,10 @@ class TelegramController extends Controller
 
     function carialumni(BotMan $bot)
     {
-    	return $bot->startConversation(new \App\Conversations\FindAlumniConversation());
+        if ($bot->getMessage()->getPayload()['chat']['type'] == 'group') {
+            $bot->reply("Hai : ".$bot->getUser()->getFirstname().".\nSilahkan check pesan pribadi ya");
+        }
+        
+    	return $bot->startConversation(new \App\Conversations\FindAlumniConversation(), $bot->getUser()->getId(), TelegramDriver::class);
     }
 }

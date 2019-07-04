@@ -81,10 +81,6 @@
                 <div class="col text-right">{{ $user->phone }}</div>
             </div>
             <div class="d-flex justify-content-between mb-3">
-                <div class="col text-left">Nomor Telegram</div>
-                <div class="col text-right">{{ $user->telegram }}</div>
-            </div>
-            <div class="d-flex justify-content-between mb-3">
                 <div class="col text-left">Email</div>
                 <div class="col text-right"><a href="mailto:{{ $user->email }}">{{ $user->email }}</a></div>
             </div>

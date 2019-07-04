@@ -21,10 +21,10 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('api/provinsi', 'LocationController@getProvince');
-Route::get('api/kabupaten/{id}', 'LocationController@getDistrict');
-Route::get('api/kecamatan/{id}', 'LocationController@getSubDistrict');
-Route::get('api/desa/{id}', 'LocationController@getVillage');
+Route::get('api/provinsi', 'LocationController@getProvinces');
+Route::get('api/kabupaten/{id}', 'LocationController@getDistricts');
+Route::get('api/kecamatan/{id}', 'LocationController@getSubDistricts');
+Route::get('api/desa/{id}', 'LocationController@getVillages');
 
 Route::group(['middleware' => 'auth'], function () {
 	Route::post('/home', 'HomeController@update')->name('home.update');
@@ -50,6 +50,7 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::resource('department', 'DepartmentController', ['except' => ['show']]);
 		Route::resource('status', 'StatusController', ['except' => ['show']]);
 		Route::resource('group', 'GroupController', ['except' => ['show']]);
+		Route::resource('job', 'JobController', ['except' => ['show']]);
 
 		Route::get('batch/user', 'UserBatchController@batch')->name('user.batch');
 		Route::put('batch/user', 'UserBatchController@insertBatch')->name('user.insert_batch');

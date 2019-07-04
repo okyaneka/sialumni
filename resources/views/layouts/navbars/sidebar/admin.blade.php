@@ -102,6 +102,22 @@
                 </div>
             </li>
             <li class="nav-item">
+                <a href="#job" class="nav-link {{ Request::is('job*') ? 'active' : '' }}" data-toggle="collapse" role="button" aria-expanded="true">
+                    <i class="fas fa-briefcase text-pink"></i> Lowongan Kerja
+                </a>
+
+                <div id="job" class="collapse bg-secondary {{ Request::is('job*') ? 'show' : '' }}">
+                    <ul class="nav nav-sm flex-column">
+                        <li class="nav-item {{ Request::is('job/index') ? 'active' : '' }}">
+                            <a href="{{ route('job.index') }}" class="nav-link">Daftar lowongan</a>
+                        </li>
+                        <li class="nav-item {{ Request::is('job/create') ? 'active' : '' }}">
+                            <a href="{{ route('job.create') }}" class="nav-link">Buat lowongan</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link {{ Request::is('statistic*') ? 'active' : '' }}" href="#statistic" data-toggle="collapse" role="button" aria-expanded="true">
                     <i class="ni ni-chart-bar-32 text-green"></i> {{ __('Statistik') }}
                 </a>

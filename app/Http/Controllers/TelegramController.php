@@ -46,7 +46,11 @@ class TelegramController extends Controller
 
     function info(BotMan $bot)
     {
-    	return $bot->startConversation(new \App\Conversations\InfoConversation());
+        if($bot->getMessage()->getPayload()['chat']['type'] == 'group') {
+            $bot->reply("Hai : ".$bot->getUser()->getFirstname().".\nSilahkan check pesan pribadi ya");
+        }
+
+    	return $bot->startConversation(new \App\Conversations\InfoConversation(), $bot->getUser()->getId(), TelegramDriver::class);
     }
 
     function daftar(BotMan $bot)
@@ -54,6 +58,7 @@ class TelegramController extends Controller
         if($bot->getMessage()->getPayload()['chat']['type'] == 'group') {
             $bot->reply("Hai : ".$bot->getUser()->getFirstname().".\nSilahkan check pesan pribadi ya");
         }
+
         return $bot->startConversation(new \App\Conversations\RegisterConversation(), $bot->getUser()->getId(), TelegramDriver::class);
     }
 
@@ -71,7 +76,7 @@ class TelegramController extends Controller
         if ($bot->getMessage()->getPayload()['chat']['type'] == 'group') {
             $bot->reply("Hai : ".$bot->getUser()->getFirstname().".\nSilahkan check pesan pribadi ya");
         }
-        
+
     	return $bot->startConversation(new \App\Conversations\FindAlumniConversation(), $bot->getUser()->getId(), TelegramDriver::class);
     }
 }

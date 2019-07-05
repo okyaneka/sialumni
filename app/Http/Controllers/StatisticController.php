@@ -12,7 +12,7 @@ class StatisticController extends Controller
     public function index()
     {
         $statistics = [
-            'total' => User::where('type','=','default')->count(),
+            'total' => User::where('type','=','default')->whereNotNull('grad')->count(),
             'notActiveYet' => User::where('type','=','default')->whereNull('grad')->count(),
             'active' => User::where('type','=','default')
             ->whereBetween('grad',[(date('Y') - 5), date('Y')])

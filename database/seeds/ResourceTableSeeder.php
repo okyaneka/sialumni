@@ -11,14 +11,18 @@ class ResourceTableSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('departments')->delete();
+
         DB::table('departments')->insert([
-        	[
-        		'code' => 'TKJ',
-        		'department' => 'Teknik Komputer Jaringan',
+            [
+                'code' => 'TKJ',
+                'department' => 'Teknik Komputer Jaringan',
                 'created_at' => now(),
                 'updated_at' => now()
             ],
         ]);
+
+        DB::table('statuses')->delete();
 
         DB::table('statuses')->insert([
         	[
@@ -36,6 +40,15 @@ class ResourceTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now()
             ],
+        ]);
+
+        DB::table('settings')->delete();
+
+        DB::table('settings')->insert([
+            [
+                'name' => 'defaultpassword',
+                'config' => '123456'
+            ]
         ]);
     }
 }

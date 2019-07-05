@@ -69,7 +69,7 @@ class UpdateConversation extends Conversation
     function closing()
     {
         $this->say('Terimakasih menggunakan layanan dari Skanira Bot. Untuk informasi dan fitur-fitur yang lain, silahkan gunakan perintah "/" pada tombol dibawah.');
-        return TRUE;
+        return true;
     }
 
     // ########################################################################

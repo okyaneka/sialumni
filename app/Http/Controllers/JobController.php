@@ -63,7 +63,9 @@ class JobController extends Controller
         $requirements = [];
 
         foreach ($request->requirements as $r) {
-            $requirements[] = $r;
+            if (!empty($r)) {
+                $requirements[] = $r;
+            }
         }
 
         $job = $model->create([
@@ -93,9 +95,18 @@ class JobController extends Controller
      * @param  \App\Job  $job
      * @return \Illuminate\Http\Response
      */
-    public function showAll(Job $job)
+    public function showAll(Job $jobs)
     {
         //
+        $filter = [];
+        if (!empty($_GET['company'])) {
+            $filter[] = ['company','like','%'.$_GET['company'].'%'];
+        }
+
+        $jobs = $jobs->where($filter);
+        $jobs = $jobs->where('duedate','>',date('Y-m-d'))->paginate(12);
+
+        return view('jobs.showall', compact('jobs', 'filter'));
     }
 
     /**
@@ -104,9 +115,11 @@ class JobController extends Controller
      * @param  \App\Job  $job
      * @return \Illuminate\Http\Response
      */
-    public function show(Job $job)
+    public function show($id, Job $job)
     {
         //
+        $job = $job->find($id);
+        return view('jobs.show', compact('job'));
     }
 
     /**
@@ -148,7 +161,9 @@ class JobController extends Controller
         $requirements = [];
 
         foreach ($request->requirements as $r) {
-            $requirements[] = $r;
+            if (!empty($r)) {
+                $requirements[] = $r;
+            }
         }
 
         $job->company = $request->company;

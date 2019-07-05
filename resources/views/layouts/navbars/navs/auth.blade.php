@@ -1,6 +1,6 @@
 <!-- Top navbar -->
 <nav class="navbar navbar-top navbar-expand-md navbar-dark" id="navbar-main">
-    <div class="container-fluid">
+    <div class="container px-4">
         <!-- Brand -->
         <div class="breadcrumb bg-transparent">
             @if (Route::is('home'))
@@ -17,6 +17,8 @@
                     <a class="h4 mb-0 text-white breadcrumb-item active text-uppercase d-none d-lg-inline-block" href="{{ route('status.index') }}">{{ __('Status') }}</a>
                 @elseif (Route::is('group*'))
                     <a class="h4 mb-0 text-white breadcrumb-item active text-uppercase d-none d-lg-inline-block" href="{{ route('group.index') }}">{{ __('Group') }}</a>
+                @elseif (Route::is('job*'))
+                    <a class="h4 mb-0 text-white breadcrumb-item active text-uppercase d-none d-lg-inline-block" href="{{ route('job.index') }}">{{ __('JOB') }}</a>
                 @elseif (Route::is('statistic*'))
                     @if (Route::is('statistic'))
                         <a class="h4 mb-0 text-white breadcrumb-item active text-uppercase d-none d-lg-inline-block" href="{{ route('statistic.index') }}">{{ __('Statistik') }}</a>

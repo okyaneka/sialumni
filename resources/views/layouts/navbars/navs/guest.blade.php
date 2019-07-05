@@ -25,19 +25,61 @@
                     </div>
                 </div>
             </div>
-            <!-- Navbar items -->
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link px-2" href="{{ route('register') }}">
-                        <span class="nav-link-inner--text">{{ __('Register') }}</span>
+            @auth()
+            <ul class="ml-auto navbar-nav align-items-center d-none d-md-flex">
+                <li class="nav-item dropdown">
+                    <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <div class="media align-items-center">
+                            <span class="avatar avatar-sm rounded-circle">
+                                <img alt="Image placeholder" src="{{ asset('storage/avatars/'.auth()->user()->avatar) }}">
+                            </span>
+                            <div class="media-body ml-2 d-none d-lg-block">
+                                <span class="mb-0 text-sm  font-weight-bold">{{ auth()->user()->name }}</span>
+                            </div>
+                        </div>
                     </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link px-2" href="{{ route('login') }}">
-                        <span class="nav-link-inner--text">{{ __('Login') }}</span>
+                    <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-right">
+                        @if (!auth()->user()->isAdmin())
+                        <a href="{{ route('profile.edit') }}" class="dropdown-item">
+                            <i class="ni ni-single-02"></i>
+                            <span>Profil Saya</span>
+                        </a>
+                        @endif
+                        <a href="{{ route('setting.get') }}" class="dropdown-item">
+                            <i class="ni ni-settings-gear-65"></i>
+                            <span>Pengaturan</span>
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="ni ni-support-16"></i>
+                            <span>Bantuan</span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="{{ route('logout') }}" class="dropdown-item" onclick="event.preventDefault();
+                        document.getElementById('logout-form').submit();">
+                        <i class="ni ni-user-run"></i>
+                        <span>{{ __('Logout') }}</span>
                     </a>
-                </li>
-            </ul>
-        </div>
+                </div>
+            </li>
+        </ul>
+        @endauth
+
+        @guest()
+        <!-- Navbar items -->
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link px-2" href="{{ route('register') }}">
+                    <span class="nav-link-inner--text">{{ __('Register') }}</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link px-2" href="{{ route('login') }}">
+                    <span class="nav-link-inner--text">{{ __('Login') }}</span>
+                </a>
+            </li>
+        </ul>
+        @endguest
     </div>
+
+</div>
 </nav>

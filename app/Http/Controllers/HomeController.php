@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
+use App\Job;
 use DB;
 use Auth;
 
@@ -18,12 +19,30 @@ class HomeController extends Controller
         $this->middleware('auth');
     }
 
+    public function index()
+    {
+        $data = [
+            'total' => User::where('type','=','default')
+                ->whereNotNull('grad')
+                ->count(),
+            'statuses' => DB::table('statuses')
+            ->join('user_statuses','statuses.id','=','user_statuses.status_id')
+            ->select(DB::raw('statuses.id, statuses.status, count(*) as total'))
+            ->groupBy('id')
+            ->orderBy('total', 'desc')
+            ->get(),
+            'jobs' => Job::where('duedate','>',date('Y-m-d'))->orderBy('duedate', 'desc')->limit(12)->get(),
+        ];
+
+        return view('welcome', ['data' => $data]);
+    }
+
     /**
      * Show the application dashboard.
      *
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function home()
     {
         $alumnus = [
             'total' => User::where('type','=','default')->count(),

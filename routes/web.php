@@ -11,15 +11,16 @@
 |
 */
 
-Route::get('/', function () {
-	return view('welcome');
-});
+Route::get('/', 'HomeController@index');
 
 Route::match(['get', 'post'], '/telegram', 'TelegramController@handle');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'HomeController@home')->name('home');
+
+Route::get('job/{id}/show', ['as' => 'job.show', 'uses' => 'JobController@show']);
+Route::get('job/showall', ['as' => 'job.showall', 'uses' => 'JobController@showAll']);
 
 Route::get('api/provinsi', 'LocationController@getProvinces');
 Route::get('api/kabupaten/{id}', 'LocationController@getDistricts');

@@ -33,7 +33,7 @@
 
                         <div class="form-group">
                             <input type="file" class="form-control-file form-group{{ $errors->has('file') ? ' has-danger' : '' }}" name="file" id="file" aria-describedby="fileHelp">
-                            <small id="fileHelp" class="form-text text-muted">Silahkan upload file .xlsx. Klik <a href="#">Bantuan</a> untuk mendapatkan petunjuk lebih lanjut.</small>
+                            <small id="fileHelp" class="form-text text-muted">Silahkan upload file .xlsx. Klik <a href="{{ route('larecipe.index') }}" target="_blank">Bantuan</a> untuk mendapatkan petunjuk lebih lanjut.</small>
                         </div>
 
                         @if ($errors->has('file'))

@@ -139,7 +139,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Request::is('data*') ? 'active' : '' }}" href="#">
+                    <a class="nav-link {{ Request::is('data*') ? 'active' : '' }}" href="{{ route('larecipe.index') }}" target="_blank">
                         <i class="ni ni-support-16 text-teal"></i> {{ __('Bantuan') }}
                     </a>
                 </li>

@@ -49,7 +49,7 @@
                             <i class="ni ni-settings-gear-65"></i>
                             <span>Pengaturan</span>
                         </a>
-                        <a href="#" class="dropdown-item">
+                        <a href="{{ route('larecipe.index') }}" class="dropdown-item" target="_blank">
                             <i class="ni ni-support-16"></i>
                             <span>Bantuan</span>
                         </a>

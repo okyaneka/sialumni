@@ -181,7 +181,7 @@
             <label class="form-control-label">{{ __('Status') }}</label>
             <select name="status[{{ $s->id }}][status_id]" class="input-status form-control form-control-alternative {{ $errors->has('status') ? ' is-invalid' : '' }}" {{ empty(\App\Status::all()) ? 'disabled' : '' }}>
                 <option value=''>- Silahkan pilih -</option>
-                @foreach ($statuses as $status)
+                @foreach (\App\Status::all() as $status)
                 <option {{ $s->pivot->status_id == $status->id ? 'selected' : '' }} value="{{ $status->id }}">{{ $status->status }}</option>
                 @endforeach
             </select>
@@ -207,7 +207,7 @@
             <label class="form-control-label">{{ __('Status 2') }}</label>
             <select name="status[n][status_id]" class="input-status form-control form-control-alternative {{ $errors->has('status') ? ' is-invalid' : '' }}" {{ empty(\App\Status::all()) ? 'disabled' : '' }}>
                 <option {{ $user->status == '' ? 'selected' : '' }} value=''>- Silahkan pilih -</option>
-                @foreach ($statuses as $status)
+                @foreach (\App\Status::all() as $status)
                 <option value="{{ $status->id }}">{{ $status->status }}</option>
                 @endforeach
             </select>
@@ -224,17 +224,6 @@
             @if ($errors->has('phone'))
             <span class="invalid-feedback" role="alert">
                 <strong>{{ $errors->first('phone') }}</strong>
-            </span> 
-            @endif
-        </div>
-
-        {{-- Telegram --}}
-        <div class="form-group{{ $errors->has('telegram') ? ' has-danger' : '' }}">
-            <label class="form-control-label" for="input-telegram">{{ __('Nomor Telegram') }}</label>
-            <input type="text" name="telegram" id="input-telegram" class="form-control form-control-alternative {{ $errors->has('telegram') ? ' is-invalid' : '' }}" placeholder="{{ __('Nomor Telegram') }}" value="{{ old('telegram', $user->telegram) }}">
-            @if ($errors->has('telegram'))
-            <span class="invalid-feedback" role="alert" style="display: block;">
-                <strong>{{ $errors->first('telegram') }}</strong>
             </span> 
             @endif
         </div>

@@ -34,9 +34,9 @@ class UsersExport implements FromCollection, WithHeadings, ShouldAutoSize
     		foreach ($d->statuses()->get() as $k2 => $d2) {
     			$array[$k]->$k2 = $d2->status;
     			$k2 = $k2.'ket';
-    			$info = ' di '.$d2->pivot->info;
-    			$year = ' sampai '.$d2->pivot->year;
-    			$array[$k]->$k2 = $d2->status.$info.$year;
+    			$info = !empty($d2->pivot->info) ? $d2->status.' di '.$d2->pivot->info : '';
+    			$info .= !empty($d2->pivot->year) ? ' sampai '.$d2->pivot->year : '';
+    			$array[$k]->$k2 = $info;
     		}
 
     		unset($array[$k]->id);
@@ -56,7 +56,7 @@ class UsersExport implements FromCollection, WithHeadings, ShouldAutoSize
     		'TEMPAT LAHIR',
     		'TANGGAL LAHIR',
     		'JURUSAN',
-    		'JALAN',
+    		'JALAN / DUSUN',
     		'KELURAHAN',
     		'KECAMATAN',
     		'KABUPATEN',

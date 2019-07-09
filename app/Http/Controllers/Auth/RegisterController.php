@@ -7,6 +7,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Events\Registered;
 
 class RegisterController extends Controller
 {
@@ -50,11 +53,37 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            // 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'nis' => ['required', 'string', 'min:4'],
-            'password' => ['required', 'string', 'min:6', 'confirmed'],
+            // 'password' => ['required', 'string', 'min:6', 'confirmed'],
             'privacy' => ['required']
         ]);
+    }
+
+
+    /**
+     * Handle a registration request for the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+
+        event(new Registered($user = $this->create($request->all())));
+        
+        if ($user == FALSE) {
+            return back()->withStatus('Maaf, NIS dan Nama lengkap yang anda masukkan tidak terdaftar sebagai alumni SMK N Pringsurat');
+        }
+
+        if ($user->temp_password == '') {
+            return back()->withStatus('Maaf, NIS dan Nama lengkap yang anda masukkan telah terdaftar sebagai alumni SMK N Pringsurat, silahkan masuk menggunakan halaman <a href="'.route('login').'">Login</a>');
+        }
+
+        $this->guard()->login($user);
+
+        return $this->registered($request, $user) ?: redirect($this->redirectPath());
     }
 
     /**
@@ -65,12 +94,23 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => trim(ucwords($data['name'])),
-            'nis' => trim($data['nis']),
-            'email' => trim($data['email']),
-            'password' => Hash::make($data['password']),
-            'type' => User::DEFAULT_TYPE,
+        $user = User::where([
+            ['name', '=', $data['name']],
+            ['nis', '=', $data['nis']]
         ]);
+
+        if ($user->count() == 1) {
+            return $user->get()->first();
+        } else {
+            return FALSE;
+        }
+
+        // return User::create([
+        //     'name' => trim(ucwords($data['name'])),
+        //     'nis' => trim($data['nis']),
+        //     'email' => trim($data['email']),
+        //     'password' => Hash::make($data['password']),
+        //     'type' => User::DEFAULT_TYPE,
+        // ]);
     }
 }

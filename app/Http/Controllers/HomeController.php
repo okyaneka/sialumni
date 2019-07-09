@@ -82,7 +82,8 @@ class HomeController extends Controller
         $user->department = $request->department;
         $user->grad = $request->grad;
         $user->phone = $request->phone;
-        $user->telegram = $request->telegram;
+        $temp_password = $user->temp_password;
+        $user->temp_password = '';
 
         // dd($request->toArray());
 
@@ -110,6 +111,6 @@ class HomeController extends Controller
         $link = '#';
         $link = '<a href="'.$link.'" target="_blank">'.$link.'</a>';
 
-        return redirect()->route('home')->withStatus(__('Profil telah diperbaharui, klik link berikut untuk bergabung dengan grup alumni anda '.$link));
+        return redirect()->route('home')->withStatus(__('Anda terdaftar sebagai alumni SMK N Pringsurat dengan<br>NIS : '.$user->nis.'<br>Password : '.$temp_password.'<br>Profil telah diperbaharui, klik link berikut untuk bergabung dengan grup alumni anda '.$link));
     }
 }

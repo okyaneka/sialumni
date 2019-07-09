@@ -17,8 +17,6 @@ Route::match(['get', 'post'], '/telegram', 'TelegramController@handle');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@home')->name('home');
-
 Route::get('job/{id}/show', ['as' => 'job.show', 'uses' => 'JobController@show']);
 Route::get('job/showall', ['as' => 'job.showall', 'uses' => 'JobController@showAll']);
 
@@ -28,6 +26,7 @@ Route::get('api/kecamatan/{id}', 'LocationController@getSubDistricts');
 Route::get('api/desa/{id}', 'LocationController@getVillages');
 
 Route::group(['middleware' => 'auth'], function () {
+	Route::get('/home', 'HomeController@home')->name('home');
 	Route::post('/home', 'HomeController@update')->name('home.update');
 
 	Route::resource('user', 'UserController');

@@ -19,8 +19,8 @@ class CreateJobsTable extends Migration
             $table->string('position');
             $table->string('salary')->nullable();
             $table->string('location');
-            $table->string('email');
-            $table->string('phone');
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable();
             $table->date('duedate');
             $table->text('description')->nullable();
             $table->text('requirements');

@@ -20,6 +20,24 @@ class ResourceTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now()
             ],
+            [
+                'code' => 'MM',
+                'department' => 'Multimedia',
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'code' => 'BKP',
+                'department' => 'Bisnis Konstruksi Properti',
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'code' => 'DPIB',
+                'department' => 'Desain Pemodelan Infrastruktur Bangunan',
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
         ]);
 
         DB::table('statuses')->delete();

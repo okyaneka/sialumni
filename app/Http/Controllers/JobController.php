@@ -52,11 +52,9 @@ class JobController extends Controller
             "salary" => "numeric|required",
             "province" => "required",
             "district" => "required",
-            "sub_district" => "required",
-            "address" => "required",
             "street" => "required",
-            "email" => "email|required",
-            'phone' => 'required|numeric|digits_between:9,14', 
+            "email" => "nullable|email",
+            'phone' => "nullable|numeric|digits_between:9,14", 
             'duedate' => 'required|date',
         ]);
 
@@ -75,8 +73,6 @@ class JobController extends Controller
             'location' => serialize([
                 "province" => $request->province,
                 "district" => $request->district,
-                "sub_district" => $request->sub_district,
-                "address" => $request->address,
                 "street" => $request->street,
             ]),
             'email' => $request->email,

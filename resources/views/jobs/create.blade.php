@@ -61,7 +61,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">Rp.</span>
                                     </div>
-                                    <input type="number" name="salary" id="input-salary" class="form-control form-control-alternative{{ $errors->has('salary') ? ' is-invalid' : '' }}" value="{{ old('salary') }}" required>
+                                    <input type="number" name="salary" id="input-salary" class="form-control form-control-alternative{{ $errors->has('salary') ? ' is-invalid' : '' }}" value="{{ old('salary') }}" placeholder="(opsional)">
                                 </div>
 
                                 @if ($errors->has('salary'))
@@ -109,30 +109,6 @@
                                 @endif
                             </div>
 
-                            {{-- Kecamatan --}}
-                            <div class="form-group{{ $errors->has('sub_district') ? ' has-danger' : '' }}">
-                                <label class="form-control-label" for="input-sub_district">{{ __('Kecamatan') }}</label>
-                                <select type="text" name="sub_district" id="input-sub_district" class="form-control form-control-alternative {{ $errors->has('sub_district') ? ' is-invalid' : '' }}" placeholder="{{ __('Kecamatan') }}">
-                                </select>
-                                @if ($errors->has('sub_district'))
-                                <span class="invalid-feedback" role="alert" style="display: block;">
-                                    <strong>{{ $errors->first('sub_district') }}</strong>
-                                </span> 
-                                @endif
-                            </div>
-
-                            {{-- Desa --}}
-                            <div class="form-group{{ $errors->has('address') ? ' has-danger' : '' }}">
-                                <label class="form-control-label" for="input-address">{{ __('Kelurahan') }}</label>
-                                <select type="text" name="address" id="input-address" class="form-control form-control-alternative {{ $errors->has('address') ? ' is-invalid' : '' }}" placeholder="{{ __('Desa') }}">
-                                </select>
-                                @if ($errors->has('address'))
-                                <span class="invalid-feedback" role="alert" style="display: block;">
-                                    <strong>{{ $errors->first('address') }}</strong>
-                                </span> 
-                                @endif
-                            </div>
-
                             {{-- Alamat --}}
                             <div class="form-group{{ $errors->has('street') ? ' has-danger' : '' }}">
                                 <label class="form-control-label" for="input-street">{{ __('Jalan') }}</label>
@@ -150,7 +126,7 @@
 
                             <div class="form-group{{ $errors->has('email') ? ' has-danger' : '' }}">
                                 <label class="form-control-label" for="input-email">Email</label>
-                                <input type="text" name="email" id="input-email" class="form-control form-control-alternative{{ $errors->has('email') ? ' is-invalid' : '' }}" placeholder="Email" value="{{ old('email') }}" required>
+                                <input type="text" name="email" id="input-email" class="form-control form-control-alternative{{ $errors->has('email') ? ' is-invalid' : '' }}" placeholder="Email (opsional)" value="{{ old('email') }}">
 
                                 @if ($errors->has('email'))
                                 <span class="invalid-feedback" role="alert">
@@ -161,7 +137,7 @@
 
                             <div class="form-group{{ $errors->has('phone') ? ' has-danger' : '' }}">
                                 <label class="form-control-label" for="input-phone">Nomor telepon</label>
-                                <input type="text" name="phone" id="input-phone" class="form-control form-control-alternative{{ $errors->has('phone') ? ' is-invalid' : '' }}" placeholder="Nomor telepon" value="{{ old('phone') }}" required>
+                                <input type="text" name="phone" id="input-phone" class="form-control form-control-alternative{{ $errors->has('phone') ? ' is-invalid' : '' }}" placeholder="Nomor telepon (opsional)" value="{{ old('phone') }}">
 
                                 @if ($errors->has('phone'))
                                 <span class="invalid-feedback" role="alert">

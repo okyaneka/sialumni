@@ -21,6 +21,14 @@ class UsersImport implements ToModel, WithHeadingRow
             return null;
         }
 
+        $dob = '';
+
+        if (is_numeric($row['tanggal_lahir'])) {
+            $dob = date('Y-m-d', \PhpOffice\PhpSpreadsheet\Shared\Date::excelToTimestamp($row['tanggal_lahir']));
+        } else {
+            $dob = date('Y-m-d', strtotime($row['tanggal_lahir']));
+        }
+
         return new User([
             'nis' => $row['nis'],
             'name' => $row['nama'],
@@ -28,7 +36,7 @@ class UsersImport implements ToModel, WithHeadingRow
             'password' => Hash::make(empty(Setting::get()['defaultpassword']) ? '123456' : Setting::get()['defaultpassword']),
             'gender' => $row['jenis_kelamin'] == 'L' || strtolower($row['jenis_kelamin']) == 'laki-laki' ? 'M' : 'F',
             'pob' => $row['tempat_lahir'],
-            'dob' => date('Y-m-d', \PhpOffice\PhpSpreadsheet\Shared\Date::excelToTimestamp($row['tanggal_lahir'])) ,
+            'dob' => $dob,
             'department' => $row['jurusan'],
             'temp_password' => empty(Setting::get()['defaultpassword']) ? '123456' : Setting::get()['defaultpassword'],
         ]);

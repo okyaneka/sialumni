@@ -1,4 +1,4 @@
-@extends('layouts.default', ['class' => 'bg-default'])
+@extends('layouts.default')
 
 @section('content')
 <div class="header bg-gradient-primary py-7 py-lg-8">
@@ -58,10 +58,10 @@
                         <h4>{{ $j->position }}</h4>
                         <h3 class="text-primary">{{ $j->company }}</h3>
                         <?php $location = unserialize($j->location);?>
-                        <span class="text-muted small">{{ $location['street'] }}, {{ \App\Location::getVillage($location['address'])->nama }}, {{ \App\Location::getSubDistrict($location['sub_district'])->nama }}, {{ \App\Location::getDistrict($location['district'])->nama }}, {{ \App\Location::getProvince($location['province'])->nama }}</span>
+                        <span class="text-muted small">{{ $location['street'] }}, {{ \App\Location::getDistrict($location['district'])->nama }}, {{ \App\Location::getProvince($location['province'])->nama }}</span>
                     </div>
                     <div class="card-footer bg-primary py-2">
-                        <h3><a href="{{ route('job.show', $j) }}" class="text-white" target="_blank">lihat detail</a></h3>
+                        <h3><a href="{{ route('job.show', $j) }}" class="text-white">lihat detail</a></h3>
                     </div>
                 </div>
             </div>
@@ -69,15 +69,10 @@
             @endif
             <div class="w-100 m-3"></div>
             <div class="col text-center">
-                    <a href="{{ route('job.showall') }}" class="btn btn-primary btn-large" target="_blank">Lihat semua lowongan kerja</a>
+                    <a href="{{ route('job.showall') }}" class="btn btn-primary btn-large">Lihat semua lowongan kerja</a>
             </div>
         </div>
     </div>
-</div>
-<div class="separator separator-bottom separator-skew zindex-100">
-    <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
-        <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
-    </svg>
 </div>
 @endsection
 

@@ -27,15 +27,32 @@ class UserBatchController extends Controller
 		// dd($request->file->getMimeType());
 
 		$messages = [
-			'mimetypes' => 'Format berkas yang di unggah harus .xlsx.',
+			'mimes' => 'Format berkas yang di unggah harus .xls, .xlsx, .ods',
 		];
 
 		$request->validate([
-			'file' => 'required|mimetypes:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+			'file' => 'required|mimes:xlsx,ods,xls',
 		], $messages);
-
+		
 		try {
-			Excel::import(new UsersImport, $request->file);	
+			switch ($request->file->extension()) {
+				case 'xlsx':
+				Excel::import(new UsersImport, $request->file, null, \Maatwebsite\Excel\Excel::XLSX);
+				break;
+				
+				case 'xls':
+				Excel::import(new UsersImport, $request->file, null, \Maatwebsite\Excel\Excel::XLS);
+				break;
+
+				case 'ods':
+				Excel::import(new UsersImport, $request->file, null, \Maatwebsite\Excel\Excel::ODS);
+				break;
+
+				default:
+					// code...
+				break;
+			}
+
 		} catch (\Exception $e) {
 			return back()->withStatus([
 				'status' => 'danger',

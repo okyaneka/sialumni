@@ -36,7 +36,9 @@
                             <small id="fileHelp" class="form-text text-muted">Silahkan upload file .xlsx. Klik <a href="{{ route('larecipe.index') }}" target="_blank">Bantuan</a> untuk mendapatkan petunjuk lebih lanjut.</small>
                         </div>
 
+
                         @if ($errors->has('file'))
+                        {{-- {{ dd($errors->has('')) }} --}}
                         <div class="mb-3">
                             <span class="invalid-feedback" style="display: block;" role="alert">
                                 <strong>{{ $errors->first('file') }}</strong>

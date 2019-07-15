@@ -8,6 +8,7 @@ use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use App\User;
+use App\Setting;
 use App\Job;
 use DB;
 
@@ -88,8 +89,6 @@ class InfoConversation extends Conversation
             $message .= "- $j->company\n".
             "Posisi sebagai $j->position\n".
             $location['street'].",".
-            \App\Location::getVillage($location['address'])->nama.",".
-            \App\Location::getSubDistrict($location['sub_district'])->nama.",".
             \App\Location::getDistrict($location['district'])->nama.",".
             \App\Location::getProvince($location['province'])->nama."\n";
             $message .= route('job.show', $j);
@@ -134,7 +133,7 @@ class InfoConversation extends Conversation
         foreach ($statuses as $s) {
             $message .= "Total alumni yang $s->status adalah $s->total\n";
         }
-        $message .= "data ini di ambil sejak %y";
+        $message .= "data ini di ambil sejak ".date('Y', strtotime(Setting::get('instaled_date')));
 
         return $this->say($message);
     }

@@ -8,7 +8,7 @@
 
 <div class="container-fluid mt--5">
     <div class="row">
-        <div class="col-xl-6 offset-xl-3 mb-5 mb-xl-0 mt-xl--5 ">
+        <div class="col-xl-8 offset-xl-2 mb-5 mb-xl-0 mt-xl--5 ">
             @include('cards.user', ['user' => $user])
         </div>
     </div>

@@ -65,7 +65,11 @@ class ResourceTableSeeder extends Seeder
         DB::table('settings')->insert([
             [
                 'name' => 'defaultpassword',
-                'config' => '123456'
+                'config' => '123456',
+            ],
+            [
+                'name' => 'instaled_date',
+                'config' => now(),
             ]
         ]);
     }

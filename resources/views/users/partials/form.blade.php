@@ -18,7 +18,7 @@
         <div class="form-group{{ $errors->has('name') ? ' has-danger' : '' }}">
             <label class="form-control-label" for="input-name">{{ __('Nama') }}</label>
             <input type="text" name="name" id="input-name" class="form-control form-control-alternative{{ $errors->has('name') ? ' is-invalid' : '' }}"
-            placeholder="{{ __('Nama') }}" value="{{ old('name', $user->name) }}" required>                                
+            placeholder="{{ __('Nama') }}" value="{{ old('name', $user->name) }}" required {{ $user->isDataComplete() ? 'disabled' : '' }}>                                
             @if ($errors->has('name'))
             <span class="invalid-feedback" role="alert" style="display: block;">
                 <strong>{{ $errors->first('name') }}</strong>
@@ -29,7 +29,7 @@
         {{-- Jenis Kelamin --}}
         <div class="form-group {{ $errors->has('gender') ? 'has-danger' : '' }}">
             <label for="input-gender" class="form-control-label">Jenis Kelamin</label>
-            <select name="gender" id="input-gender" class="form-control form-control-alternative {{ $errors->has('gender') ? ' is-invalid' : '' }}">
+            <select name="gender" id="input-gender" class="form-control form-control-alternative {{ $errors->has('gender') ? ' is-invalid' : '' }}" {{ $user->isDataComplete() ? 'disabled' : '' }}>
                 <option {{ $user->gender == '' ? 'selected' : '' }} value=''>- Silahkan pilih -</option>
                 <option {{ $user->gender == 'M' ? 'selected' : '' }} value='M'>Laki-laki</option>
                 <option {{ $user->gender == 'F' ? 'selected' : '' }} value='F'>Perempuan</option>
@@ -112,7 +112,7 @@
         {{-- Tempat Lahir --}}
         <div class="form-group{{ $errors->has('pob') ? ' has-danger' : '' }}">
             <label class="form-control-label" for="input-pob">{{ __('Tempat Lahir') }}</label>
-            <input type="text" name="pob" id="input-pob" class="form-control form-control-alternative {{ $errors->has('pob') ? ' is-invalid' : '' }}" placeholder="{{ __('Tempat Lahir') }}" value="{{ old('pob', $user->pob) }}">
+            <input type="text" name="pob" id="input-pob" class="form-control form-control-alternative {{ $errors->has('pob') ? ' is-invalid' : '' }}" placeholder="{{ __('Tempat Lahir') }}" value="{{ old('pob', $user->pob) }}" {{ $user->isDataComplete() ? 'disabled' : '' }}>
             @if ($errors->has('pob'))
             <span class="invalid-feedback" role="alert" style="display: block;">
                 <strong>{{ $errors->first('pob') }}</strong>
@@ -123,7 +123,7 @@
         {{-- Tanggal Lahir --}}
         <div class="form-group{{ $errors->has('dob') ? ' has-danger' : '' }}">
             <label class="form-control-label" for="input-dob">{{ __('Tanggal Lahir') }}</label>
-            <input type="text" name="dob" id="input-dob" class="form-control form-control-alternative datepicker {{ $errors->has('dob') ? ' is-invalid' : '' }}" placeholder="{{ __('Tanggal Lahir') }}" value="{{ old('dob', date('m/d/Y', strtotime($user->dob))) }}">
+            <input type="text" name="dob" id="input-dob" class="form-control form-control-alternative datepicker {{ $errors->has('dob') ? ' is-invalid' : '' }}" placeholder="{{ __('Tanggal Lahir') }}" value="{{ old('dob', date('m/d/Y', strtotime($user->dob))) }}" {{ $user->isDataComplete() ? 'disabled' : '' }}>
             @if ($errors->has('dob'))
             <span class="invalid-feedback" role="alert" style="display: block;">
                 <strong>{{ $errors->first('dob') }}</strong>
@@ -135,7 +135,7 @@
         {{-- Jurusan --}}
         <div class="form-group{{ $errors->has('department') ? ' has-danger' : '' }}">
             <label class="form-control-label" for="input-department">{{ __('Jurusan') }}</label>
-            <select name="department" id="input-department" class="form-control form-control-alternative {{ $errors->has('department') ? ' is-invalid' : '' }}" {{ empty(\App\Department::all()) ? 'disabled' : '' }}>
+            <select name="department" id="input-department" class="form-control form-control-alternative {{ $errors->has('department') ? ' is-invalid' : '' }}" {{ empty(\App\Department::all()) ? 'disabled' : '' }} {{ $user->isDataComplete() ? 'disabled' : '' }}>
                 <option {{ $user->department == '' ? 'selected' : '' }} value=''>- Silahkan pilih -</option>
                 @foreach (\App\Department::all() as $department)
                 <option {{ $user->department == $department->code ? 'selected' : '' }} value="{{ $department->code }}">{{ $department->department }}</option>
@@ -152,7 +152,7 @@
         {{-- Tahun Lulus --}}
         <div class="form-group{{ $errors->has('grad') ? ' has-danger' : '' }}">
             <label class="form-control-label" for="input-grad">{{ __('Tahun Lulus') }}</label>
-            <input type="text" name="grad" id="input-grad" class="form-control form-control-alternative {{ $errors->has('grad') ? ' is-invalid' : '' }}" placeholder="{{ __('Tahun Lulus') }}" value="{{ old('grad', $user->grad) }}">
+            <input type="text" name="grad" id="input-grad" class="form-control form-control-alternative {{ $errors->has('grad') ? ' is-invalid' : '' }}" placeholder="{{ __('Tahun Lulus') }}" value="{{ old('grad', $user->grad) }}" {{ $user->isDataComplete() ? 'disabled' : '' }}>
 
             @if ($errors->has('grad'))
             <span class="invalid-feedback" role="alert" style="display: block;">
@@ -188,7 +188,7 @@
 
             <div class="form-row mt-3">
                 <div class="col-8">
-                    <input type="text" title="Keterangan (opsional)" name="status[{{ $s->id }}][info]" id="input-phone" class="form-control form-control-alternative {{ $errors->has('phone') ? ' is-invalid' : '' }}" placeholder="{{ __('Keterangan (opsional)') }}" value="{{ old('info', $s->pivot->info) }}" required>
+                    <input type="text" title="Keterangan (opsional)" name="status[{{ $s->id }}][info]" id="input-phone" class="form-control form-control-alternative {{ $errors->has('phone') ? ' is-invalid' : '' }}" placeholder="{{ __('Keterangan (opsional)') }}" value="{{ old('info', $s->pivot->info) }}">
                     <small class="form-text text-muted">
                         Keterangan (opsional)
                     </small>

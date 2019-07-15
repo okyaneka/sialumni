@@ -31,7 +31,7 @@
             </h4>
             @endif
             <h3>
-                {{ $user->name }}<span class="font-weight-light">, {{ \Carbon\Carbon::parse($user->dob)->age }} tahun</span>
+                {{ $user->name }}<span class="font-weight-light">, {{ $user == auth()->user() || auth()->user()->isAdmin() ? \Carbon\Carbon::parse($user->dob)->age.' tahun' : '' }}</span>
             </h3>
             <div class="h5 font-weight-300">
                 <i class="ni location_pin mr-2"></i>{{ __($user->street.', '.$user->getAddress().', '.$user->getSubDistricts().', '.$user->getDistricts()).', '.$user->getProvinces() }}
@@ -40,6 +40,7 @@
                 <i class="ni business_briefcase-24 mr-2"></i>{{ __('Lulusan tahun '.$user->grad) }}
             </div>
             <hr>
+            @if ($user == auth()->user() || auth()->user()->isAdmin())    
             <div class="d-flex justify-content-between mb-3">
                 <div class="col text-left">Tempat Lahir</div>
                 <div class="col text-right">{{ $user->pob }}</div>
@@ -49,6 +50,7 @@
                 <div class="col text-right">{{ $user->dob }}</div>
             </div>
             <hr>
+            @endif
             <div class="d-flex justify-content-between mb-3">
                 <div class="col text-left">Jurusan</div>
                 <div class="col text-right">{{ \App\Department::where('code',$user->department)->first()->department }}</div>

@@ -39,8 +39,12 @@
                         </div>
                     </a>
                     <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-right">
+                        <a href="{{ route('home') }}" class="dropdown-item">
+                            <i class="ni ni-settings-gear-65"></i>
+                            <span>Dashboard</span>
+                        </a>
                         @if (!auth()->user()->isAdmin())
-                        <a href="{{ route('profile.edit') }}" class="dropdown-item">
+                        <a href="{{ route('profile') }}" class="dropdown-item">
                             <i class="ni ni-single-02"></i>
                             <span>Profil Saya</span>
                         </a>
@@ -55,31 +59,30 @@
                         </a>
                         <div class="dropdown-divider"></div>
                         <a href="{{ route('logout') }}" class="dropdown-item" onclick="event.preventDefault();
-                        document.getElementById('logout-form').submit();">
-                        <i class="ni ni-user-run"></i>
-                        <span>{{ __('Logout') }}</span>
+                            document.getElementById('logout-form').submit();">
+                            <i class="ni ni-user-run"></i>
+                            <span>{{ __('Logout') }}</span>
+                        </a>
+                    </div>
+                </li>
+            </ul>
+            @endauth
+
+            @guest()
+            <!-- Navbar items -->
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link px-2" href="{{ route('register') }}">
+                        <span class="nav-link-inner--text">{{ __('Register') }}</span>
                     </a>
-                </div>
-            </li>
-        </ul>
-        @endauth
-
-        @guest()
-        <!-- Navbar items -->
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                <a class="nav-link px-2" href="{{ route('register') }}">
-                    <span class="nav-link-inner--text">{{ __('Register') }}</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link px-2" href="{{ route('login') }}">
-                    <span class="nav-link-inner--text">{{ __('Login') }}</span>
-                </a>
-            </li>
-        </ul>
-        @endguest
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link px-2" href="{{ route('login') }}">
+                        <span class="nav-link-inner--text">{{ __('Login') }}</span>
+                    </a>
+                </li>
+            </ul>
+            @endguest
+        </div>
     </div>
-
-</div>
 </nav>

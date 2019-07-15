@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use DB;
+use Auth;
 use App\User;
 use App\Status;
 use Illuminate\Http\Request;
@@ -25,6 +26,9 @@ class UserController extends Controller
             // $filter[] = ['status', '=', $_GET['status']];
 
         $model = $model->where('type','=',User::DEFAULT_TYPE);
+        if (Auth::user()->isAdmin() == FALSE) {
+            $model = $model->whereNotNull('grad');
+        }
 
         $filter = [];
 
@@ -78,6 +82,10 @@ class UserController extends Controller
     public function show($id)
     {
         $user = User::find($id);
+
+        if (is_null($user)) {
+            abort(503, 'User not found');
+        }
 
         // if ($user->isDataComplete()) {
         return view('users.show', ['user' => $user]);

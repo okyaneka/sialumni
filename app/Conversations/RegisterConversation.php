@@ -24,7 +24,7 @@ class RegisterConversation extends Conversation
     {
         $this->say('Dalam menu pendaftaran ini, anda akan diminta memasukan beberapa data secara bertahap.');
         $this->say('Data-data tersebut antara lain');
-        $this->say('nama lengkap, alamat email, tempat lahir, tanggal lahir, jurusan, tahun lulus, jenis kelamin, alamat (provinsi), alamat (kabupaten), alamat (kecamatan), alamat (desa), alamat (jalan / RT RW), nomor telepon, nomor telegram');
+        $this->say('nama lengkap, tempat lahir, tanggal lahir, jurusan, tahun lulus, alamat, dan nomor telepon');
         return $this->ask('Baik kita mulai untuk yang pertama. (Balas "oke" untuk memulai)', function(Answer $answer) {
             if (strtolower($answer->getText()) == 'oke') {
                 $this->askName();
@@ -98,7 +98,22 @@ class RegisterConversation extends Conversation
 
     function banned()
     {
-        $this->say("Kami mendeteksi bahwa anda bukan alumni dari SMK Negeri Pringsurat. Mohon maaf untuk sementara nomor anda tidak dapat digunakan untuk mendaftarkan diri.");
+        $question = Question::create('Data yang anda masukkan tidak terdeteksi sebagai alumni dari SMK Negeri Pringsurat. Apakah anda ingin mengeceknya kembali?')
+        ->callbackId('ask_check')
+        ->addButtons([
+            Button::create('Iya tolong')->value('TRUE'),
+            Button::create('Tidak, terimakasih')->value('FALSE')
+        ]);
+
+        return $this->ask($question, function (Answer $answer)
+        {
+            if ($answer->getValue() == '') {
+                $this->check();
+            } else {
+                $this->closing();
+            }
+        });
+
     }
 
     // ########################################################################
@@ -285,11 +300,11 @@ class RegisterConversation extends Conversation
             $this->say("Anda memasukkan data berikut:\n".
                 "Tahun lulus : ".$this->data['grad']."\n".
                 "Alamat : ".
-                    $this->data['street'].', '.
-                    Location::getVillage($this->data['address'])->nama.', '.
-                    Location::getSubDistrict($this->data['sub_district'])->nama.', '.
-                    Location::getDistrict($this->data['district'])->nama.', '.
-                    Location::getProvince($this->data['province'])->nama."\n".
+                $this->data['street'].', '.
+                Location::getVillage($this->data['address'])->nama.', '.
+                Location::getSubDistrict($this->data['sub_district'])->nama.', '.
+                Location::getDistrict($this->data['district'])->nama.', '.
+                Location::getProvince($this->data['province'])->nama."\n".
                 "Nomor Telepon : ".$this->data['phone']."\n".
                 "Status : ".\App\Status::find($this->data['status'][0]['status_id'])->status);
             break;
@@ -401,25 +416,40 @@ class RegisterConversation extends Conversation
 
         if ($this->user->get()->count() == 1) {
             $this->user = $this->user->get()->first();
-            $data = "NIS : ".$this->user->nis."\n".
-            "Nama : ".$this->user->name."\n".
-            "Jenis Kelamin : ".($this->user->gender == 'M' ? 'Laki-laki' : 'Perempuan')."\n".
-            "Email : ".$this->user->email."\n".
-            "Tempat Lahir : ".$this->user->dob."\n".
-            "Tanggal Lahir : ".$this->user->pob."\n".
-            "Jurusan : ".$this->user->department;
+            if($this->user->isDataComplete()) {
+                $question = Question::create("Kami mendeteksi bahwa anda telah terdaftar sebagai alumni aktif di dalam sistem kami")
+                ->callbackId('ask_confirmation')
+                ->addButtons([
+                    Button::create('OK!')->value('OK'),
+                ]);
+                
+                return $this->ask($question, function (Answer $answer) {
+                    if ($answer->getValue() == 'TRUE') {
+                        $this->sayThanks(true);
+                    }
+                });
 
-            $this->say("Kami mendeteksi bahwa data anda telah terdaftar dalam sistem kami dengan rincian sebagai berikut:\n");
-            $this->say($data);
-            $this->say('Untuk selanjutnya, anda akan diminta untuk memasukan beberapa data seperti tahun lulus, alamat, status, nomor telepon');
+            } else {
+                $data = "NIS : ".$this->user->nis."\n".
+                "Nama : ".$this->user->name."\n".
+                "Jenis Kelamin : ".($this->user->gender == 'M' ? 'Laki-laki' : 'Perempuan')."\n".
+                "Email : ".$this->user->email."\n".
+                "Tempat Lahir : ".$this->user->dob."\n".
+                "Tanggal Lahir : ".$this->user->pob."\n".
+                "Jurusan : ".$this->user->department;
 
-            return $this->ask('Balas "Oke" untuk melanjutkan.', function(Answer $answer) {
-                if (strtolower($answer->getText()) == 'oke') {
-                    $this->askGrad();
-                } else {
-                    $this->closing();
-                }
-            });
+                $this->say("Kami mendeteksi bahwa data anda telah terdaftar dalam sistem kami dengan rincian sebagai berikut:\n");
+                $this->say($data);
+                $this->say('Untuk selanjutnya, anda akan diminta untuk memasukan beberapa data seperti tahun lulus, alamat, status, nomor telepon');
+
+                return $this->ask('Balas "Oke" untuk melanjutkan.', function(Answer $answer) {
+                    if (strtolower($answer->getText()) == 'oke') {
+                        $this->askGrad();
+                    } else {
+                        $this->closing();
+                    }
+                });
+            }
         } else {
             $this->banned();
         }
@@ -431,26 +461,28 @@ class RegisterConversation extends Conversation
     {
         return $this->ask('Sebelumnya, Silahkan masukan nomor induk siswa anda!', function(Answer $answer)
         {
-         $this->data['nis'] = $answer->getText();
-         $this->sayThanks();
-     });
+            $this->data['nis'] = $answer->getText();
+            $this->sayThanks();
+        });
     }
 
     // ########################################################################
 
-    function sayThanks()
+    function sayThanks($isRegistered = false)
     {
-        $this->say('Anda telah terdaftar dalam sistem kami. Silahkan klik link berikut dan login dengan nis dan password berikut');
+        $this->say('Terimakasih telah mendaftarkan akun anda. Silahkan klik link berikut '.route('home').' untuk menikmati layana dari SI Alumni dengan login menggunakan nis dan password berikut');
         $this->say('nis : '.$this->user->nis."\n".'password : '.$this->user->temp_password);
 
-        $this->user->province = $this->data['province'];
-        $this->user->district = $this->data['district'];
-        $this->user->sub_district = $this->data['sub_district'];
-        $this->user->address = $this->data['address'];
-        $this->user->street = $this->data['street'];
-        $this->user->grad = $this->data['grad'];
-        $this->user->phone = $this->data['phone'];
-        $this->user->telegram_id = $this->botinfo['user']['id'];
+        if (!$isRegistered) {
+            $this->user->province = $this->data['province'];
+            $this->user->district = $this->data['district'];
+            $this->user->sub_district = $this->data['sub_district'];
+            $this->user->address = $this->data['address'];
+            $this->user->street = $this->data['street'];
+            $this->user->grad = $this->data['grad'];
+            $this->user->phone = $this->data['phone'];
+            $this->user->telegram_id = $this->botinfo['user']['id'];
+        } 
         $this->user->temp_password = '';
 
         foreach ($this->data['status'] as $status) {

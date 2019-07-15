@@ -304,6 +304,6 @@ class UpdateConversation extends Conversation
             return TRUE;
         }
 
-        $this->askPhone();
+        $this->greetings();
     }
 }

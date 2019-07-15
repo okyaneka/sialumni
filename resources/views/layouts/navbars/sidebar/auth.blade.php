@@ -5,7 +5,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <!-- Brand -->
-        <a class="navbar-brand py-3" href="{{ route('home') }}">
+        <a class="navbar-brand py-3" href="/">
             <i class="fas fa-fw fa-graduation-cap"></i>
             <span>SI Alumni</span>
         </a>
@@ -20,27 +20,27 @@
                     </div>
                 </a>
                 <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-right">
-                    <div class=" dropdown-header noti-title">
-                        <h6 class="text-overflow m-0">{{ __('Welcome!') }}</h6>
-                    </div>
-                    <a href="{{ route('profile.edit') }}" class="dropdown-item">
-                        <i class="ni ni-single-02"></i>
-                        <span>{{ __('My profile') }}</span>
-                    </a>
-                    <a href="#" class="dropdown-item">
+                    <a href="{{ route('home') }}" class="dropdown-item">
                         <i class="ni ni-settings-gear-65"></i>
-                        <span>{{ __('Settings') }}</span>
+                        <span>Dashboard</span>
                     </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="ni ni-calendar-grid-58"></i>
-                        <span>{{ __('Activity') }}</span>
+                    @if (!auth()->user()->isAdmin())
+                        <a href="{{ route('profile') }}" class="dropdown-item">
+                            <i class="ni ni-single-02"></i>
+                            <span>Profil Saya</span>
+                        </a>
+                    @endif
+                    <a href="{{ route('setting.get') }}" class="dropdown-item">
+                        <i class="ni ni-settings-gear-65"></i>
+                        <span>Pengaturan</span>
                     </a>
-                    <a href="#" class="dropdown-item">
+                    <a href="{{ route('larecipe.index') }}" class="dropdown-item" target="_blank">
                         <i class="ni ni-support-16"></i>
-                        <span>{{ __('Support') }}</span>
+                        <span>Bantuan</span>
                     </a>
                     <div class="dropdown-divider"></div>
-                    <a href="{{ route('logout') }}" class="dropdown-item" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <a href="{{ route('logout') }}" class="dropdown-item" onclick="event.preventDefault();
+                    document.getElementById('logout-form').submit();">
                         <i class="ni ni-user-run"></i>
                         <span>{{ __('Logout') }}</span>
                     </a>

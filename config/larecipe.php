@@ -114,11 +114,17 @@ return [
 
     'ui'                 => [
         'code_theme'     => 'dark', // or: light
-        'fav'            => '',     // eg: fav.png
+        'fav'            => 'fav.png',     // eg: fav.png
         'fa_v4_shims'    => true, // Add FontAwesome v4 shims prevent BC break
         'colors'         => [
             'primary'    => '#787AF6',
             'secondary'  => '#2b9cf2'
+        ],
+        'additional_css' => [
+            // 'css/custom.css',
+        ],
+        'additional_js'  => [
+            // 'js/custom.js',
         ],
     ],
 
@@ -160,11 +166,11 @@ return [
    |
    */
 
-  'forum'                   => [
-        'enabled'           => false,
-        'default'           => 'disqus',
-        'services'          => [
-            'disqus'        => [
+   'forum'                   => [
+    'enabled'           => false,
+    'default'           => 'disqus',
+    'services'          => [
+        'disqus'        => [
                 'site_name' => '', // yoursite.disqus.com
             ]
         ]

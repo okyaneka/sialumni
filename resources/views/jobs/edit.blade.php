@@ -111,30 +111,6 @@
                                 @endif
                             </div>
 
-                            {{-- Kecamatan --}}
-                            <div class="form-group{{ $errors->has('sub_district') ? ' has-danger' : '' }}">
-                                <label class="form-control-label" for="input-sub_district">{{ __('Kecamatan') }}</label>
-                                <select type="text" name="sub_district" id="input-sub_district" class="form-control form-control-alternative {{ $errors->has('sub_district') ? ' is-invalid' : '' }}" placeholder="{{ __('Kecamatan') }}">
-                                </select>
-                                @if ($errors->has('sub_district'))
-                                <span class="invalid-feedback" role="alert" style="display: block;">
-                                    <strong>{{ $errors->first('sub_district') }}</strong>
-                                </span> 
-                                @endif
-                            </div>
-
-                            {{-- Desa --}}
-                            <div class="form-group{{ $errors->has('address') ? ' has-danger' : '' }}">
-                                <label class="form-control-label" for="input-address">{{ __('Kelurahan') }}</label>
-                                <select type="text" name="address" id="input-address" class="form-control form-control-alternative {{ $errors->has('address') ? ' is-invalid' : '' }}" placeholder="{{ __('Desa') }}">
-                                </select>
-                                @if ($errors->has('address'))
-                                <span class="invalid-feedback" role="alert" style="display: block;">
-                                    <strong>{{ $errors->first('address') }}</strong>
-                                </span> 
-                                @endif
-                            </div>
-
                             {{-- Alamat --}}
                             <div class="form-group{{ $errors->has('street') ? ' has-danger' : '' }}">
                                 <label class="form-control-label" for="input-street">{{ __('Jalan') }}</label>
@@ -221,8 +197,6 @@
 
         var prov_id = {{ old('province', unserialize($job->location)['province']) ?: 'false' }};
         var kab_id = {{ old('district', unserialize($job->location)['district']) ?: 'false' }};
-        var kec_id = {{ old('sub_district', unserialize($job->location)['sub_district']) ?: 'false' }};
-        var kel_id = {{ old('address', unserialize($job->location)['address']) ?: 'false' }};
 
         $.get('/api/provinsi', function(data, status) {
             selected = '';
@@ -261,78 +235,14 @@
             });
         }
 
-        if (kec_id != false) {
-            $.get('/api/kecamatan/'+kab_id, function(data, status) {
-                $('#input-sub_district').append('<option value="">- Silahkan pilih -</option>');
-                $.each(data, function(i, val) {
-                    if (kec_id == val.id) {
-                        selected = 'selected';
-                    } else {
-                        selected = '';
-                    }
-
-                    if (val.id == null) {
-                        $('#input-sub_district').append('<option value="'+kec_id+'" selected>'+kec_id+'</option>');
-                    } else {
-                        $('#input-sub_district').append('<option value="'+val.id+'" '+selected+'>'+val.nama+'</option>');
-                    }
-                })
-            });
-        }
-
-        if (kel_id != false) {
-            $.get('/api/desa/'+kec_id, function(data, status) {
-                $('#input-address').append('<option value="">- Silahkan pilih -</option>');
-                $.each(data, function(i, val) {
-                    if (kel_id == val.id) {
-                        selected = 'selected';
-                    } else {
-                        selected = '';
-                    }
-
-                    if (val.id == null) {
-                        $('#input-address').append('<option value="'+kel_id+'" selected>'+kel_id+'</option>');
-                    } else {
-                        $('#input-address').append('<option value="'+val.id+'" '+selected+'>'+val.nama+'</option>');
-                    }
-                    
-                })
-            });
-        }
-
         $('#input-province').change(function() {
             $('#input-district').empty();
-            $('#input-sub_district').empty();
-            $('#input-address').empty();
             $('#input-district').append('<option value="">- Silahkan pilih -</option>');
 
             $.get('/api/kabupaten/'+$(this).val(), function(data, status) {
                 $.each(data, function(i, val) {
                     $('#input-district').append('<option value="'+val.id+'">'+val.nama+'</option>');
                 })
-            });
-        });
-
-        $('#input-district').change(function() {
-            $('#input-sub_district').empty();
-            $('#input-address').empty();
-            $('#input-sub_district').append('<option value="">- Silahkan pilih -</option>');
-
-            $.get('/api/kecamatan/'+$(this).val(), function(data, status) {
-                $.each(data, function(i, val) {
-                    $('#input-sub_district').append('<option value="'+val.id+'">'+val.nama+'</option>');
-                })
-            });
-        });
-
-        $('#input-sub_district').change(function() {
-            $('#input-address').empty();
-            $('#input-address').append('<option value="">- Silahkan pilih -</option>');
-
-            $.get('/api/desa/'+$(this).val(), function(data, status) {
-                $.each(data, function(i, val) {
-                    $('#input-address').append('<option value="'+val.id+'">'+val.nama+'</option>');
-                });
             });
         });
     });

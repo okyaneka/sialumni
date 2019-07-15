@@ -33,6 +33,10 @@ class FindAlumniConversation extends Conversation
             $results[] = Button::create($user->name.' ('.$user->department.', '.$user->grad.')')->value($user->id);
         }
 
+        if ($users->count() == 0) {
+            return $this->say('Tidak ditemukan data alumni untuk pencarian "'.$this->data['keyword'].'"');
+        }
+
         $question = Question::create('Ditemukan '.$users->count().' alumni')
         ->callbackId('results')
         ->addButtons($results);

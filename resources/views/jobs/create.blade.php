@@ -195,8 +195,6 @@
 
         var prov_id = {{ old('province') ?: 'false' }};
         var kab_id = {{ old('district') ?: 'false' }};
-        var kec_id = {{ old('sub_district') ?: 'false' }};
-        var kel_id = {{ old('address') ?: 'false' }};
 
         $.get('/api/provinsi', function(data, status) {
             selected = '';
@@ -235,78 +233,14 @@
             });
         }
 
-        if (kec_id != false) {
-            $.get('/api/kecamatan/'+kab_id, function(data, status) {
-                $('#input-sub_district').append('<option value="">- Silahkan pilih -</option>');
-                $.each(data, function(i, val) {
-                    if (kec_id == val.id) {
-                        selected = 'selected';
-                    } else {
-                        selected = '';
-                    }
-
-                    if (val.id == null) {
-                        $('#input-sub_district').append('<option value="'+kec_id+'" selected>'+kec_id+'</option>');
-                    } else {
-                        $('#input-sub_district').append('<option value="'+val.id+'" '+selected+'>'+val.nama+'</option>');
-                    }
-                })
-            });
-        }
-
-        if (kel_id != false) {
-            $.get('/api/desa/'+kec_id, function(data, status) {
-                $('#input-address').append('<option value="">- Silahkan pilih -</option>');
-                $.each(data, function(i, val) {
-                    if (kel_id == val.id) {
-                        selected = 'selected';
-                    } else {
-                        selected = '';
-                    }
-
-                    if (val.id == null) {
-                        $('#input-address').append('<option value="'+kel_id+'" selected>'+kel_id+'</option>');
-                    } else {
-                        $('#input-address').append('<option value="'+val.id+'" '+selected+'>'+val.nama+'</option>');
-                    }
-                    
-                })
-            });
-        }
-
         $('#input-province').change(function() {
             $('#input-district').empty();
-            $('#input-sub_district').empty();
-            $('#input-address').empty();
             $('#input-district').append('<option value="">- Silahkan pilih -</option>');
 
             $.get('/api/kabupaten/'+$(this).val(), function(data, status) {
                 $.each(data, function(i, val) {
                     $('#input-district').append('<option value="'+val.id+'">'+val.nama+'</option>');
                 })
-            });
-        });
-
-        $('#input-district').change(function() {
-            $('#input-sub_district').empty();
-            $('#input-address').empty();
-            $('#input-sub_district').append('<option value="">- Silahkan pilih -</option>');
-
-            $.get('/api/kecamatan/'+$(this).val(), function(data, status) {
-                $.each(data, function(i, val) {
-                    $('#input-sub_district').append('<option value="'+val.id+'">'+val.nama+'</option>');
-                })
-            });
-        });
-
-        $('#input-sub_district').change(function() {
-            $('#input-address').empty();
-            $('#input-address').append('<option value="">- Silahkan pilih -</option>');
-
-            $.get('/api/desa/'+$(this).val(), function(data, status) {
-                $.each(data, function(i, val) {
-                    $('#input-address').append('<option value="'+val.id+'">'+val.nama+'</option>');
-                });
             });
         });
     });

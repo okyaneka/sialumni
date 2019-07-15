@@ -55,8 +55,12 @@
                     </div>
                 </a>
                 <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-right">
+                    <a href="{{ route('home') }}" class="dropdown-item">
+                        <i class="ni ni-settings-gear-65"></i>
+                        <span>Dashboard</span>
+                    </a>
                     @if (!auth()->user()->isAdmin())
-                        <a href="{{ route('profile.edit') }}" class="dropdown-item">
+                        <a href="{{ route('profile') }}" class="dropdown-item">
                             <i class="ni ni-single-02"></i>
                             <span>Profil Saya</span>
                         </a>

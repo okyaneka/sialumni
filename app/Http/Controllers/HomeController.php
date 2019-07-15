@@ -61,10 +61,10 @@ class HomeController extends Controller
             'pob' => 'required|alpha', 
             'dob' => 'required|date', 
             'department' => 'required', 
-            'status' => 'required', 
+            // 'status' => 'required', 
             'grad' => 'required|numeric|digits:4', 
             'phone' => 'required|numeric|digits_between:9,14', 
-            'telegram' => 'required|numeric|digits_between:9,14',
+            // 'telegram' => 'required|numeric|digits_between:9,14',
         ]);
 
         $user = Auth::user();

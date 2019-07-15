@@ -26,5 +26,26 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         //
+        // Gate::define('viewLarecipe', function($user, $documentation) {
+        //     return TRUE;
+        //     $doc_title = [
+        //         'Profil (admin)',
+        //         'Master data (admin)',
+        //         'Pengaturan (admin)',
+        //         'Lowongan kerja (admin)',
+        //     ];
+
+        //     foreach ($doc_title as $d) {
+        //         if ($documentation->title == $d) {
+        //             if ($user->isAdmin()) {
+        //                 return false;
+        //             } else {
+        //                 return true;
+        //             }
+        //         }
+        //     }
+
+        //     return true;
+        // });
     }
 }

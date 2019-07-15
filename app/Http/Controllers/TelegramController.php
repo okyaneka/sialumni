@@ -22,7 +22,7 @@ class TelegramController extends Controller
 				"token" => env('TELEGRAM_TOKEN')
 			],
             'botman' => [
-                'conversation_cache_time' => 30
+                'conversation_cache_time' => 180
             ],
         ];
 

@@ -1,5 +1,21 @@
-- ## Get Started
-    - [Overview](/{{route}}/{{version}}/overview)
-    	- [Overview](/{{route}}/{{version}}/tes)
-	- [Overview](/{{route}}/{{version}}/tes2)
-- ## Menu
+- ## Permulaan
+	- [Ikhtisar](/{{route}}/{{version}}/overview)
+	- [Petunjuk pendaftaran](/{{route}}/{{version}}/register)
+	- [F.A.Q](/{{route}}/{{version}}/telegram/auth)
+- ## Web
+	- [Otentikasi](/{{route}}/{{version}}/web/auth)
+	- [Profil](/{{route}}/{{version}}/web/profile)
+	- [Alumni](/{{route}}/{{version}}/web/alumnus)
+	- [Lowongan kerja](/{{route}}/{{version}}/web/job)
+	- [Statistik](/{{route}}/{{version}}/web/stat)
+	- [Pengaturan](/{{route}}/{{version}}/web/setting)
+	- [Alumni (admin)](/{{route}}/{{version}}/web/admin/alumnus)
+	- [Master data (admin)](/{{route}}/{{version}}/web/admin/master)
+	- [Lowongan kerja (admin)](/{{route}}/{{version}}/web/admin/job)
+	- [Pengaturan (admin)](/{{route}}/{{version}}/web/admin/setting)
+- ## Telegram
+	- [Daftar](/{{route}}/{{version}}/telegram/register)
+	- [Update](/{{route}}/{{version}}/telegram/update)
+	- [Info](/{{route}}/{{version}}/telegram/info)
+	- [Cari alumni](/{{route}}/{{version}}/telegram/find)
+	<!-- - [Bantuan](/{{route}}/{{version}}/telegram/help) -->

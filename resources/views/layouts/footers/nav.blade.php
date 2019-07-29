@@ -7,7 +7,7 @@
     <div class="col-xl-6">
         <div class="text-xl-right text-center text-muted">
             <small>
-                <span>Supported by </span><a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">Creative Tim</a> &amp; <a href="https://www.updivision.com" class="font-weight-bold" target="_blank">Updivision</a>
+                <span>Supported by </span><a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">Creative Tim</a> &amp; <a href="https://www.updivision.com" class="font-weight-bold" target="_blank">Updivision</a> | <a href="{{ route('larecipe.index') }}">Bantuan</a>
             </small>
         </div>
     </div>

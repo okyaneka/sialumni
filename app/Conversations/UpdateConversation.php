@@ -57,7 +57,7 @@ class UpdateConversation extends Conversation
                     break;
 
                 case 'cancel' :
-                    $this->clossing();
+                    $this->closing();
                     break;
                 default:
                     // code...

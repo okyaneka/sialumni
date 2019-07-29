@@ -51,7 +51,7 @@
                                 </div>
                             </div>
                             <div class="text-center">
-                                <button type="submit" class="btn btn-primary my-4">{{ __('Reset Password') }}</button>
+                                <button type="submit" class="btn btn-primary my-4">{{ __('Setel ulang kata sandi') }}</button>
                             </div>
                         </form>
                     </div>

@@ -14,8 +14,6 @@ class JobController extends Controller
      */
     public function index(Job $job)
     {
-        //
-
         $filter = [];
 
         // if (!empty($_GET['submit'])) {

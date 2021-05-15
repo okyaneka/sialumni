@@ -19,7 +19,6 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        //
-        '/telegram'
+        "/bot" . env('TELEGRAM_TOKEN')
     ];
 }

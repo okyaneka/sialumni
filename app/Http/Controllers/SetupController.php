@@ -42,7 +42,7 @@ class SetupController extends Controller
         $url = str_replace('<token>', env('TELEGRAM_TOKEN'), 'https://api.telegram.org/bot<token>/setWebhook');
         // $file = curl_file_create($req->file->path());
         $data = [
-            'url' => url('/bot' . env('TELEGRAM_TOKEN'))
+            'url' => url(env('TELEGRAM_WEBHOOK'))
         ];
         $headers = ["Content-Type:multipart/form-data"];
         $ch = curl_init();

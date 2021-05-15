@@ -18,7 +18,7 @@ Route::middleware('is_not_installed')->group(function () {
 	});
 });
 
-Route::match(['get', 'post'], "/bot" . env('TELEGRAM_TOKEN'), 'TelegramController@handle');
+Route::match(['get', 'post'], env('TELEGRAM_WEBHOOK'), 'TelegramController@handle');
 
 Route::middleware('is_installed')->group(function () {
 	Auth::routes();

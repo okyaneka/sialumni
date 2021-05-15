@@ -18,13 +18,13 @@ Route::middleware('is_not_installed')->group(function () {
 	});
 });
 
-Route::match(['get', 'post'], env('TELEGRAM_WEBHOOK'), 'TelegramController@handle');
+Route::match(['get', 'post'], '/telegram/' . env('TELEGRAM_WEBHOOK'), 'TelegramController@handle');
 
 Route::middleware('is_installed')->group(function () {
 	Auth::routes();
-	
+
 	Route::get('/setup/status', 'SetupController@status')->name('setup.status');
-	
+
 	Route::get('/', 'HomeController@index');
 
 	Route::get('job/{id}/show', ['as' => 'job.show', 'uses' => 'JobController@show']);

@@ -18,18 +18,12 @@ class isNotInstalled
     public function handle($request, Closure $next)
     {
         try {
-            $is_installed = Artisan::call('migrate:status');
-        } catch (\Throwable $th) {
-            $is_installed = false;
-        }
-
-        try {
             $admin_exist = User::where('type', User::ADMIN_TYPE)->count() > 0;
         } catch (\Throwable $th) {
             $admin_exist = false;
         }
 
-        if ($is_installed && $admin_exist) {
+        if ($admin_exist) {
             return redirect('/');
         }
 

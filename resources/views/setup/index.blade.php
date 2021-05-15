@@ -8,6 +8,16 @@
         <div class="card shadow border-0">
           <div class="card-body px-lg-5 py-lg-5">
             <form action="{{ route('setup.store') }}" method="post" enctype="multipart/form-data">
+              @if ($errors->any())
+              <div class="alert alert-danger">
+                <ul>
+                  @foreach ($errors->all() as $error)
+                  <li>{{ $error }}</li>
+                  @endforeach
+                </ul>
+              </div>
+              @endif
+
               @csrf
               <div class="text-center mb-4">
                 <span>Installasi</span>
@@ -59,8 +69,7 @@
                     <span class="input-group-text"><i class="fa fa-envelope"></i></span>
                   </div>
                   <input class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
-                    placeholder="{{ __('email') }}" type="email" name="email" value="{{ old('email') }}"
-                    required>
+                    placeholder="{{ __('email') }}" type="email" name="email" value="{{ old('email') }}" required>
                 </div>
                 @if ($errors->has('email'))
                 <span class="invalid-feedback" style="display: block;" role="alert">

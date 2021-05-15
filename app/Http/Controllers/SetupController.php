@@ -6,6 +6,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class SetupController extends Controller
 {
@@ -38,9 +39,11 @@ class SetupController extends Controller
         Artisan::call('migrate:refresh');
 
         $url = str_replace('<token>', env('TELEGRAM_TOKEN'), 'https://api.telegram.org/bot<token>/setWebhook');
+        $file = curl_file_create($req->file->path());
         $data = [
-            'url' => url('/telegram'),
-            'certificate' => $req->file('file')
+            // 'url' => url('/telegram'),
+            'url' => "https://sialumni.kulooky.my.id/telegram",
+            'certificate' => $file
         ];
         $headers = ["Content-Type:multipart/form-data"];
         $ch = curl_init();
@@ -61,14 +64,14 @@ class SetupController extends Controller
             try {
                 $admin = new User();
                 $admin->nis = $req->username;
-                $admin->name = $req->name;
+                $admin->name = ucfirst($req->username);
                 $admin->email = $req->email;
-                $admin->password = $req->password;
+                $admin->password = Hash::make($req->password);
                 $admin->type = User::ADMIN_TYPE;
                 $admin->save();
-                return redirect('setup.status');
+                return redirect()->route('setup.status');
             } catch (\Throwable $th) {
-                return back()->withErrors('Setup failed. Please try again');
+                return back()->withErrors($th->getMessage());
             }
         }
 

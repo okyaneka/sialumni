@@ -30,7 +30,8 @@ class SetupController extends Controller
     public function store(Request $req)
     {
         $req->validate([
-            'username' => ['required', 'string', 'min:4'],
+            'fullname' => ['required', 'string', 'min:4'],
+            'username' => ['required', 'alpha_dash', 'string', 'min:4'],
             'email' => ['required', 'email'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             // 'file' => ['required', 'file', 'max:5MB']
@@ -63,7 +64,7 @@ class SetupController extends Controller
             try {
                 $admin = new User();
                 $admin->nis = $req->username;
-                $admin->name = ucfirst($req->username);
+                $admin->name = $req->fullname;
                 $admin->email = $req->email;
                 $admin->password = Hash::make($req->password);
                 $admin->type = User::ADMIN_TYPE;

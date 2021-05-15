@@ -47,6 +47,22 @@
 
               <p class="small">Setup admin</p>
 
+              <div class="form-group{{ $errors->has('fullname') ? ' has-danger' : '' }}">
+                <div class="input-group input-group-alternative mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-user-circle"></i></span>
+                  </div>
+                  <input class="form-control{{ $errors->has('fullname') ? ' is-invalid' : '' }}"
+                    placeholder="{{ __('Fullname') }}" type="text" name="fullname" value="{{ old('fullname') }}"
+                    required autofocus>
+                </div>
+                @if ($errors->has('fullname'))
+                <span class="invalid-feedback" style="display: block;" role="alert">
+                  <strong>{{ $errors->first('fullname') }}</strong>
+                </span>
+                @endif
+              </div>
+
               <div class="form-group{{ $errors->has('username') ? ' has-danger' : '' }}">
                 <div class="input-group input-group-alternative mb-3">
                   <div class="input-group-prepend">

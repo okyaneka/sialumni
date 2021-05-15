@@ -98,7 +98,7 @@
                 telegram, sehubungan itu maka diperlukan website dengan protokol https dan mengupload file
                 certificate/public key dari https tersebut.</p>
               <div class="form-group mb-3">
-                <input type="file" class="custom-file-input" name="file" id="file" lang="en">
+                <input type="file" name="file" id="file" lang="en">
                 @if ($errors->has('file'))
                 <span class="invalid-feedback" style="display: block;" role="alert">
                   <strong>{{ $errors->first('file') }}</strong>

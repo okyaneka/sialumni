@@ -58,14 +58,18 @@ class SetupController extends Controller
         curl_close($ch);
 
         if ($res['http_code'] == 200) {
-            $admin = new User();
-            $admin->nis = $req->nis;
-            $admin->name = $req->name;
-            $admin->email = $req->email;
-            $admin->password = $req->password;
-            $admin->type = User::ADMIN_TYPE;
-            $admin->save();
-            return redirect('setup.status');
+            try {
+                $admin = new User();
+                $admin->nis = $req->username;
+                $admin->name = $req->name;
+                $admin->email = $req->email;
+                $admin->password = $req->password;
+                $admin->type = User::ADMIN_TYPE;
+                $admin->save();
+                return redirect('setup.status');
+            } catch (\Throwable $th) {
+                return back()->withErrors('Setup failed. Please try again');
+            }
         }
 
         return back()->withErrors('Setup failed. Please try again');

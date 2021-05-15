@@ -51,6 +51,8 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
+        'is_installed' => \App\Http\Middleware\isInstalled::class,
+        'is_not_installed' => \App\Http\Middleware\isNotInstalled::class,
         'auth' => \App\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
@@ -62,8 +64,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'is_admin' => \App\Http\Middleware\IsAdmin::class,
         'is_data_complete' => \App\Http\Middleware\IsDataComplete::class,
-        'is_installed' => \App\Http\Middleware\isInstalled::class,
-        'is_not_installed' => \App\Http\Middleware\isNotInstalled::class,
     ];
 
     /**
@@ -74,6 +74,8 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middlewarePriority = [
+        \App\Http\Middleware\isInstalled::class,
+        \App\Http\Middleware\isNotInstalled::class,
         \Illuminate\Session\Middleware\StartSession::class,
         \Illuminate\View\Middleware\ShareErrorsFromSession::class,
         \App\Http\Middleware\Authenticate::class,

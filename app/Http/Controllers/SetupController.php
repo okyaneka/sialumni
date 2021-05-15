@@ -33,17 +33,15 @@ class SetupController extends Controller
             'username' => ['required', 'string', 'min:4'],
             'email' => ['required', 'email'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'file' => ['required', 'file', 'max:5MB']
+            // 'file' => ['required', 'file', 'max:5MB']
         ]);
 
         Artisan::call('migrate:refresh');
 
         $url = str_replace('<token>', env('TELEGRAM_TOKEN'), 'https://api.telegram.org/bot<token>/setWebhook');
-        $file = curl_file_create($req->file->path());
+        // $file = curl_file_create($req->file->path());
         $data = [
-            // 'url' => url('/telegram'),
-            'url' => "https://sialumni.kulooky.my.id/telegram",
-            'certificate' => $file
+            'url' => url('/bot' . env('TELEGRAM_TOKEN'))
         ];
         $headers = ["Content-Type:multipart/form-data"];
         $ch = curl_init();
@@ -56,11 +54,12 @@ class SetupController extends Controller
             CURLOPT_RETURNTRANSFER => true
         ];
         curl_setopt_array($ch, $options);
-        curl_exec($ch);
-        $res = curl_getinfo($ch);
+        $res = curl_exec($ch);
+        $info = curl_getinfo($ch);
+        $body = json_decode(substr($res, $info['header_size']));
         curl_close($ch);
 
-        if ($res['http_code'] == 200) {
+        if ($info['http_code'] == 200) {
             try {
                 $admin = new User();
                 $admin->nis = $req->username;
@@ -71,10 +70,15 @@ class SetupController extends Controller
                 $admin->save();
                 return redirect()->route('setup.status');
             } catch (\Throwable $th) {
-                return back()->withErrors($th->getMessage());
+                return back()->withInput()->withErrors($th->getMessage());
             }
         }
 
-        return back()->withErrors('Setup failed. Please try again');
+        return back()->withInput()->withErrors($body->description);
+    }
+
+    public function status()
+    {
+        return view('setup.status');
     }
 }

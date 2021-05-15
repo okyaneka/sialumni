@@ -10,7 +10,7 @@
             <form action="{{ route('setup.store') }}" method="post" enctype="multipart/form-data">
               @if ($errors->any())
               <div class="alert alert-danger">
-                <ul>
+                <ul class="mb-0">
                   @foreach ($errors->all() as $error)
                   <li>{{ $error }}</li>
                   @endforeach
@@ -103,6 +103,7 @@
                 </div>
               </div>
 
+              @if (false)
               <p class="small text-justify">Sistem ini menggunakan fitur asisten virtual berupa chatbot yang ada di
                 telegram, sehubungan itu maka diperlukan website dengan protokol https dan mengupload file
                 certificate/public key dari https tersebut.</p>
@@ -114,6 +115,7 @@
                 </span>
                 @endif
               </div>
+              @endif
 
               <button class="btn btn-primary" type="submit">Submit</button>
             </form>

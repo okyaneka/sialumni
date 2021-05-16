@@ -18,7 +18,7 @@ class UsersTableSeeder extends Seeder
 			[
 				'name' => 'Admin Admin',
 				'email' => 'admin@argon.com',
-				'nis' => '0000',
+				'nis' => 'admin',
 				'email_verified_at' => now(),
 				'password' => Hash::make('secret'),
 				'type' => 'admin',

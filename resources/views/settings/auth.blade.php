@@ -3,7 +3,7 @@
 @section('content')
 @include('users.partials.header', ['title' => __('Pengaturan')])
 
-<div class="container-fluid mt-5">
+<div class="container-fluid mt-3">
 	@if (session('password_status'))
 	<div class="alert alert-success alert-dismissible fade show" role="alert">
 		{{ session('password_status') }}

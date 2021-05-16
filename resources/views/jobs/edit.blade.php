@@ -3,7 +3,7 @@
 @section('content')
 @include('users.partials.header', ['title' => __('Edit Lowongan Kerja')])
 
-<div class="container-fluid mt-5">
+<div class="container-fluid mt-3">
     <div class="row justify-content-center">
         <div class="col-xl-8 order-xl-1">
             <div class="card bg-secondary shadow">
@@ -21,12 +21,14 @@
                     <form method="post" action="{{ route('job.update', $job) }}" autocomplete="off">
                         @method('put')
                         @csrf
-                        <input type="hidden" name="id" value="{{ $job->id }}">
 
                         <div class="pl-lg-4">
-                            <div class="form-group{{ $errors->has('company') ? ' has-danger' : '' }}">
-                                <label class="form-control-label" for="input-company">{{ __('Nama Perusahaan') }}</label>
-                                <input type="text" name="company" id="input-company" class="form-control form-control-alternative{{ $errors->has('company') ? ' is-invalid' : '' }}" placeholder="{{ __('Nama Perusahaan') }}" value="{{ old('company', $job->company) }}" required>
+                            <div class="form-group">
+                                <label class="form-control-label"
+                                    for="input-company">{{ __('Nama Perusahaan') }}</label>
+                                <input type="text" name="company" id="input-company"
+                                    class="form-control{{ $errors->has('company') ? ' is-invalid' : '' }}"
+                                    placeholder="{{ __('Nama Perusahaan') }}" value="{{ old('company', $job->company) }}" required>
 
                                 @if ($errors->has('company'))
                                 <span class="invalid-feedback" role="alert">
@@ -35,9 +37,11 @@
                                 @endif
                             </div>
 
-                            <div class="form-group{{ $errors->has('description') ? ' has-danger' : '' }}">
+                            <div class="form-group">
                                 <label class="form-control-label" for="input-description">{{ __('Deskripsi') }}</label>
-                                <textarea name="description" id="input-description" class="form-control form-control-alternative{{ $errors->has('description') ? ' is-invalid' : '' }}" rows="4" required>{{ old('description', $job->description) }}</textarea>
+                                <textarea name="description" id="input-description"
+                                    class="form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" rows="4"
+                                    required>{{ old('description', $job->description) }}</textarea>
 
                                 @if ($errors->has('description'))
                                 <span class="invalid-feedback" role="alert">
@@ -46,9 +50,11 @@
                                 @endif
                             </div>
 
-                            <div class="form-group{{ $errors->has('position') ? ' has-danger' : '' }}">
+                            <div class="form-group">
                                 <label class="form-control-label" for="input-position">Posisi</label>
-                                <input type="text" name="position" id="input-position" class="form-control form-control-alternative{{ $errors->has('position') ? ' is-invalid' : '' }}" placeholder="Posisi" value="{{ old('position', $job->position) }}" required>
+                                <input type="text" name="position" id="input-position"
+                                    class="form-control{{ $errors->has('position') ? ' is-invalid' : '' }}"
+                                    placeholder="Posisi" value="{{ old('position', $job->position) }}" required>
 
                                 @if ($errors->has('position'))
                                 <span class="invalid-feedback" role="alert">
@@ -57,13 +63,15 @@
                                 @endif
                             </div>
 
-                            <div class="form-group{{ $errors->has('salary') ? ' has-danger' : '' }}">
+                            <div class="form-group">
                                 <label class="form-control-label" for="input-salary">Capaian gaji</label>
                                 <div class="input-group input-group-alternative">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">Rp.</span>
                                     </div>
-                                    <input type="number" name="salary" id="input-salary" class="form-control form-control-alternative{{ $errors->has('salary') ? ' is-invalid' : '' }}" value="{{ old('salary', $job->salary) }}" required>
+                                    <input type="number" name="salary" id="input-salary"
+                                        class="form-control{{ $errors->has('salary') ? ' is-invalid' : '' }}"
+                                        value="{{ old('salary', $job->salary) }}" placeholder="(opsional)">
                                 </div>
 
                                 @if ($errors->has('salary'))
@@ -73,9 +81,11 @@
                                 @endif
                             </div>
 
-                            <div class="form-group{{ $errors->has('duedate') ? ' has-danger' : '' }}">
+                            <div class="form-group">
                                 <label class="form-control-label" for="input-duedate">Dibuka sampai</label>
-                                <input type="text" name="duedate" id="input-duedate" class="form-control form-control-alternative datepicker{{ $errors->has('duedate') ? ' is-invalid' : '' }}" value="{{ old('duedate', date('m/d/Y', strtotime($job->duedate))) }}" required>
+                                <input type="text" name="duedate" id="input-duedate"
+                                    class="form-control datepicker{{ $errors->has('duedate') ? ' is-invalid' : '' }}"
+                                    value="{{ old('duedate', $job->duedate) }}" required>
 
                                 @if ($errors->has('duedate'))
                                 <span class="invalid-feedback" role="alert">
@@ -85,50 +95,58 @@
                             </div>
                             <hr>
 
-                            <span class="text-muted">Alamat</span>
+                            <p class="text-muted">Alamat</p>
                             {{-- Provinsi --}}
-                            <div class="form-group{{ $errors->has('province') ? ' has-danger' : '' }}">
+                            <div class="form-group">
                                 <label class="form-control-label" for="input-province">Provinsi</label>
-                                <select type="text" name="province" id="input-province" class="form-control form-control-alternative {{ $errors->has('province') ? ' is-invalid' : '' }}" placeholder="Provinsi">
+                                <select type="text" name="province" id="input-province"
+                                    class="form-control {{ $errors->has('province') ? ' is-invalid' : '' }}"
+                                    placeholder="Provinsi">
 
                                 </select>
                                 @if ($errors->has('province'))
                                 <span class="invalid-feedback" role="alert" style="display: block;">
                                     <strong>{{ $errors->first('province') }}</strong>
-                                </span> 
+                                </span>
                                 @endif
                             </div>
 
                             {{-- Kabupaten --}}
-                            <div class="form-group{{ $errors->has('district') ? ' has-danger' : '' }}">
+                            <div class="form-group">
                                 <label class="form-control-label" for="input-district">{{ __('Kabupaten') }}</label>
-                                <select type="text" name="district" id="input-district" class="form-control form-control-alternative {{ $errors->has('district') ? ' is-invalid' : '' }}" placeholder="{{ __('Kabupaten') }}">
+                                <select type="text" name="district" id="input-district"
+                                    class="form-control {{ $errors->has('district') ? ' is-invalid' : '' }}"
+                                    placeholder="{{ __('Kabupaten') }}">
                                 </select>
                                 @if ($errors->has('district'))
                                 <span class="invalid-feedback" role="alert" style="display: block;">
                                     <strong>{{ $errors->first('district') }}</strong>
-                                </span> 
+                                </span>
                                 @endif
                             </div>
 
                             {{-- Alamat --}}
-                            <div class="form-group{{ $errors->has('street') ? ' has-danger' : '' }}">
+                            <div class="form-group">
                                 <label class="form-control-label" for="input-street">{{ __('Jalan') }}</label>
-                                <input type="text" name="street" id="input-street" class="form-control form-control-alternative {{ $errors->has('street') ? ' is-invalid' : '' }}" placeholder="{{ __('Jalan') }}" value="{{ old('street', unserialize($job->location)['street']) }}">
+                                <input type="text" name="street" id="input-street"
+                                    class="form-control {{ $errors->has('street') ? ' is-invalid' : '' }}"
+                                    placeholder="{{ __('Jalan') }}" value="{{ old('street', $job->street) }}">
                                 <small class="form-text text-muted">
                                     Jalan / Dusun / RT / RW
                                 </small>
                                 @if ($errors->has('street'))
                                 <span class="invalid-feedback" role="alert" style="display: block;">
                                     <strong>{{ $errors->first('street') }}</strong>
-                                </span> 
+                                </span>
                                 @endif
                             </div>
                             <hr>
 
-                            <div class="form-group{{ $errors->has('email') ? ' has-danger' : '' }}">
+                            <div class="form-group">
                                 <label class="form-control-label" for="input-email">Email</label>
-                                <input type="text" name="email" id="input-email" class="form-control form-control-alternative{{ $errors->has('email') ? ' is-invalid' : '' }}" placeholder="Email" value="{{ old('email', $job->email) }}" required>
+                                <input type="text" name="email" id="input-email"
+                                    class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
+                                    placeholder="Email (opsional)" value="{{ old('email', $job->email) }}">
 
                                 @if ($errors->has('email'))
                                 <span class="invalid-feedback" role="alert">
@@ -137,9 +155,11 @@
                                 @endif
                             </div>
 
-                            <div class="form-group{{ $errors->has('phone') ? ' has-danger' : '' }}">
+                            <div class="form-group">
                                 <label class="form-control-label" for="input-phone">Nomor telepon</label>
-                                <input type="text" name="phone" id="input-phone" class="form-control form-control-alternative{{ $errors->has('phone') ? ' is-invalid' : '' }}" placeholder="Nomor telepon" value="{{ old('phone', $job->phone) }}" required>
+                                <input type="text" name="phone" id="input-phone"
+                                    class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}"
+                                    placeholder="Nomor telepon (opsional)" value="{{ old('phone', $job->phone) }}">
 
                                 @if ($errors->has('phone'))
                                 <span class="invalid-feedback" role="alert">
@@ -149,18 +169,19 @@
                             </div>
 
                             <div class="form-group">
-                                <?php $requirements = old('requirements', unserialize($job->requirements)); ?>
+                                @php $requirements = old('requirements', unserialize($job->requirements)) @endphp
                                 <label class="form-control-label" for="input-requirements">Persyaratan</label>
-                                <input type="text" name="requirements[]" class="input-requirements form-control form-control-alternative" required value="{{ $requirements[0] }}">
-
-                                @if (!empty(old('requirements', unserialize($job->requirements))))
-                                @for ($i = 1; $i < count($requirements); $i++)
-                                @if (!empty($requirements[$i]))
-                                <input type="text" name="requirements[]" class="input-requirements form-control form-control-alternative mt-3" value="{{ $requirements[$i] }}">
-                                @endif
-                                @endfor
-                                <input type="text" name="requirements[]" class="input-requirements form-control form-control-alternative mt-3" >
-                                @endif
+                                <input type="text" name="requirements[]" class="input-requirements form-control"
+                                    required value="{{ is_array($requirements) ? $requirements[0] : '' }}">
+                                @if (!empty(old('requirements', $requirements)))
+                                @for ($i = 1; $i < count($requirements); $i++) @if (!empty($requirements[$i])) <input
+                                    type="text" name="requirements[]" class="input-requirements form-control mt-3"
+                                    value="{{ $requirements[$i] }}">
+                                    @endif
+                                    @endfor
+                                    <input type="text" name="requirements[]"
+                                        class="input-requirements form-control mt-3">
+                                    @endif
                             </div>
 
                             <div class="text-center">
@@ -179,6 +200,8 @@
 
 @push('js')
 <script src="{{ asset('argon') }}/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="https://cdn.tiny.cloud/1/11gbqitr6wxn3kei2wjuino6e84fucjdwff4sjpt48ima2u0/tinymce/5/tinymce.min.js"
+    referrerpolicy="origin"></script>
 <script type="text/javascript">
     $(function() {
         function inputRequrements() {    
@@ -191,12 +214,18 @@
             });
         }
 
+        tinymce.init({
+            selector: '#input-description',
+            toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify',
+            menubar: false
+        });
+
         $('.datepicker').datepicker();
 
         inputRequrements();
 
-        var prov_id = {{ old('province', unserialize($job->location)['province']) ?: 'false' }};
-        var kab_id = {{ old('district', unserialize($job->location)['district']) ?: 'false' }};
+        var prov_id = {{ old('province', $job->province_id) ?: 'false' }};
+        var kab_id = {{ old('district', $job->district_id) ?: 'false' }};
 
         $.get('/api/provinsi', function(data, status) {
             selected = '';

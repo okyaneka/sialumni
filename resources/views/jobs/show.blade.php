@@ -3,23 +3,19 @@
 @section('content')
 @include('layouts.headers.header', ['title' => $job->company])
 
-<div class="container mt-3">
-    @include('layouts.navbars.breadcrumb', ['job' => $job->company])
+<div class="container-fluid mt-3">
     <div class="row">
         <div class="col">
             <div class="card bg-white mb-7">
                 <div class="card-body">
+                    <small class="text-muted">{{ date('d/m/Y', strtotime($job->updated_at)) }}</small>
                     <h2 class="display-2 text-primary">{{ $job->company }}</h2>
-                    <h4 class="text-muted">{{ date('d/m/Y', strtotime($job->updated_at)) }}</h4>
                     <hr>
-                    @foreach (explode("\n", $job->description) as $description)
-                    <p>{{ $description }}</p>
-                    @endforeach
-                    <div class="bg-success p-3 text-white m-5 ml-0">
+                    {!! $job->description !!}
+                    <div class="bg-success p-3 text-white my-5 ml-0">
                         <strong>Posisi yang dibutuhkan : {{ $job->position }}</strong><br>
                         <strong>Gaji mencapai : Rp. {{ number_format($job->salary) }}</strong><br>
-                        <?php $location = unserialize($job->location);?>
-                        <strong>Alamat : {{ $location['street'] }}, {{ \App\Location::getDistrict($location['district'])->nama }}, {{ \App\Location::getProvince($location['province'])->nama }}</strong><br>
+                        <strong>Alamat : {{ $job->full_address }}</strong><br>
                         <strong>Nomor telepon : {{ $job->phone }}</strong><br>
                         <strong>Email : {{ $job->email }}</strong>
                     </div>

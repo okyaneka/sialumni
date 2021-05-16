@@ -3,7 +3,7 @@
 @section('content')
     @include('users.partials.header', ['title' => __('Daftar Jurusan')])
 
-    <div class="container-fluid mt-5">
+    <div class="container-fluid mt-3">
         <div class="row">
             <div class="col">
                 <div class="card shadow">

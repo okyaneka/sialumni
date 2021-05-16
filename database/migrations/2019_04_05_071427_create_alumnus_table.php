@@ -18,16 +18,14 @@ class CreateAlumnusTable extends Migration
             $table->string('pob')->nullable();
             $table->date('dob')->nullable();
             $table->string('street')->nullable();
-            $table->string('address')->nullable();
-            $table->string('sub_district')->nullable();
-            $table->string('district')->nullable();
-            $table->string('province')->nullable();
-            $table->string('department', 5)->nullable();
+            $table->string('address_id')->nullable();
+            $table->string('sub_district_id')->nullable();
+            $table->string('district_id')->nullable();
+            $table->string('province_id')->nullable();
+            $table->string('department_slug', 5)->nullable();
             $table->string('grad', 4)->nullable();
             $table->string('phone', 14)->nullable()->unique();
-            $table->string('telegram', 14)->nullable()->unique();
             $table->string('telegram_id')->nullable()->unique();
-            $table->string('temp_password')->nullable();
         });
     }
 
@@ -40,20 +38,18 @@ class CreateAlumnusTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn([
-                'pob',
                 'gender',
+                'pob',
                 'dob',
                 'street',
-                'address',
-                'sub_district',
-                'district',
-                'province',
-                'department',
+                'address_id',
+                'sub_district_id',
+                'district_id',
+                'province_id',
+                'department_slug',
                 'grad',
                 'phone',
-                'telegram',
                 'telegram_id',
-                'temp_password'
             ]);
         });
     }

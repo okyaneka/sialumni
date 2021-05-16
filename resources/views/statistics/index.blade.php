@@ -3,7 +3,7 @@
 @section('content')
 @include('users.partials.header', ['title' => __('Statistik')])
 
-<div class="container-fluid mt-5">
+<div class="container-fluid mt-3">
 	<div class="row">
 		<div class="col-lg-6">
 			<div class="mb-3">

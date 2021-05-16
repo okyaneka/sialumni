@@ -3,9 +3,13 @@
 @section('content')
 @include('users.partials.header', ['title' => __('Lowongan Kerja')])
 
-<div class="container-fluid mt-5">
+<div class="container-fluid mt-3">
     <div class="row">
         <div class="col">
+            <div class="mb-3">
+                <a href="{{ route('job.create') }}" class="btn btn-sm btn-primary">{{ __('Tambah data') }}</a>
+            </div>
+
             <div class="mb-3">
                 <form action="{{ route('job.index') }}" class="form-inline" method="GET">
                     <div class="input-group input-group-sm mb-2">
@@ -31,25 +35,22 @@
                 </button>
             </div>
             @endif
+            @if($jobs->total() == 0)
             <div class="alert alert-primary alert-dismissible fade show">
-                @if($jobs->total() == 0)
                 {{ 'Tidak ada entri' }}
-                @else
-                {{ 'Menampilkan '.count($jobs).' dari '.$jobs->total() }}
-                @endif
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-
+            @else
+            <div class="alert alert-primary alert-dismissible fade show">
+                {{ 'Menampilkan '.count($jobs).' dari '.$jobs->total() }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            
             <div class="card shadow">
-                <div class="card-header border-0">
-                    <div class="row align-items-center float-right">
-                        <div class="col-4 text-right">
-                            <a href="{{ route('job.create') }}" class="btn btn-sm btn-primary">{{ __('Buat baru') }}</a>
-                        </div>
-                    </div>
-                </div>
                 <div class="table-responsive">
                     <table class="table align-items-center table-flush">
                         <thead class="thead-light">
@@ -102,6 +103,7 @@
                     </nav>
                 </div>
             </div>
+            @endif
         </div>
     </div>
 

@@ -15,6 +15,8 @@
 
 	<div class="row align-items-center">
 		<div class="col mb-5">
+			@include('utils.soon')
+			@if (false)
 			<form method="post" action="{{ route('setting.set') }}" autocomplete="off">
 				@csrf @method('put')
 				<div class="pl-lg-4">
@@ -41,6 +43,7 @@
 					</div>
 				</div>
 			</form>
+			@endif
 		</div>
 	</div>
 

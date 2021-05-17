@@ -29,6 +29,7 @@
                     $link = str_replace('?&', '?', $link);
                     $value = $key == 'status' ? \App\Status::find($value)->status : $value;
                     $value = $key == 'gender' ? $value == 'M' ? 'Laki-laki' : 'Perempuan' : $value;
+                    $value = $key == 'asal' ? \App\Location::getDistrict($value)->nama : $value;
                     ?>
                     <span class="px-2 mx-1 badge badge-default text-white">{{ $key }} : "{{ $value }}" |
                         <a href="{{ $link }}">&times;</a>

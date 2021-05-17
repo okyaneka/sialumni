@@ -28,7 +28,8 @@
                                     for="input-company">{{ __('Nama Perusahaan') }}</label>
                                 <input type="text" name="company" id="input-company"
                                     class="form-control{{ $errors->has('company') ? ' is-invalid' : '' }}"
-                                    placeholder="{{ __('Nama Perusahaan') }}" value="{{ old('company', $job->company) }}" required>
+                                    placeholder="{{ __('Nama Perusahaan') }}"
+                                    value="{{ old('company', $job->company) }}" required>
 
                                 @if ($errors->has('company'))
                                 <span class="invalid-feedback" role="alert">
@@ -40,8 +41,8 @@
                             <div class="form-group">
                                 <label class="form-control-label" for="input-description">{{ __('Deskripsi') }}</label>
                                 <textarea name="description" id="input-description"
-                                    class="form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" rows="4"
-                                    required>{{ old('description', $job->description) }}</textarea>
+                                    class="form-control{{ $errors->has('description') ? ' is-invalid' : '' }}"
+                                    rows="4">{{ old('description', $job->description) }}</textarea>
 
                                 @if ($errors->has('description'))
                                 <span class="invalid-feedback" role="alert">

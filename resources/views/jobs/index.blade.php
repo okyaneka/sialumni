@@ -69,7 +69,7 @@
                             <tr>
                                 <td><a href="{{ route('job.show', $job) }}">{{ $job->company }}</a></td>
                                 <?php $location = unserialize($job->location);?>
-                                <td>{{ $location['street'] }}, {{ \App\Location::getDistrict($location['district'])->nama }}, {{ \App\Location::getProvince($location['province'])->nama }}</td>
+                                <td>{{ $job->full_address }}</td>
                                 <td>{{ $job->email }}</td>
                                 <td>{{ $job->phone }}</td>
                                 <td>{{ 'Rp. '.number_format($job->salary, 2) }}</td>

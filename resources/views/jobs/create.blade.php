@@ -39,8 +39,8 @@
                             <div class="form-group">
                                 <label class="form-control-label" for="input-description">{{ __('Deskripsi') }}</label>
                                 <textarea name="description" id="input-description"
-                                    class="form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" rows="4"
-                                    required>{{ old('description') }}</textarea>
+                                    class="form-control{{ $errors->has('description') ? ' is-invalid' : '' }}"
+                                    rows="4">{{ old('description') }}</textarea>
 
                                 @if ($errors->has('description'))
                                 <span class="invalid-feedback" role="alert">

@@ -13,6 +13,11 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::get('provinsi', 'LocationController@getProvinces');
+Route::get('kabupaten/{id}', 'LocationController@getDistricts');
+Route::get('kecamatan/{id}', 'LocationController@getSubDistricts');
+Route::get('desa/{id}', 'LocationController@getVillages');
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });

@@ -3,7 +3,7 @@
 @section('content')
 @include('users.partials.header', ['title' => __('Batch Alumni')])
 
-<div class="container-fluid mt-5">
+<div class="container-fluid mt-3">
     <div class="row">
         <div class="col-xl-6 offset-xl-3 order-xl-1">
             @if (session('status'))
@@ -33,7 +33,7 @@
 
                         <div class="form-group">
                             <input type="file" class="form-control-file form-group{{ $errors->has('file') ? ' has-danger' : '' }}" name="file" id="file" aria-describedby="fileHelp">
-                            <small id="fileHelp" class="form-text text-muted">Silahkan upload file .xlsx. Klik <a href="{{ route('larecipe.index') }}" target="_blank">Bantuan</a> untuk mendapatkan petunjuk lebih lanjut.</small>
+                            <small id="fileHelp" class="form-text text-muted">Silahkan upload file .xlsx. Klik <a href="/docs/1.0/web/admin/alumnus#section-5" target="_blank">Bantuan</a> untuk mendapatkan petunjuk lebih lanjut.</small>
                         </div>
 
 

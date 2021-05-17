@@ -12,41 +12,41 @@ class StatisticController extends Controller
     public function index()
     {
         $statistics = [
-            'total' => User::where('type','=','default')->whereNotNull('grad')->count(),
-            'notActiveYet' => User::where('type','=','default')->whereNull('grad')->count(),
-            'active' => User::where('type','=','default')
-            ->whereBetween('grad',[(date('Y') - 5), date('Y')])
-            ->count(),
+            'total' => User::where('type', '=', 'default')->whereNotNull('grad')->count(),
+            'notActiveYet' => User::where('type', '=', 'default')->whereNull('grad')->count(),
+            'active' => User::where('type', '=', 'default')
+                ->whereBetween('grad', [(date('Y') - 5), date('Y')])
+                ->count(),
             'notActive' => User::where([
-                ['type','=','default'],
-                ['grad','<',(date('Y') - 5)]
+                ['type', '=', 'default'],
+                ['grad', '<', (date('Y') - 5)]
             ])->count(),
             'grads' =>  User::groupBy('grad')
-            ->select('grad', DB::raw('count(*) as total'))
-            ->where('type','default')
-            ->whereNotNull('grad')
-            ->orderBy('grad', 'desc')
-            ->get(),
-            'origin' => User::groupBy('district')
-            ->select('district', DB::raw('count(*) as total'))
-            ->where('type','default')
-            ->orderBy('total', 'desc')
-            ->get(),
-            'departments' => User::groupBy('department')
-            ->select('department', DB::raw('count(*) as total'))
-            ->where('type','default')
-            ->orderBy('total', 'desc')
-            ->get(),
+                ->select('grad', DB::raw('count(*) as total'))
+                ->where('type', 'default')
+                ->whereNotNull('grad')
+                ->orderBy('grad', 'desc')
+                ->get(),
+            'origin' => User::groupBy('district_id')
+                ->select('district_id', DB::raw('count(*) as total'))
+                ->where('type', 'default')
+                ->orderBy('total', 'desc')
+                ->get(),
+            'departments' => User::groupBy('department_slug')
+                ->select('department_slug', DB::raw('count(*) as total'))
+                ->where('type', 'default')
+                ->orderBy('total', 'desc')
+                ->get(),
             'statuses' => DB::table('statuses')
-            ->join('user_statuses','statuses.id','=','user_statuses.status_id')
-            ->select(DB::raw('statuses.id, statuses.status, count(*) as total'))
-            ->groupBy('id')
-            ->get(),
+                ->join('user_statuses', 'statuses.id', '=', 'user_statuses.status_id')
+                ->select(DB::raw('statuses.id, statuses.status, count(*) as total'))
+                ->groupBy(['statuses.id', 'statuses.status'])
+                ->get(),
             'gender' => User::groupBy('gender')
-            ->select('gender', DB::raw('count(*) as total'))
-            ->where('type','default')
-            ->orderBy('total', 'desc')
-            ->get(),
+                ->select('gender', DB::raw('count(*) as total'))
+                ->where('type', 'default')
+                ->orderBy('total', 'desc')
+                ->get(),
             [
                 'M' => User::where(['type' => 'default', 'gender' => 'M'])->count(),
                 'F' => User::where(['type' => 'default', 'gender' => 'F'])->count(),
@@ -61,13 +61,13 @@ class StatisticController extends Controller
     {
         $statistics = [
             'total' => User::groupBy('grad')
-                ->select( DB::raw('grad as `key`, count(*) as total'))
+                ->select(DB::raw('grad as `key`, count(*) as total'))
                 ->where('type', 'default')
                 ->whereNotNull('grad')
                 ->orderBy('key', 'desc')
                 ->get(),
             'five' => User::groupBy('grad')
-                ->select( DB::raw('grad as `key`, count(*) as total'))
+                ->select(DB::raw('grad as `key`, count(*) as total'))
                 ->where('type', 'default')
                 ->whereNotNull('grad')
                 ->orderBy('key', 'desc')
@@ -81,7 +81,7 @@ class StatisticController extends Controller
                 ->limit(3)
                 ->get(),
             'one' => User::groupBy('grad')
-                ->select( DB::raw('grad as `key`, count(*) as total'))
+                ->select(DB::raw('grad as `key`, count(*) as total'))
                 ->where('type', 'default')
                 ->whereNotNull('grad')
                 ->orderBy('key', 'desc')
@@ -96,25 +96,25 @@ class StatisticController extends Controller
     public function origin()
     {
         $statistics = [
-            'total' => User::groupBy('district')
-                ->select(DB::raw('district'), DB::raw('count(*) as total'))
+            'total' => User::groupBy('district_id')
+                ->select(DB::raw('district_id'), DB::raw('count(*) as total'))
                 ->where('type', 'default')
                 ->whereNotNull('grad')
                 ->get(),
-            'five' => User::groupBy('district')
-                ->select(DB::raw('district'), DB::raw('count(*) as total'))
+            'five' => User::groupBy('district_id')
+                ->select(DB::raw('district_id'), DB::raw('count(*) as total'))
                 ->where('type', 'default')
                 ->whereNotNull('grad')
                 ->where('grad', '>', date('Y') - 5)
                 ->get(),
-            'three' => User::groupBy('district')
-                ->select(DB::raw('district'), DB::raw('count(*) as total'))
+            'three' => User::groupBy('district_id')
+                ->select(DB::raw('district_id'), DB::raw('count(*) as total'))
                 ->where('type', 'default')
                 ->whereNotNull('grad')
                 ->where('grad', '>', date('Y') - 3)
                 ->get(),
-            'one' => User::groupBy('district')
-                ->select(DB::raw('district'), DB::raw('count(*) as total'))
+            'one' => User::groupBy('district_id')
+                ->select(DB::raw('district_id'), DB::raw('count(*) as total'))
                 ->where('type', 'default')
                 ->whereNotNull('grad')
                 ->where('grad', '>', date('Y') - 1)
@@ -129,11 +129,11 @@ class StatisticController extends Controller
     {
         $column = 'grad';
         foreach (\App\Department::all() as $d) {
-            $column .= ",SUM(IF(department = '$d->code', total, 0)) as $d->code";
+            $column .= ",SUM(IF(department_slug = '$d->code', total, 0)) as $d->code";
         }
 
-        $user = User::groupBy('grad','department')
-            ->select(DB::raw('grad, department, count(*) as total'))
+        $user = User::groupBy(['grad', 'department_slug'])
+            ->select(DB::raw('grad, department_slug, count(*) as total'))
             ->where('type', 'default')
             ->whereNotNull('grad')
             ->orderBy('grad', 'desc');
@@ -171,9 +171,9 @@ class StatisticController extends Controller
 
     public function status()
     {
-        $user = User::groupBy('users.grad', 'statuses.id')
-            ->join('user_statuses','users.id','=','user_statuses.user_id')
-            ->join('statuses','statuses.id','=','user_statuses.status_id')
+        $user = User::groupBy(['users.grad', 'statuses.id'])
+            ->join('user_statuses', 'users.id', '=', 'user_statuses.user_id')
+            ->join('statuses', 'statuses.id', '=', 'user_statuses.status_id')
             ->select(DB::raw('users.grad, statuses.status, count(*) as total'))
             ->where('users.type', 'default')
             ->whereNotNull('users.grad')
@@ -222,7 +222,7 @@ class StatisticController extends Controller
         $column .= ",SUM(IF(gender = 'M', total, 0)) as M";
         $column .= ",SUM(IF(gender = 'F', total, 0)) as F";
 
-        $user = User::groupBy('grad','gender')
+        $user = User::groupBy('grad', 'gender')
             ->select(DB::raw('grad, gender, count(*) as total'))
             ->where('type', 'default')
             ->whereNotNull('grad')

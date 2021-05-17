@@ -27,13 +27,8 @@ Route::middleware('is_installed')->group(function () {
 
 	Route::get('/', 'HomeController@index');
 
-	Route::get('job/{id}/show', ['as' => 'job.show', 'uses' => 'JobController@show']);
+	Route::get('job/{job}/show', ['as' => 'job.show', 'uses' => 'JobController@show']);
 	Route::get('job/showall', ['as' => 'job.showall', 'uses' => 'JobController@showAll']);
-
-	Route::get('api/provinsi', 'LocationController@getProvinces');
-	Route::get('api/kabupaten/{id}', 'LocationController@getDistricts');
-	Route::get('api/kecamatan/{id}', 'LocationController@getSubDistricts');
-	Route::get('api/desa/{id}', 'LocationController@getVillages');
 
 	Route::group(['middleware' => 'auth'], function () {
 		Route::get('/home', 'HomeController@home')->name('home');

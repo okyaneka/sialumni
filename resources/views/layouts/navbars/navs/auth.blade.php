@@ -56,7 +56,7 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-right">
                     <a href="{{ route('home') }}" class="dropdown-item">
-                        <i class="ni ni-settings-gear-65"></i>
+                        <i class="fa fa-columns"></i>
                         <span>Dashboard</span>
                     </a>
                     @if (!auth()->user()->isAdmin())

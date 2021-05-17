@@ -3,7 +3,7 @@
 @section('content')
 @include('users.partials.header', ['title' => __('Statistik')])
 
-<div class="container-fluid mt-5">
+<div class="container-fluid mt-3">
 	<div class="row">
 		<div class="col-lg-6">
 			<div class="mb-3">
@@ -28,12 +28,12 @@
 						</p>
 						<ul class="text-sm pl-3">
 							<li>
-								<a class="text-success" href="{{ route('user.index').'?alumnistatus=aktif' }}" target="_blank">
+								<a class="text-primary" href="{{ route('user.index').'?alumnistatus=aktif' }}" target="_blank">
 									Alumni aktif : <strong>{{ $active }}</strong>
 								</a>
 							</li>
 							<li>
-								<a href="{{ route('user.index').'?alumnistatus=belum_aktif' }}" class="text-yellow"  target="_blank">
+								<a href="{{ route('user.index').'?alumnistatus=belum_aktif' }}" class="text-muted"  target="_blank">
 									Alumni belum aktif : <strong>{{ $notActiveYet }}</strong>
 								</a>
 							</li>
@@ -103,8 +103,8 @@
 						<ul class="text-sm pl-3">
 							@foreach ($origin as $d)
 							<li>
-								<a href="{{ route('user.index').'?asal='.$d->district }}" target="_blank">
-									{{ $d->getDistricts() }} : <strong>{{ $d->total }}</strong>
+								<a href="{{ route('user.index').'?asal='.$d->district_id }}" target="_blank">
+									{{ $d->district }} : <strong>{{ $d->total }}</strong>
 								</a>
 							</li>
 							@endforeach
@@ -288,7 +288,7 @@
 		});
 
 		ctx = $('#originChart');
-		labels = [ @foreach ($origin as $d) '{{ $d->getDistricts() }}', @endforeach ];
+		labels = [ @foreach ($origin as $d) '{{ $d->district_id }}', @endforeach ];
 		datas = [ @foreach ($origin as $d) {{ $d->total.',' }} @endforeach ];
 		color = [ @foreach ($origin as $d) '{{ rand(0,255).','.rand(0,255).','.rand(0,255) }}', @endforeach ];
 		backgrounds = [];

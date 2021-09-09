@@ -36,21 +36,26 @@ class CreateAlumnusTable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn([
-                'gender',
-                'pob',
-                'dob',
-                'street',
-                'address_id',
-                'sub_district_id',
-                'district_id',
-                'province_id',
-                'department_slug',
-                'grad',
-                'phone',
-                'telegram_id',
-            ]);
-        });
+        $this->dropColumnIfExist('users', 'gender');
+        $this->dropColumnIfExist('users', 'pob');
+        $this->dropColumnIfExist('users', 'dob');
+        $this->dropColumnIfExist('users', 'street');
+        $this->dropColumnIfExist('users', 'address_id');
+        $this->dropColumnIfExist('users', 'sub_district_id');
+        $this->dropColumnIfExist('users', 'district_id');
+        $this->dropColumnIfExist('users', 'province_id');
+        $this->dropColumnIfExist('users', 'department_slug');
+        $this->dropColumnIfExist('users', 'grad');
+        $this->dropColumnIfExist('users', 'phone');
+        $this->dropColumnIfExist('users', 'telegram_id');
+    }
+
+    private function dropColumnIfExist($table, $column)
+    {
+        if (Schema::hasColumn($table, $column)) {
+            Schema::table($table, function (Blueprint $table) use ($column) {
+                $table->dropColumn($column);
+            });
+        }
     }
 }

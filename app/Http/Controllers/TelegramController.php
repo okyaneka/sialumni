@@ -53,13 +53,13 @@ class TelegramController extends Controller
     	return $bot->startConversation(new \App\Conversations\InfoConversation(), $bot->getUser()->getId(), TelegramDriver::class);
     }
 
-    function daftar(BotMan $bot)
+    function validasi(BotMan $bot)
     {
         if($bot->getMessage()->getPayload()['chat']['type'] == 'group') {
             $bot->reply("Hai : ".$bot->getUser()->getFirstname().".\nSilahkan check pesan pribadi ya");
         }
 
-        return $bot->startConversation(new \App\Conversations\RegisterConversation(), $bot->getUser()->getId(), TelegramDriver::class);
+        return $bot->startConversation(new \App\Conversations\ValidasiConversation(), $bot->getUser()->getId(), TelegramDriver::class);
     }
 
     function update(BotMan $bot)

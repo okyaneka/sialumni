@@ -25,7 +25,7 @@ class CreateAlumnusTable extends Migration
             $table->string('department_slug', 5)->nullable();
             $table->string('grad', 4)->nullable();
             $table->string('phone', 14)->nullable()->unique();
-            $table->string('telegram_id')->nullable()->unique();
+            $table->string('telegram_id', 16)->nullable()->unique();
         });
     }
 

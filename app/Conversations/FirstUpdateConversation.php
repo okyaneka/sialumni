@@ -250,7 +250,12 @@ class FirstUpdateConversation extends Conversation
   {
     $this->user->save();
 
-    $old_status_id = $this->user->statuses()->first()->pivot->id;
+    try {
+      $old_status_id = $this->user->statuses()->first()->pivot->id;
+    } catch (\Throwable $th) {
+      $old_status_id = '';
+    }
+    
     if (isset($this->data['status'])) {
       foreach ($this->data['status'] as $status) {
         if (!empty($old_status_id)) {
@@ -268,7 +273,7 @@ class FirstUpdateConversation extends Conversation
         }
       }
     }
-    
+
     $message = "Selamat, data kamu sekarang sudah lengkap. Sekarang kamu bisa juga mengaksis website alumni SMK N Pringsurat dengan menggunakan:";
     $message .= "\nEmail: {$this->user->email}";
     $message .= "\nPassword: " . date('dmY', strtotime($this->user->dob));

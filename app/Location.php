@@ -19,6 +19,7 @@ class Location extends Model
 
     static function getDistricts($id)
     {
+        \Log::debug("district. province_id: $id");
         try {
             return json_decode(Storage::get('/origin/district/'.$id));
         } catch (\Exception $e) {
@@ -29,6 +30,7 @@ class Location extends Model
 
     static function getSubDistricts($id)
     {
+        \Log::debug("sub_district. district_id: $id");
         try {
             return json_decode(Storage::get('/origin/sub_district/'.$id));
         } catch (\Exception $e) {
@@ -39,6 +41,7 @@ class Location extends Model
 
     static function getVillages($id)
     {
+        \Log::debug("vilage. sub_district_id: $id");
         try {
             return json_decode(Storage::get('/origin/village/'.$id));
         } catch (\Exception $e) {

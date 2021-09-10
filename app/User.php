@@ -22,7 +22,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name', 'nis', 'email', 'password', 'pob',
         'dob', 'street', 'province_id', 'gender', 'address',
-        'sub_district_id', 'district_id', 'department', 'grad', 'phone',
+        'sub_district_id', 'district_id', 'department_slug', 'grad', 'phone',
     ];
 
     /**
@@ -55,7 +55,6 @@ class User extends Authenticatable
     public function isDataComplete()
     {
         foreach ($this->fillable as $column) {
-            if ($column == 'temp_password') continue;
             if (empty($this->$column)) return FALSE;
         }
 

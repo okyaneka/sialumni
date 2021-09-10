@@ -240,10 +240,10 @@ class UpdateConversation extends Conversation
 
   public function update()
   {
-    $this->user->province = empty($this->data['province']) ? $this->user->province : $this->data['province'];
-    $this->user->district = empty($this->data['district']) ? $this->user->district : $this->data['district'];
-    $this->user->sub_district = empty($this->data['sub_district']) ? $this->user->sub_district : $this->data['sub_district'];
-    $this->user->address = empty($this->data['address']) ? $this->user->address : $this->data['address'];
+    $this->user->province_id = empty($this->data['province']) ? $this->user->province_id : $this->data['province'];
+    $this->user->district_id = empty($this->data['district']) ? $this->user->district_id : $this->data['district'];
+    $this->user->sub_district_id = empty($this->data['sub_district']) ? $this->user->sub_district_id : $this->data['sub_district'];
+    $this->user->address_id = empty($this->data['address']) ? $this->user->address_id : $this->data['address'];
     $this->user->street = empty($this->data['street']) ? $this->user->street : $this->data['street'];
     $this->user->phone = empty($this->data['phone']) ? $this->user->phone : $this->data['phone'];
 

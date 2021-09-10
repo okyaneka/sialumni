@@ -1,15 +1,11 @@
 <?php
 use App\Http\Controllers\TelegramController;
+use BotMan\BotMan\Messages\Incoming\Answer;
 
 $botman = resolve('botman');
 
 $botman->fallback(function($bot) {
     $bot->reply('Maaf, saya tidak mengerti apa yang kamu maksud. Silahkan pilih menu atau tekan tombol "/" di bagian bawah untuk memulai berinteraksi dengan SkaniraBot. Semoga harimu menyenangkan! ^_^.');
-});
-
-$botman->hears('getinfo', function ($bot) {
-    $bot->reply(json_encode($bot->getUser()->getInfo()));
-    // $bot->reply(json_encode($bot->getUser()->getInfo()));
 });
 
 $botman->hears('/start', function ($bot) {

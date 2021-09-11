@@ -1,6 +1,5 @@
 <?php
 use App\Http\Controllers\TelegramController;
-use BotMan\BotMan\Messages\Incoming\Answer;
 
 $botman = resolve('botman');
 
@@ -14,7 +13,7 @@ $botman->hears('/start', function ($bot) {
 
 $botman->hears('/validasi', TelegramController::class.'@validasi'); // validasi
 $botman->hears('/update', TelegramController::class.'@update'); // update
-// /infoloker
+$botman->hears('/infoloker', TelegramController::class.'@infoloker'); // infoloker
 // /tambahloker
 // /infoalumni
 // /bantuan

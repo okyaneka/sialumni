@@ -16,7 +16,7 @@ class LokerConversation extends Conversation
 
   public function __construct()
   {
-    $this->jobs = Job::where('duedate', '<=', date('Y-m-d'))->get();
+    $this->jobs = Job::where('duedate', '>=', date('Y-m-d'))->get();
   }
 
   public function showJob()

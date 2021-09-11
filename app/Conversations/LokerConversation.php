@@ -22,7 +22,7 @@ class LokerConversation extends Conversation
   public function showJob()
   {
     $buttons = [];
-    if ($this->offset + 1 < $this->jobs->count()) {
+    if (($this->offset + 1) < $this->jobs->count()) {
       $buttons[] = Button::create('Berikutnya')->value('next');
     }
     $buttons[] = Button::create('Cukup')->value('enough');
@@ -59,6 +59,7 @@ class LokerConversation extends Conversation
       }
     }
     if (!empty($job->email) || !empty($job->phone)) {
+      $text .= "\n";
       $text .= "Kontak:\n";
       if (!empty($job->email)) {
         $text .= "- Email: $job->email\n";

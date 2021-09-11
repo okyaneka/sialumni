@@ -14,12 +14,18 @@ class LokerConversation extends Conversation
 
   protected $jobs;
 
+  public function __construct()
+  {
+    $this->jobs = Job::where('duedate', '<=', date('Y-m-d'))->get();
+  }
+
   public function showJob()
   {
-    $buttons = [
-      Button::create('Berikutnya')->value('next'),
-      Button::create('Cukup')->value('enough'),
-    ];
+    $buttons = [];
+    if ($this->offset < $this->jobs->count()) {
+      $buttons[] = Button::create('Berikutnya')->value('next');
+    }
+    $buttons[] = Button::create('Cukup')->value('enough');
 
     $job = $this->jobs->skip($this->offset)->first();
 
@@ -69,9 +75,12 @@ class LokerConversation extends Conversation
 
   public function run()
   {
-    $this->jobs = Job::where('duedate', '<=', date('Y-m-d'))->get();
-    $message = "Aku menemukan ada {$this->jobs->count()} lowongan pekerjaan yang masih dibuka, diantaranya:";
-    $this->say($message);
-    $this->showJob();
+    if ($this->jobs->count()) {
+      $message = "Aku menemukan ada {$this->jobs->count()} lowongan pekerjaan yang masih dibuka, diantaranya:";
+      $this->say($message);
+      $this->showJob();
+    } else {
+      return $this->say("Mohon maaf, sepertinya belum ada info lowongan pekerjaan yang sedang dibuka.");
+    }
   }
 }

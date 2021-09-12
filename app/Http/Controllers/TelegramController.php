@@ -80,6 +80,15 @@ class TelegramController extends Controller
         return $bot->startConversation(new \App\Conversations\LokerConversation(), $bot->getUser()->getId(), TelegramDriver::class);
     }
 
+    public function infoalumni(BotMan $bot)
+    {
+        if ($bot->getMessage()->getPayload()['chat']['type'] == 'group') {
+            $bot->reply("Hai : " . $bot->getUser()->getFirstname() . ".\nSilahkan check pesan pribadi ya");
+        }
+
+        return $bot->startConversation(new \App\Conversations\AlumniConversation(), $bot->getUser()->getId(), TelegramDriver::class);
+    }
+
     function carialumni(BotMan $bot)
     {
         if ($bot->getMessage()->getPayload()['chat']['type'] == 'group') {

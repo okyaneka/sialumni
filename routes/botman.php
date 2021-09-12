@@ -14,8 +14,10 @@ $botman->hears('/start', function ($bot) {
 $botman->hears('/validasi', TelegramController::class.'@validasi'); // validasi
 $botman->hears('/update', TelegramController::class.'@update'); // update
 $botman->hears('/infoloker', TelegramController::class.'@infoloker'); // infoloker
-// /tambahloker
-// /infoalumni
+$botman->hears('/tambahloker', function ($bot) {
+    $bot->reply('Mohon maaf, untuk fitur ini masih dalam pengembangan. Terimakasih.');
+}); // tambahloker
+$botman->hears('/infoalumni', TelegramController::class.'@infoalumni'); // infoalumni
 // /bantuan
 $botman->hears('/info', TelegramController::class.'@info');
 $botman->hears('/carialumni', TelegramController::class.'@carialumni');

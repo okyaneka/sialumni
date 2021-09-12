@@ -70,6 +70,7 @@ class ValidasiConversation extends Conversation
       $this->info($user);
     } catch (\Throwable $th) {
       $this->askName();
+      \Log::error($th);
     }
   }
 }

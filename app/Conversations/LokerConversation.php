@@ -3,6 +3,7 @@
 namespace App\Conversations;
 
 use App\Job;
+use App\User;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
@@ -10,9 +11,13 @@ use BotMan\BotMan\Messages\Outgoing\Question;
 
 class LokerConversation extends Conversation
 {
+  protected $botinfo;
+
   protected $offset = 0;
 
   protected $jobs;
+
+  protected $user;
 
   public function __construct()
   {
@@ -22,6 +27,9 @@ class LokerConversation extends Conversation
   public function showJob()
   {
     $buttons = [];
+    if ($this->offset > 0) {
+      $buttons[] = Button::create('Sebelumnya')->value('prev');
+    }
     if (($this->offset + 1) < $this->jobs->count()) {
       $buttons[] = Button::create('Berikutnya')->value('next');
     }
@@ -33,6 +41,10 @@ class LokerConversation extends Conversation
       switch ($answer->getValue()) {
         case 'next':
           $this->offset += 1;
+          $this->showJob();
+          break;
+        case 'prev':
+          $this->offset -= 1;
           $this->showJob();
           break;
         case 'enough':
@@ -76,12 +88,20 @@ class LokerConversation extends Conversation
 
   public function run()
   {
-    if ($this->jobs->count()) {
-      $message = "Aku menemukan ada {$this->jobs->count()} lowongan pekerjaan yang masih dibuka, diantaranya:";
+    try {
+      $this->botinfo = $this->bot->getUser()->getInfo();
+      $this->user = User::where('telegram_id', $this->botinfo['user']['id'])->firstOrFail();
+      if ($this->jobs->count()) {
+        $message = "Aku menemukan ada {$this->jobs->count()} lowongan pekerjaan yang masih dibuka, diantaranya:";
+        $this->say($message);
+        $this->showJob();
+      } else {
+        return $this->say("Mohon maaf, sepertinya belum ada info lowongan pekerjaan yang sedang dibuka.");
+      }
+    } catch (\Throwable $th) {
+      $message = 'Mohon maaf, sepertinya kamu belum terdaftar sebagai alumni SMK N Pringsurat. Silahkan tekan /validasi untuk mengecek apakah akun kamu terdaftar sebagai alumni SMK N Pringsurat';
       $this->say($message);
-      $this->showJob();
-    } else {
-      return $this->say("Mohon maaf, sepertinya belum ada info lowongan pekerjaan yang sedang dibuka.");
+      \Log::error($th);
     }
   }
 }

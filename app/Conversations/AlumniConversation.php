@@ -103,7 +103,7 @@ class AlumniConversation extends Conversation
       $this->say($message);
     }
 
-    $this->ask(Question::create('')->callbackId('show_job')->addButtons($buttons), function (Answer $answer) {
+    $this->ask(Question::create('Aksi')->callbackId('show_job')->addButtons($buttons), function (Answer $answer) {
       switch ($answer->getValue()) {
         case 'prev':
           $this->offset -= 1;

@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use DB;
 use App\User;
+use Illuminate\Support\Facades\DB;
 
 class StatisticController extends Controller
 {
@@ -171,7 +170,7 @@ class StatisticController extends Controller
 
     public function status()
     {
-        $user = User::groupBy(['users.grad', 'statuses.id'])
+        $user = User::groupBy(['users.grad', 'statuses.status'])
             ->join('user_statuses', 'users.id', '=', 'user_statuses.user_id')
             ->join('statuses', 'statuses.id', '=', 'user_statuses.status_id')
             ->select(DB::raw('users.grad, statuses.status, count(*) as total'))

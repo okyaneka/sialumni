@@ -194,7 +194,7 @@
                     </small>
                 </div>
                 <div class="col-4">
-                    <input type="text" title="Tahun (opsional)" name="status[{{ $s->id }}][year]" id="input-phone" class="form-control form-control-alternative {{ $errors->has('year') ? ' is-invalid' : '' }}" placeholder="{{ __('Tahun (opsional)') }}" value="{{ old('year', $s->pivot->year) }}" required>
+                    <input type="text" title="Tahun (opsional)" name="status[{{ $s->id }}][year]" id="input-phone" class="form-control form-control-alternative {{ $errors->has('year') ? ' is-invalid' : '' }}" placeholder="{{ __('Tahun (opsional)') }}" value="{{ old('year', $s->pivot->year) }}">
                     <small class="form-text text-muted">
                         Sampai Tahun? (opsional)
                     </small>

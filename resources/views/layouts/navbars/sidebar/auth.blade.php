@@ -106,34 +106,6 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Request::is('statistic*') ? 'active' : '' }}" href="#statistic" data-toggle="collapse" role="button" aria-expanded="true">
-                        <i class="ni ni-chart-bar-32 text-green"></i> {{ __('Statistik') }}
-                    </a>
-
-                    <div id="statistic" class="collapse bg-secondary {{ Request::is('statistic*') ? 'show' : '' }}">
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item {{ Request::is('statistic') ? 'active' : '' }}">
-                                <a class="nav-link" href="{{ route('statistic.index') }}">Terkini</a>
-                            </li>
-                            <li class="nav-item {{ Request::is('statistic/grad') ? 'active' : '' }}">
-                                <a class="nav-link" href="{{ route('statistic.grad') }}">Statistik Lulusan</a>
-                            </li>
-                            <li class="nav-item {{ Request::is('statistic/origin') ? 'active' : '' }}">
-                                <a class="nav-link" href="{{ route('statistic.origin') }}">Statistik Asal Alumni </a>
-                            </li>
-                            <li class="nav-item {{ Request::is('statistic/department') ? 'active' : '' }}">
-                                <a class="nav-link" href="{{ route('statistic.department') }}">Statistik Jurusan</a>
-                            </li>
-                            <li class="nav-item {{ Request::is('statistic/status') ? 'active' : '' }}">
-                                <a class="nav-link" href="{{ route('statistic.status') }}">Statistik Status</a>
-                            </li>
-                            <li class="nav-item {{ Request::is('statistic/gender') ? 'active' : '' }}">
-                                <a class="nav-link" href="{{ route('statistic.gender') }}">Statistik Jenis Kelamin</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link {{ Request::is('setting*') ? 'active' : '' }}" href="{{ route('setting.get') }}">
                         <i class="ni ni-settings text-red"></i> {{ __('Pengaturan') }}
                     </a>

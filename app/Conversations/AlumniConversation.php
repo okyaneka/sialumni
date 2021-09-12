@@ -25,7 +25,7 @@ class AlumniConversation extends Conversation
 
   public function __construct()
   {
-    $this->users = User::where('type', User::DEFAULT_TYPE)->whereNotNull('grad')->orderBy('name');
+    $this->users = User::where('type', User::DEFAULT_TYPE)->whereNotNull('grad')->orderBy('name')->get();
   }
 
   public function askForSearch()
@@ -76,7 +76,8 @@ class AlumniConversation extends Conversation
           }
         });
       });
-      $this->say("Aku menemukan ada {$this->users->count()} alumni yang mirip dengan {keyword}, berikut di antaranya:");
+      $this->users = $this->users->get();
+      $this->say("Aku menemukan ada {$this->users->count()} alumni yang mirip dengan {$answer->getText()}, berikut di antaranya:");
       $this->showUser();
     });
   }

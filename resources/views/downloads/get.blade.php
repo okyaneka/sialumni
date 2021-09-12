@@ -3,7 +3,7 @@
 @section('content')
 @include('users.partials.header', ['title' => __('Download Data Alumni')])
 
-<div class="container-fluid mt-5">
+<div class="container-fluid mt-3">
     <div class="row">
         <div class="col-xl-6 offset-xl-3 order-xl-1">
             <div class="card bg-white shadow">

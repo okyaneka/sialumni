@@ -47,8 +47,8 @@
     <div class="d-flex justify-content-center">
         <div class="container row">
             @if ($data['jobs']->count() == 0)
-            <div class="text-center">
-                <h3 class="text-muted">Belum ada info lowongan kerja</h3>
+            <div class="col">
+                <h3 class="text-muted text-center">Belum ada info lowongan kerja</h3>
             </div>
             @else
             @foreach ($data['jobs'] as $j)
@@ -66,11 +66,11 @@
                 </div>
             </div>
             @endforeach
-            @endif
             <div class="w-100 m-3"></div>
             <div class="col text-center">
                     <a href="{{ route('job.showall') }}" class="btn btn-primary btn-large">Lihat semua lowongan kerja</a>
             </div>
+            @endif
         </div>
     </div>
 </div>
@@ -79,6 +79,7 @@
 @push('js')
 <script src="/js/app.js?=v1.0.0"></script>
 <script src="{{ asset('argon') }}/vendor/chart.js/dist/Chart.min.js"></script>
+<script src="/assets/particles.min.js"></script>
 <script>
     $( function() {
         /* particlesJS.load(@dom-id, @path-json, @callback (optional)); */

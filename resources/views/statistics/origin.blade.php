@@ -11,7 +11,7 @@
 	<tbody>
 		@foreach ($total as $s)
 		<tr>
-			<td>{{ $s->getDistricts() }}</td>
+			<td>{{ $s->district }}</td>
 			<td class="text-right">{{ $s->total }}</td>
 		</tr>
 		@endforeach
@@ -30,7 +30,7 @@
 	<tbody>
 		@foreach ($five as $s)
 		<tr>
-			<td>{{ $s->getDistricts() }}</td>
+			<td>{{ $s->district }}</td>
 			<td class="text-right">{{ $s->total }}</td>
 		</tr>
 		@endforeach
@@ -49,7 +49,7 @@
 	<tbody>
 		@foreach ($three as $s)
 		<tr>
-			<td>{{ $s->getDistricts() }}</td>
+			<td>{{ $s->district }}</td>
 			<td class="text-right">{{ $s->total }}</td>
 		</tr>
 		@endforeach
@@ -68,7 +68,7 @@
 	<tbody>
 		@foreach ($one as $s)
 		<tr>
-			<td>{{ $s->getDistricts() }}</td>
+			<td>{{ $s->district }}</td>
 			<td class="text-right">{{ $s->total }}</td>
 		</tr>
 		@endforeach
@@ -81,19 +81,19 @@
 	$(function () {
 		var data = [
 		{
-			labels: [ @foreach ($total as $s) '{{ $s->getDistricts() }}', @endforeach ],
+			labels: [ @foreach ($total as $s) '{{ $s->district }}', @endforeach ],
 			datas: [ @foreach ($total as $s) {{ $s->total.',' }} @endforeach ]
 		},
 		{
-			labels:[ @foreach ($five as $s) '{{ $s->getDistricts() }}', @endforeach ],
+			labels:[ @foreach ($five as $s) '{{ $s->district }}', @endforeach ],
 			datas:[ @foreach ($five as $s) {{ $s->total.',' }} @endforeach ]
 		},
 		{
-			labels:[ @foreach ($three as $s) '{{ $s->getDistricts() }}', @endforeach ],
+			labels:[ @foreach ($three as $s) '{{ $s->district }}', @endforeach ],
 			datas:[ @foreach ($three as $s) {{ $s->total.',' }} @endforeach ]
 		},
 		{
-			labels:[ @foreach ($one as $s) '{{ $s->getDistricts() }}', @endforeach ],
+			labels:[ @foreach ($one as $s) '{{ $s->district }}', @endforeach ],
 			datas:[ @foreach ($one as $s) {{ $s->total.',' }} @endforeach ]
 		}];
 

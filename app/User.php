@@ -14,6 +14,39 @@ class User extends Authenticatable
     const ADMIN_TYPE = 'admin';
     const DEFAULT_TYPE = 'default';
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name', 'nis', 'email', 'password', 'pob',
+        'dob', 'street', 'province_id', 'gender', 'address',
+        'sub_district_id', 'district_id', 'department_slug', 'grad', 'phone',
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+        'province_id',
+        'sub_district_id',
+        'district_id',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+
     public function isAdmin()
     {
         return $this->type === self::ADMIN_TYPE;
@@ -22,8 +55,7 @@ class User extends Authenticatable
     public function isDataComplete()
     {
         foreach ($this->fillable as $column) {
-            if($column == 'temp_password') continue;
-            if(empty($this->$column)) return FALSE;
+            if (empty($this->$column)) return FALSE;
         }
 
         if (empty($this->statuses()->get()->toArray())) return FALSE;
@@ -31,14 +63,79 @@ class User extends Authenticatable
         return TRUE;
     }
 
-    /**
-     * Get the department for the user.
-     *
-     * @return Department
-     */
+    public function getFullAddressAttribute()
+    {
+        if (
+            $this->address &&
+            $this->sub_district &&
+            $this->district &&
+            $this->province
+        ) {
+            $street = $this->street ? "{$this->street}, " : '';
+            return "{$street}{$this->address}, {$this->sub_district}, {$this->district}, {$this->province}";
+        }
+        return;
+    }
+
+    public function getAddressAttribute()
+    {
+        if ($this->address_id) {
+            return Location::getVillage($this->address_id)->nama;
+        }
+        return;
+    }
+
+    public function getSubDistrictAttribute()
+    {
+        if ($this->sub_district_id) {
+            return Location::getSubDistrict($this->sub_district_id)->nama;
+        }
+        return;
+    }
+
+    public function getDistrictAttribute()
+    {
+        if ($this->district_id) {
+            return Location::getDistrict($this->district_id)->nama;
+        }
+        return;
+    }
+
+    public function getProvinceAttribute()
+    {
+        if ($this->province_id) {
+            return Location::getProvince($this->province_id)->nama;
+        }
+        return;
+    }
+
+    public function getStatusAttribute()
+    {
+        return empty($this->grad) ? 'Belum Aktif' : (date('Y') - $this->grad > 5 ? 'Tidak Aktif' : 'Aktif');
+    }
+
+    public function getLocalDobAttribute()
+    {
+        $months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+        $time = strtotime($this->dob);
+        $tanggal = date('j', $time);
+        $bulan = $months[date('n', $time) - 1];
+        $tahun = date('Y', $time);
+        return "{$tanggal} {$bulan} {$tahun}";
+    }
+
+    public function getDepartmentAttribute()
+    {
+        if ($this->department_slug) {
+            return $this->department()->first()->department;
+        }
+        
+        return;
+    }
+
     public function department()
     {
-        return $this->hasOne('App\Department','code','department');
+        return $this->belongsTo('App\Department', 'department_slug', 'code');
     }
 
     /**
@@ -50,110 +147,4 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Status', 'user_statuses', 'user_id', 'status_id')->withPivot('id', 'year', 'info');
     }
-
-    public function alumniStatus()
-    {
-        return empty($this->grad) ? 'Belum Aktif' : (date('Y') - $this->grad > 5 ? 'Tidak Aktif' : 'Aktif');
-        // ;
-    }
-
-    public function getProvinces()
-    {
-        try {
-            if (empty($this->province)) {
-                return 'Belum terdata';
-            }
-
-            foreach (json_decode(Storage::get('/origin/province')) as $province) {
-                if ($this->province == $province->id) {
-                    return trim($province->nama);
-                }
-            }
-        } catch (\Exception $e) {
-            Storage::put('/origin/province', json_encode(json_decode(file_get_contents('http://dev.farizdotid.com/api/daerahindonesia/provinsi'))->semuaprovinsi));
-            return $this->getProvinces();
-        }
-    }
-
-    public function getDistricts()
-    {
-        try {
-            if (empty($this->district)) {
-                return 'Belum terdata';
-            }
-
-            foreach (json_decode(Storage::get('/origin/district/'.substr($this->district, 0, 2))) as $district) {
-                if ($this->district == $district->id) {
-                    return trim($district->nama);   
-                }
-            }
-        } catch (\Exception $e) {
-            Storage::put('/origin/district/'.$this->province, json_encode(json_decode(file_get_contents('http://dev.farizdotid.com/api/daerahindonesia/provinsi/'.substr($this->district, 0, 2).'/kabupaten'))->kabupatens));
-            return $this->getDistricts();
-        }
-    }
-
-    public function getSubDistricts()
-    {
-        try {
-            if (empty($this->sub_district)) {
-                return 'Belum terdata';
-            }
-
-            foreach (json_decode(Storage::get('/origin/sub_district/'.$this->district)) as $subdistrict) {
-                if ($this->sub_district == $subdistrict->id) {
-                    return trim($subdistrict->nama);
-                }
-            }
-        } catch (\Exception $e) {
-            Storage::put('/origin/sub_district/'.$this->district, json_encode(json_decode(file_get_contents("http://dev.farizdotid.com/api/daerahindonesia/provinsi/kabupaten/$this->district/kecamatan"))->kecamatans));
-            return $this->getSubDistricts();
-        }
-    }
-
-
-    public function getAddress()
-    {
-        try {
-            if (empty($this->address)) {
-                return 'Belum terdata';
-            }
-
-            foreach (json_decode(Storage::get('/origin/village/'.$this->sub_district)) as $address) {
-                if ($this->address == $address->id) {
-                    return trim($address->nama);
-                }
-            }
-        } catch (\Exception $e) {
-            Storage::put('/origin/village/'.$id, json_encode(json_decode(file_get_contents("http://dev.farizdotid.com/api/daerahindonesia/provinsi/kabupaten/kecamatan/$this->sub_district/desa"))->desas));
-            return $this->getAddress();
-        }
-    }
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name', 'nis', 'email', 'password', 'pob', 'dob', 'street', 'province', 'gender', 'address', 'sub_district', 'district', 'department', 'grad', 'phone', 'temp_password'
-    ];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
 }

@@ -18,16 +18,14 @@ class CreateAlumnusTable extends Migration
             $table->string('pob')->nullable();
             $table->date('dob')->nullable();
             $table->string('street')->nullable();
-            $table->string('address')->nullable();
-            $table->string('sub_district')->nullable();
-            $table->string('district')->nullable();
-            $table->string('province')->nullable();
-            $table->string('department', 5)->nullable();
+            $table->string('address_id')->nullable();
+            $table->string('sub_district_id')->nullable();
+            $table->string('district_id')->nullable();
+            $table->string('province_id')->nullable();
+            $table->string('department_slug', 5)->nullable();
             $table->string('grad', 4)->nullable();
             $table->string('phone', 14)->nullable()->unique();
-            $table->string('telegram', 14)->nullable()->unique();
-            $table->string('telegram_id')->nullable()->unique();
-            $table->string('temp_password')->nullable();
+            $table->string('telegram_id', 16)->nullable()->unique();
         });
     }
 
@@ -38,23 +36,26 @@ class CreateAlumnusTable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn([
-                'pob',
-                'gender',
-                'dob',
-                'street',
-                'address',
-                'sub_district',
-                'district',
-                'province',
-                'department',
-                'grad',
-                'phone',
-                'telegram',
-                'telegram_id',
-                'temp_password'
-            ]);
-        });
+        $this->dropColumnIfExist('users', 'gender');
+        $this->dropColumnIfExist('users', 'pob');
+        $this->dropColumnIfExist('users', 'dob');
+        $this->dropColumnIfExist('users', 'street');
+        $this->dropColumnIfExist('users', 'address_id');
+        $this->dropColumnIfExist('users', 'sub_district_id');
+        $this->dropColumnIfExist('users', 'district_id');
+        $this->dropColumnIfExist('users', 'province_id');
+        $this->dropColumnIfExist('users', 'department_slug');
+        $this->dropColumnIfExist('users', 'grad');
+        $this->dropColumnIfExist('users', 'phone');
+        $this->dropColumnIfExist('users', 'telegram_id');
+    }
+
+    private function dropColumnIfExist($table, $column)
+    {
+        if (Schema::hasColumn($table, $column)) {
+            Schema::table($table, function (Blueprint $table) use ($column) {
+                $table->dropColumn($column);
+            });
+        }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\JobRequest;
 use App\Job;
 use Illuminate\Http\Request;
 
@@ -17,8 +18,8 @@ class JobController extends Controller
         $filter = [];
 
         // if (!empty($_GET['submit'])) {
-        if (!empty($_GET['company'])) 
-            $filter[] = ['company', 'like', '%'.$_GET['company'].'%'];
+        if (!empty($_GET['company']))
+            $filter[] = ['company', 'like', '%' . $_GET['company'] . '%'];
 
         $jobs = $job->where($filter)->paginate(15);
         return view('jobs.index', ['jobs' => $jobs, 'filter' => $filter]);
@@ -41,21 +42,8 @@ class JobController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Job $model)
+    public function store(JobRequest $request, Job $job)
     {
-        //
-        $request->validate([
-            "company" => "required",
-            "position" => "required",
-            "salary" => "numeric|required",
-            "province" => "required",
-            "district" => "required",
-            "street" => "required",
-            "email" => "nullable|email",
-            'phone' => "nullable|numeric|digits_between:9,14", 
-            'duedate' => 'required|date',
-        ]);
-
         $requirements = [];
 
         foreach ($request->requirements as $r) {
@@ -64,7 +52,7 @@ class JobController extends Controller
             }
         }
 
-        $job = $model->create([
+        $job->create([
             'company' => $request->company,
             'position' => $request->position,
             'salary' => $request->salary,
@@ -79,7 +67,7 @@ class JobController extends Controller
             'requirements' => serialize($requirements),
             'duedate' => date('Y-m-d', strtotime($request->duedate)),
         ]);
-        
+
         return redirect()->route('job.index')->withStatus('Lowongan kerja telah berhasil ditambahkan');
     }
 
@@ -94,11 +82,11 @@ class JobController extends Controller
         //
         $filter = [];
         if (!empty($_GET['company'])) {
-            $filter[] = ['company','like','%'.$_GET['company'].'%'];
+            $filter[] = ['company', 'like', '%' . $_GET['company'] . '%'];
         }
 
         $jobs = $jobs->where($filter);
-        $jobs = $jobs->where('duedate','>',date('Y-m-d'))->paginate(12);
+        $jobs = $jobs->where('duedate', '>', date('Y-m-d'))->paginate(12);
 
         return view('jobs.showall', compact('jobs', 'filter'));
     }
@@ -109,10 +97,8 @@ class JobController extends Controller
      * @param  \App\Job  $job
      * @return \Illuminate\Http\Response
      */
-    public function show($id, Job $job)
+    public function show(Job $job)
     {
-        //
-        $job = $job->find($id);
         return view('jobs.show', compact('job'));
     }
 
@@ -135,23 +121,8 @@ class JobController extends Controller
      * @param  \App\Job  $job
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Job $job)
+    public function update(JobRequest $request, Job $job)
     {
-        //
-        $request->validate([
-            "company" => "required",
-            "position" => "required",
-            "salary" => "numeric|required",
-            "province" => "required",
-            "district" => "required",
-            "sub_district" => "required",
-            "address" => "required",
-            "street" => "required",
-            "email" => "email|required",
-            'phone' => 'required|numeric|digits_between:9,14', 
-            'duedate' => 'required|date',
-        ]);
-
         $requirements = [];
 
         foreach ($request->requirements as $r) {

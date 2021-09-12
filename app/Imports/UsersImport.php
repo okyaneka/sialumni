@@ -11,10 +11,10 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 class UsersImport implements ToModel, WithHeadingRow
 {
     /**
-    * @param array $row
-    *
-    * @return \Illuminate\Database\Eloquent\Model|null
-    */
+     * @param array $row
+     *
+     * @return \Illuminate\Database\Eloquent\Model|null
+     */
     public function model(array $row)
     {
         if (!is_numeric($row['nis'])) {
@@ -33,12 +33,11 @@ class UsersImport implements ToModel, WithHeadingRow
             'nis' => $row['nis'],
             'name' => $row['nama'],
             'email' => $row['email'],
-            'password' => Hash::make(empty(Setting::get()['defaultpassword']) ? '123456' : Setting::get()['defaultpassword']),
+            'password' => Hash::make(date('dmY', strtotime($dob))),
             'gender' => $row['jenis_kelamin'] == 'L' || strtolower($row['jenis_kelamin']) == 'laki-laki' ? 'M' : 'F',
             'pob' => $row['tempat_lahir'],
             'dob' => $dob,
-            'department' => $row['jurusan'],
-            'temp_password' => empty(Setting::get()['defaultpassword']) ? '123456' : Setting::get()['defaultpassword'],
+            'department_slug' => $row['jurusan'],
         ]);
     }
 }

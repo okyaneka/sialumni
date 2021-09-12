@@ -3,7 +3,7 @@
 @section('content')
     @include('users.partials.header', ['title' => __('Tambah Status Lulusan')])
 
-    <div class="container-fluid mt-5">
+    <div class="container-fluid mt-3">
         <div class="d-flex justify-content-center">
             <div class="col-xl-8 order-xl-1">
                 <div class="card bg-secondary shadow">
@@ -22,7 +22,7 @@
                             @csrf
 
                             <div class="pl-lg-4">
-                                <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
+                                <div class="form-group">
                                     <label class="form-control-label" for="input-status">{{ __('Status Lulusan') }}</label>
                                     <input type="text" name="status" id="input-status" class="form-control form-control-alternative{{ $errors->has('status') ? ' is-invalid' : '' }}" placeholder="{{ __('Status Lulusan') }}" value="{{ old('status') }}" required>
 

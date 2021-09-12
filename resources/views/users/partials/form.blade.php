@@ -136,9 +136,9 @@
         <div class="form-group{{ $errors->has('department') ? ' has-danger' : '' }}">
             <label class="form-control-label" for="input-department">{{ __('Jurusan') }}</label>
             <select name="department" id="input-department" class="form-control form-control-alternative {{ $errors->has('department') ? ' is-invalid' : '' }}" {{ empty(\App\Department::all()) ? 'disabled' : '' }} {{ $user->isDataComplete() ? 'disabled' : '' }}>
-                <option {{ $user->department == '' ? 'selected' : '' }} value=''>- Silahkan pilih -</option>
+                <option disabled selected>- Silahkan pilih -</option>
                 @foreach (\App\Department::all() as $department)
-                <option {{ $user->department == $department->code ? 'selected' : '' }} value="{{ $department->code }}">{{ $department->department }}</option>
+                <option {{ $user->department_slug == $department->code ? 'selected' : '' }} value="{{ $department->code }}">{{ $department->department }}</option>
                 @endforeach
             </select>
 
@@ -167,7 +167,7 @@
         <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
             <label class="form-control-label">{{ __('Status') }}</label>
             <select name="status[n][status_id]" class="input-status form-control form-control-alternative {{ $errors->has('status') ? ' is-invalid' : '' }}" {{ empty(\App\Status::all()) ? 'disabled' : '' }}>
-                <option {{ $user->status == '' ? 'selected' : '' }} value=''>- Silahkan pilih -</option>
+                <option {{ $user->status == '' ? 'selected' : '' }} disabled selected>- Silahkan pilih -</option>
                 @foreach (\App\Status::all() as $status)
                 <option value="{{ $status->id }}">{{ $status->status }}</option>
                 @endforeach
@@ -180,7 +180,7 @@
             <input type="hidden" name="status[{{ $s->id }}][id]" value="{{ $s->id }}">
             <label class="form-control-label">{{ __('Status') }}</label>
             <select name="status[{{ $s->id }}][status_id]" class="input-status form-control form-control-alternative {{ $errors->has('status') ? ' is-invalid' : '' }}" {{ empty(\App\Status::all()) ? 'disabled' : '' }}>
-                <option value=''>- Silahkan pilih -</option>
+                <option disabled selected>- Silahkan pilih -</option>
                 @foreach (\App\Status::all() as $status)
                 <option {{ $s->pivot->status_id == $status->id ? 'selected' : '' }} value="{{ $status->id }}">{{ $status->status }}</option>
                 @endforeach
@@ -194,7 +194,7 @@
                     </small>
                 </div>
                 <div class="col-4">
-                    <input type="text" title="Tahun (opsional)" name="status[{{ $s->id }}][year]" id="input-phone" class="form-control form-control-alternative {{ $errors->has('year') ? ' is-invalid' : '' }}" placeholder="{{ __('Tahun (opsional)') }}" value="{{ old('year', $s->pivot->year) }}" required>
+                    <input type="text" title="Tahun (opsional)" name="status[{{ $s->id }}][year]" id="input-phone" class="form-control form-control-alternative {{ $errors->has('year') ? ' is-invalid' : '' }}" placeholder="{{ __('Tahun (opsional)') }}" value="{{ old('year', $s->pivot->year) }}">
                     <small class="form-text text-muted">
                         Sampai Tahun? (opsional)
                     </small>
@@ -206,7 +206,7 @@
         <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
             <label class="form-control-label">{{ __('Status 2') }}</label>
             <select name="status[n][status_id]" class="input-status form-control form-control-alternative {{ $errors->has('status') ? ' is-invalid' : '' }}" {{ empty(\App\Status::all()) ? 'disabled' : '' }}>
-                <option {{ $user->status == '' ? 'selected' : '' }} value=''>- Silahkan pilih -</option>
+                <option {{ $user->status == '' ? 'selected' : '' }} disabled selected>- Silahkan pilih -</option>
                 @foreach (\App\Status::all() as $status)
                 <option value="{{ $status->id }}">{{ $status->status }}</option>
                 @endforeach
@@ -266,7 +266,7 @@
                 $(this).parent().after('<div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">'+
                     '<label class="form-control-label">{{ __('Status 2') }}</label>'+
                     '<select name="status[m][status_id]" class="input-status form-control form-control-alternative {{ $errors->has('status') ? ' is-invalid' : '' }}" {{ empty(\App\Status::all()) ? 'disabled' : '' }}>'+
-                    '<option {{ $user->status == '' ? 'selected' : '' }} value="">- Silahkan pilih -</option>'+
+                    '<option {{ $user->status == '' ? 'selected' : '' }} disabled selected>- Silahkan pilih -</option>'+
                     @foreach (\App\Status::all() as $status)
                     '<option value="{{ $status->id }}">{{ $status->status }}</option>'+
                     @endforeach
@@ -280,14 +280,18 @@
             }
         });
 
-        var prov_id = {{ old('province', $user->province) ?: 'false' }};
-        var kab_id = {{ old('district', $user->district) ?: 'false' }};
-        var kec_id = {{ old('sub_district', $user->sub_district) ?: 'false' }};
-        var kel_id = {{ old('address', $user->address) ?: 'false' }};
+        var prov_id = {{ old('province', $user->province_id) ?: 'false' }};
+        var kab_id = {{ old('district', $user->district_id) ?: 'false' }};
+        var kec_id = {{ old('sub_district', $user->sub_district_id) ?: 'false' }};
+        var kel_id = {{ old('address', $user->address_id) ?: 'false' }};
 
         $.get('/api/provinsi', function(data, status) {
+            $('#input-district').empty().append('<option disabled selected>- Silahkan pilih provinsi terlebih dahulu -</option>');;
+            $('#input-sub_district').empty().append('<option disabled selected>- Silahkan pilih kabupaten terlebih dahulu -</option>');
+            $('#input-address').empty().append('<option disabled selected>- Silahkan pilih kecamatan terlebih dahulu -</option>');
+            
             selected = '';
-            $('#input-province').append('<option value="">- Silahkan pilih -</option>');
+            $('#input-province').append('<option disabled selected>- Silahkan pilih provinsi -</option>');
             $.each(data, function( i, val ) {
                 if (prov_id == val.id) {
                     selected = 'selected';
@@ -303,9 +307,9 @@
             });
         });
 
-        if (prov_id != false) {
+        if (prov_id) {
             $.get('/api/kabupaten/'+prov_id, function(data, status) {
-                $('#input-district').append('<option value="">- Silahkan pilih -</option>');
+                $('#input-district').append('<option disabled selected>- Silahkan pilih -</option>');
                 $.each(data, function(i, val) {
                     if (kab_id == val.id) {
                         selected = 'selected';
@@ -322,9 +326,9 @@
             });
         }
 
-        if (kec_id != false) {
+        if (kec_id) {
             $.get('/api/kecamatan/'+kab_id, function(data, status) {
-                $('#input-sub_district').append('<option value="">- Silahkan pilih -</option>');
+                $('#input-sub_district').append('<option disabled selected>- Silahkan pilih -</option>');
                 $.each(data, function(i, val) {
                     if (kec_id == val.id) {
                         selected = 'selected';
@@ -341,9 +345,9 @@
             });
         }
 
-        if (kel_id != false) {
+        if (kel_id) {
             $.get('/api/desa/'+kec_id, function(data, status) {
-                $('#input-address').append('<option value="">- Silahkan pilih -</option>');
+                $('#input-address').append('<option disabled selected>- Silahkan pilih -</option>');
                 $.each(data, function(i, val) {
                     if (kel_id == val.id) {
                         selected = 'selected';
@@ -361,11 +365,10 @@
             });
         }
 
-        $('#input-province').click(function() {
-            $('#input-district').empty();
-            $('#input-sub_district').empty();
-            $('#input-address').empty();
-            $('#input-district').append('<option value="">- Silahkan pilih -</option>');
+        $('#input-province').on('change', function() {
+            $('#input-district').empty().append('<option disabled selected>- Silahkan pilih provinsi terlebih dahulu -</option>');;
+            $('#input-sub_district').empty().append('<option disabled selected>- Silahkan pilih kabupaten terlebih dahulu -</option>');
+            $('#input-address').empty().append('<option disabled selected>- Silahkan pilih kecamatan terlebih dahulu -</option>');
 
             $.get('/api/kabupaten/'+$(this).val(), function(data, status) {
                 $.each(data, function(i, val) {
@@ -374,10 +377,9 @@
             });
         });
 
-        $('#input-district').click(function() {
-            $('#input-sub_district').empty();
-            $('#input-address').empty();
-            $('#input-sub_district').append('<option value="">- Silahkan pilih -</option>');
+        $('#input-district').on('change', function() {
+            $('#input-sub_district').empty().append('<option disabled selected>- Silahkan pilih kabupaten terlebih dahulu -</option>');
+            $('#input-address').empty().append('<option disabled selected>- Silahkan pilih kecamatan terlebih dahulu -</option>');
 
             $.get('/api/kecamatan/'+$(this).val(), function(data, status) {
                 $.each(data, function(i, val) {
@@ -386,9 +388,8 @@
             });
         });
 
-        $('#input-sub_district').click(function() {
-            $('#input-address').empty();
-            $('#input-address').append('<option value="">- Silahkan pilih -</option>');
+        $('#input-sub_district').on('change', function() {
+            $('#input-address').empty().append('<option disabled selected>- Silahkan pilih kecamatan terlebih dahulu -</option>');
 
             $.get('/api/desa/'+$(this).val(), function(data, status) {
                 $.each(data, function(i, val) {

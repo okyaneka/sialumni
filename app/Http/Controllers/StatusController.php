@@ -38,12 +38,10 @@ class StatusController extends Controller
      */
     public function store(Request $request, Status $model)
     {
-        //
         $request->validate([
-            'code'      => 'required|unique:statuses',
             'status'    => 'required'
         ]);
-        $model->code = strtoupper($request->get('code'));
+
         $model->status = ucwords(strtolower($request->get('status')));
         $model->save();
 

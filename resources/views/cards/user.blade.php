@@ -34,7 +34,7 @@
                 {{ $user->name }}<span class="font-weight-light">, {{ $user == auth()->user() || auth()->user()->isAdmin() ? \Carbon\Carbon::parse($user->dob)->age.' tahun' : '' }}</span>
             </h3>
             <div class="h5 font-weight-300">
-                <i class="ni location_pin mr-2"></i>{{ __($user->street.', '.$user->getAddress().', '.$user->getSubDistricts().', '.$user->getDistricts()).', '.$user->getProvinces() }}
+                <i class="ni location_pin mr-2"></i>{{ $user->full_address }}
             </div>
             <div class="h5">
                 <i class="ni business_briefcase-24 mr-2"></i>{{ __('Lulusan tahun '.$user->grad) }}
@@ -47,13 +47,13 @@
             </div>
             <div class="d-flex justify-content-between mb-3">
                 <div class="col text-left">Tanggal Lahir</div>
-                <div class="col text-right">{{ $user->dob }}</div>
+                <div class="col text-right">{{ $user->local_dob }}</div>
             </div>
             <hr>
             @endif
             <div class="d-flex justify-content-between mb-3">
                 <div class="col text-left">Jurusan</div>
-                <div class="col text-right">{{ \App\Department::where('code',$user->department)->first()->department }}</div>
+                <div class="col text-right">{{ $user->department }}</div>
             </div>
             <div class="d-flex justify-content-between mb-3">
                 <div class="col text-left">Tahun lulus</div>
@@ -61,7 +61,7 @@
             </div>
             <hr>
             <div class="d-flex justify-content-between mb-3">
-                <div class="col text-left"><strong>Status</strong></div>
+                <div class="col text-left"><strong>Status Lulusan</strong></div>
             </div>
             <?php $statuses = $user->statuses()->get() ?>
             @foreach ($statuses as $status)

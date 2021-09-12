@@ -19,13 +19,13 @@ class UserController extends Controller
      * @return \Illuminate\View\View
      */
     public function index(User $model)
-    {        
+    {
         if (!empty($_GET['status']))
             $model = Status::find($_GET['status'])->users();
         // dd($model);
-            // $filter[] = ['status', '=', $_GET['status']];
+        // $filter[] = ['status', '=', $_GET['status']];
 
-        $model = $model->where('type','=',User::DEFAULT_TYPE);
+        $model = $model->where('type', '=', User::DEFAULT_TYPE);
         if (Auth::user()->isAdmin() == FALSE) {
             $model = $model->whereNotNull('grad');
         }
@@ -33,10 +33,10 @@ class UserController extends Controller
         $filter = [];
 
         // if (!empty($_GET['submit'])) {
-        if (!empty($_GET['nama'])) 
-            $filter[] = ['name', 'like', '%'.$_GET['nama'].'%'];
+        if (!empty($_GET['nama']))
+            $filter[] = ['name', 'like', '%' . $_GET['nama'] . '%'];
 
-        if (!empty($_GET['jurusan'])) 
+        if (!empty($_GET['jurusan']))
             $filter[] =  ['department', '=', $_GET['jurusan']];
 
         if (!empty($_GET['tahun']))
@@ -54,7 +54,7 @@ class UserController extends Controller
         if (!empty($_GET['alumnistatus'])) {
             switch ($_GET['alumnistatus']) {
                 case 'aktif':
-                    $model = $model->whereBetween('grad',[(date('Y') - 5), date('Y')]);
+                    $model = $model->whereBetween('grad', [(date('Y') - 5), date('Y')]);
                     $filter[] = ['grad', 'like', '%%'];
                     break;
                 case 'belum_aktif':
@@ -62,11 +62,11 @@ class UserController extends Controller
                     $filter[] = ['grad', 'like', '%%'];
                     break;
                 case 'tidak_aktif':
-                    $filter[] = ['grad','<',(date('Y') - 5)];
+                    $filter[] = ['grad', '<', (date('Y') - 5)];
                     break;
                 default:
                     // code...
-                break;
+                    break;
             }
         }
 
@@ -79,19 +79,17 @@ class UserController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function show($id)
+    public function show(User $user)
     {
-        $user = User::find($id);
+        if ($user->isAdmin()) {
+            abort(404);
+        }
 
         if (is_null($user)) {
             abort(503, 'User not found');
         }
 
-        // if ($user->isDataComplete()) {
         return view('users.show', ['user' => $user]);
-        // }
-
-        // return abort(503, 'Invalid user data');
     }
 
     /**
@@ -108,12 +106,17 @@ class UserController extends Controller
      * Store a newly created user in storage
      *
      * @param  \App\Http\Requests\UserRequest  $request
-     * @param  \App\User  $model
+     * @param  \App\User  $user
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(UserRequest $request, User $model)
+    public function store(UserRequest $request, User $user)
     {
-        $model->create($request->merge(['password' => Hash::make($request->get('password'))])->all());
+        $user->create(
+            $request->merge([
+                'dob' => date('Y-m-d', strtotime($request->dob)),
+                'password' => Hash::make(date('dmY', strtotime($request->dob))),
+            ])->all()
+        );
 
         return redirect()->route('user.index')->withStatus(__('User successfully created.'));
     }
@@ -127,10 +130,11 @@ class UserController extends Controller
     public function edit(User $user)
     {
         // $user = array_push([
-            // 'departments' => \App\Department::all(),
-            // 'statuses' => \App\Status::all(),
+        // 'departments' => \App\Department::all(),
+        // 'statuses' => \App\Status::all(),
         // ], $user);
-        return view('users.edit', ['user' => $user,
+        return view('users.edit', [
+            'user' => $user,
             'departments' => \App\Department::all(),
             'statuses' => \App\Status::all(),
         ]);
@@ -145,45 +149,44 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-
         $user->name = $request->name;
         $user->gender = $request->gender;
-        $user->province = $request->province;
-        $user->district = $request->district;
-        $user->sub_district = $request->sub_district;
-        $user->address = $request->address;
+        $user->province_id = $request->province;
+        $user->district_id = $request->district;
+        $user->sub_district_id = $request->sub_district;
+        $user->address_id = $request->address;
         $user->street = $request->street;
         $user->pob = $request->pob;
         $user->dob = date('Y-m-d', strtotime($request->dob));
-        $user->department = $request->department;
+        $user->department_slug = $request->department;
         $user->grad = $request->grad;
         $user->phone = $request->phone;
-        $user->telegram = $request->telegram;
 
         // dd($request->toArray());
 
-        foreach ($request->status as $status) {
-            if (isset($status['id'])) {
-                DB::table('user_statuses')
-                ->where('id', $status['id'])
-                ->update([
-                    'user_id' => $user->id,
-                    'status_id' => $status['status_id'],
-                    'info' => $status['info'],
-                    'year' => $status['year'],
-                ]);
-            } elseif(!empty($status['status_id'])) {
-                DB::table('user_statuses')->insert([
-                    'user_id' => $user->id,
-                    'status_id' => $status['status_id'],
-                    'info' => $status['info'],
-                    'year' => $status['year'],
-                ]);
+        if ($request->status) {
+            foreach ($request->status as $status) {
+                if (isset($status['id'])) {
+                    DB::table('user_statuses')
+                        ->where('id', $status['id'])
+                        ->update([
+                            'user_id' => $user->id,
+                            'status_id' => $status['status_id'],
+                            'info' => $status['info'],
+                            'year' => $status['year'],
+                        ]);
+                } elseif (!empty($status['status_id'])) {
+                    DB::table('user_statuses')->insert([
+                        'user_id' => $user->id,
+                        'status_id' => $status['status_id'],
+                        'info' => $status['info'],
+                        'year' => $status['year'],
+                    ]);
+                }
             }
         }
 
         $user->update();
-
 
         return redirect()->route('user.index')->withStatus(__('User successfully updated.'));
     }

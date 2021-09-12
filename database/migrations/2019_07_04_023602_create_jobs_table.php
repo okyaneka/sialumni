@@ -23,7 +23,9 @@ class CreateJobsTable extends Migration
             $table->string('phone')->nullable();
             $table->date('duedate');
             $table->text('description')->nullable();
-            $table->text('requirements');
+            $table->text('requirements')->nullable();
+            $table->text('info')->nullable();
+            $table->enum('published', [1,0])->default(0);
             $table->timestamps();
         });
     }

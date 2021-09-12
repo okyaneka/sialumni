@@ -18,7 +18,7 @@ class HomeController extends Controller
             'statuses' => DB::table('statuses')
             ->join('user_statuses','statuses.id','=','user_statuses.status_id')
             ->select(DB::raw('statuses.id, statuses.status, count(*) as total'))
-            ->groupBy('id')
+            ->groupBy(['statuses.id', 'statuses.status'])
             ->orderBy('total', 'desc')
             ->get(),
             'jobs' => Job::where('duedate','>',date('Y-m-d'))->orderBy('duedate', 'desc')->limit(12)->get(),

@@ -15,9 +15,11 @@ class AlumniConversation extends Conversation
 {
   const EXCEPTIONS_KEYWORDS = ['lulusan', 'angkatan', 'jurusan', 'nama'];
 
+  protected $botinfo;
+
   protected $offset = 0;
 
-  protected $filters = [];
+  protected $user;
 
   protected $users;
 
@@ -97,7 +99,7 @@ class AlumniConversation extends Conversation
       $contact = new Contact($user->phone, $user->name, '', $user->telegram_id);
       $question = OutgoingMessage::create('')->withAttachment($contact);
     }
-    
+
     $this->ask(Question::create($question)->callbackId('show_job')->addButtons($buttons), function (Answer $answer) {
       switch ($answer->getValue()) {
         case 'prev':
@@ -137,7 +139,8 @@ class AlumniConversation extends Conversation
   public function run()
   {
     try {
-      User::where('telegram_id', $this->botinfo['user']['id'])->firstOrFail();
+      $this->botinfo = $this->bot->getUser()->getInfo();
+      $this->user = User::where('telegram_id', $this->botinfo['user']['id'])->firstOrFail();
       if ($this->users->count()) {
         $message = "Sampai saat ini, sudah ada {$this->users->count()} alumni yang terdaftar di sistem kami. Kamu dapat mencari salah satu dari mereka berdasarkan nama, jurusan, atau lulusan.";
         $this->say($message);

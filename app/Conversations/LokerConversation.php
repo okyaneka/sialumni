@@ -11,9 +11,13 @@ use BotMan\BotMan\Messages\Outgoing\Question;
 
 class LokerConversation extends Conversation
 {
+  protected $botinfo;
+
   protected $offset = 0;
 
   protected $jobs;
+
+  protected $user;
 
   public function __construct()
   {
@@ -78,7 +82,8 @@ class LokerConversation extends Conversation
   public function run()
   {
     try {
-      User::where('telegram_id', $this->botinfo['user']['id'])->firstOrFail();
+      $this->botinfo = $this->bot->getUser()->getInfo();
+      $this->user = User::where('telegram_id', $this->botinfo['user']['id'])->firstOrFail();
       if ($this->jobs->count()) {
         $message = "Aku menemukan ada {$this->jobs->count()} lowongan pekerjaan yang masih dibuka, diantaranya:";
         $this->say($message);

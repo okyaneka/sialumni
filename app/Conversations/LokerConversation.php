@@ -27,6 +27,9 @@ class LokerConversation extends Conversation
   public function showJob()
   {
     $buttons = [];
+    if ($this->offset > 0) {
+      $buttons[] = Button::create('Sebelumnya')->value('prev');
+    }
     if (($this->offset + 1) < $this->jobs->count()) {
       $buttons[] = Button::create('Berikutnya')->value('next');
     }
@@ -38,6 +41,10 @@ class LokerConversation extends Conversation
       switch ($answer->getValue()) {
         case 'next':
           $this->offset += 1;
+          $this->showJob();
+          break;
+        case 'prev':
+          $this->offset -= 1;
           $this->showJob();
           break;
         case 'enough':

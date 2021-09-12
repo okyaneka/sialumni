@@ -28,7 +28,7 @@ class AlumniConversation extends Conversation
     $this->users = User::where('type', User::DEFAULT_TYPE)->whereNotNull('grad')->orderBy('name');
   }
 
-  public function askSearch()
+  public function askForSearch()
   {
     $buttons = [
       Button::create('Ya, tolong!')->value('yes'),
@@ -40,10 +40,10 @@ class AlumniConversation extends Conversation
     $this->ask($question, function (Answer $answer) {
       switch ($answer->getValue()) {
         case 'yes':
-          return $this->doSearch();
+          $this->doSearch();
           break;
         default:
-          return $this->closing();
+          $this->closing();
           break;
       }
     });
@@ -77,7 +77,7 @@ class AlumniConversation extends Conversation
         });
       });
       $this->say("Aku menemukan ada {$this->users->count()} alumni yang mirip dengan {keyword}, berikut di antaranya:");
-      return $this->showUser();
+      $this->showUser();
     });
   }
 
@@ -106,18 +106,18 @@ class AlumniConversation extends Conversation
       switch ($answer->getValue()) {
         case 'prev':
           $this->offset -= 1;
-          return $this->showJob();
+          $this->showJob();
           break;
         case 'next':
           $this->offset += 1;
-          return $this->showJob();
+          $this->showJob();
           break;
         case 'change':
           $this->offset = 0;
-          return $this->doSearch();
+          $this->doSearch();
           break;
         default:
-          return $this->closing();
+          $this->closing();
           break;
       }
     });
@@ -149,7 +149,7 @@ class AlumniConversation extends Conversation
       if ($this->users->count()) {
         $message = "Sampai saat ini, sudah ada {$this->users->count()} alumni yang terdaftar di sistem kami. Kamu dapat mencari salah satu dari mereka berdasarkan nama, jurusan, atau lulusan.";
         $this->say($message);
-        return $this->askSearch();
+        $this->askForSearch();
       } else {
         return $this->say("Mohon maaf, untuk saat ini belum ada alumni yang terdaftar di sistem kami.");
       }

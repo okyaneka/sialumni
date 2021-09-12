@@ -52,14 +52,16 @@ class TelegramController extends Controller
 
     public function validasi(BotMan $bot)
     {
-        $this->isGroup($bot);
-        return $bot->startConversation(new \App\Conversations\ValidasiConversation(), $bot->getUser()->getId(), TelegramDriver::class);
+        if (!$this->isGroup($bot, "Maaf, perintah ini cuma berlaku untuk pesan pribadi.")) {
+            return $bot->startConversation(new \App\Conversations\ValidasiConversation(), $bot->getUser()->getId(), TelegramDriver::class);
+        }
     }
 
     public function update(BotMan $bot)
     {
-        $this->isGroup($bot);
-        return $bot->startConversation(new \App\Conversations\UpdateConversation(), $bot->getUser()->getId(), TelegramDriver::class);
+        if (!$this->isGroup($bot, "Maaf, perintah ini cuma berlaku untuk pesan pribadi.")) {
+            return $bot->startConversation(new \App\Conversations\UpdateConversation(), $bot->getUser()->getId(), TelegramDriver::class);
+        }
     }
 
     public function infoloker(BotMan $bot)
@@ -80,12 +82,14 @@ class TelegramController extends Controller
         return $bot->startConversation(new \App\Conversations\FindAlumniConversation(), $bot->getUser()->getId(), TelegramDriver::class);
     }
 
-    private function isGroup(BotMan $bot)
+    private function isGroup(BotMan $bot, $message = "")
     {
         $payload = $bot->getMessage()->getPayload();
         if ($payload['chat']['type'] == 'group') {
             $name = !empty($payload['from']['username']) ? '@' . $payload['from']['username'] : $payload['from']['first_name'];
-            if (User::where('telegram_id', $payload['from']['id'])->count()) {
+            if (!empty($message)) {
+                $bot->reply($message);
+            } elseif (User::where('telegram_id', $payload['from']['id'])->count()) {
                 $bot->reply("Hai $name.\nSilahkan check pesan pribadi ya");
             } else {
                 $bot->reply("Hai $name.\nCoba /start Aku dulu. Lewat japri ya...");

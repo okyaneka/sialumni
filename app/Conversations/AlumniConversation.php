@@ -40,10 +40,10 @@ class AlumniConversation extends Conversation
     $this->ask($question, function (Answer $answer) {
       switch ($answer->getValue()) {
         case 'yes':
-          $this->doSearch();
+          return $this->doSearch();
           break;
         default:
-          $this->closing();
+          return $this->closing();
           break;
       }
     });
@@ -77,7 +77,7 @@ class AlumniConversation extends Conversation
         });
       });
       $this->say("Aku menemukan ada {$this->users->count()} alumni yang mirip dengan {keyword}, berikut di antaranya:");
-      $this->showUser();
+      return $this->showUser();
     });
   }
 
@@ -106,18 +106,18 @@ class AlumniConversation extends Conversation
       switch ($answer->getValue()) {
         case 'prev':
           $this->offset -= 1;
-          $this->showJob();
+          return $this->showJob();
           break;
         case 'next':
           $this->offset += 1;
-          $this->showJob();
+          return $this->showJob();
           break;
         case 'change':
           $this->offset = 0;
-          $this->doSearch();
+          return $this->doSearch();
           break;
         default:
-          $this->closing();
+          return $this->closing();
           break;
       }
     });
@@ -149,7 +149,7 @@ class AlumniConversation extends Conversation
       if ($this->users->count()) {
         $message = "Sampai saat ini, sudah ada {$this->users->count()} alumni yang terdaftar di sistem kami. Kamu dapat mencari salah satu dari mereka berdasarkan nama, jurusan, atau lulusan.";
         $this->say($message);
-        $this->askSearch();
+        return $this->askSearch();
       } else {
         return $this->say("Mohon maaf, untuk saat ini belum ada alumni yang terdaftar di sistem kami.");
       }

@@ -19,7 +19,7 @@
                 @endempty
             </h3>
             <div class="h5 font-weight-300">
-                <i class="ni ni-pin-3 mr-2"></i>{{ $user->full_address }}
+                <i class="ni ni-pin-3 mr-2"></i>{{ auth()->user()->full_address }}
             </div>
             <div class="h5">
                 <span>

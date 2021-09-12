@@ -77,12 +77,29 @@ class AlumniConversation extends Conversation
         });
       });
       $this->users = $this->users->get();
-      $this->say("Aku menemukan ada {$this->users->count()} alumni yang mirip dengan \"{$answer->getText()}\", berikut di antaranya:");
-      $this->showUser();
+      if ($this->users->count() > 0) {
+        $this->say("Aku menemukan ada {$this->users->count()} alumni yang mirip dengan \"{$answer->getText()}\", berikut di antaranya:");
+        $this->showUser();
+      } else {
+        $this->askConfirm("Maaf, aku tidak bisa menemukan alumni yang mirip dengan \"{$answer->getText()}\"");
+      }
     });
   }
 
   public function showUser()
+  {
+    $user = $this->users->skip($this->offset)->first();
+    $this->askConfirm($this->userToText($user));
+    // if (!empty($user->phone)) {
+    //   $contact = new Contact($user->phone, $user->name, '', $user->telegram_id);
+    //   $message = OutgoingMessage::create('')->withAttachment($contact);
+    //   $this->say($message);
+    // }
+
+
+  }
+
+  public function askConfirm($message)
   {
     $buttons = [];
     if ($this->offset > 0) {
@@ -94,16 +111,7 @@ class AlumniConversation extends Conversation
     $buttons[] = Button::create('Ubah kata kunci')->value('change');
     $buttons[] = Button::create('Cukup')->value('enough');
 
-    $user = $this->users->skip($this->offset)->first();
-    $this->say($this->userToText($user));
-
-    if (!empty($user->phone)) {
-      $contact = new Contact($user->phone, $user->name, '', $user->telegram_id);
-      $message = OutgoingMessage::create('')->withAttachment($contact);
-      $this->say($message);
-    }
-
-    $this->ask(Question::create('Aksi')->callbackId('show_job')->addButtons($buttons), function (Answer $answer) {
+    $this->ask(Question::create($message)->callbackId('show_job')->addButtons($buttons), function (Answer $answer) {
       switch ($answer->getValue()) {
         case 'prev':
           $this->offset -= 1;
@@ -132,11 +140,13 @@ class AlumniConversation extends Conversation
 
   private function userToText(User $user)
   {
-
     $text = '';
     $text .= ucwords($user->name) . "\n";
     $text .= "Jurusan $user->department\n";
     $text .= "Lulusan $user->grad\n";
+    if (!empty($user->phone)) {
+      $text .= "kontak $user->phone\n";
+    }
     $text .= "Info: " . route('user.show', $user);
 
     return $text;

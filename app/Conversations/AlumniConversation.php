@@ -35,7 +35,9 @@ class AlumniConversation extends Conversation
       Button::create('Tidak, terimakasih.')->value('no'),
     ];
 
-    $this->ask(Question::create("Kamu ingin mencoba mencarinya?")->callbackId('ask_search')->addButtons($buttons), function (Answer $answer) {
+    $question = Question::create("Kamu ingin mencoba mencarinya?")->callbackId('ask_search')->addButtons($buttons);
+
+    $this->ask($question, function (Answer $answer) {
       switch ($answer->getValue()) {
         case 'yes':
           $this->doSearch();
@@ -75,7 +77,7 @@ class AlumniConversation extends Conversation
           }
         });
       });
-      $this->say("Aku menemukan ada {$this->users->count} alumni yang mirip dengan {keyword}, berikut di antaranya:");
+      $this->say("Aku menemukan ada {$this->users->count()} alumni yang mirip dengan {keyword}, berikut di antaranya:");
       $this->showUser();
     });
   }

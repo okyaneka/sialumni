@@ -77,7 +77,7 @@ class AlumniConversation extends Conversation
         });
       });
       $this->users = $this->users->get();
-      $this->say("Aku menemukan ada {$this->users->count()} alumni yang mirip dengan {$answer->getText()}, berikut di antaranya:");
+      $this->say("Aku menemukan ada {$this->users->count()} alumni yang mirip dengan \"{$answer->getText()}\", berikut di antaranya:");
       $this->showUser();
     });
   }
@@ -94,16 +94,16 @@ class AlumniConversation extends Conversation
     $buttons[] = Button::create('Ubah kata kunci')->value('change');
     $buttons[] = Button::create('Cukup')->value('enough');
 
-    $user = $this->users->skip($this->offset)->take(1)->first();
+    $user = $this->users->skip($this->offset)->first();
     $this->say($this->userToText($user));
-    $question = '';
 
     if (!empty($user->phone)) {
       $contact = new Contact($user->phone, $user->name, '', $user->telegram_id);
-      $question = OutgoingMessage::create('')->withAttachment($contact);
+      $message = OutgoingMessage::create('')->withAttachment($contact);
+      $this->say($message);
     }
 
-    $this->ask(Question::create($question)->callbackId('show_job')->addButtons($buttons), function (Answer $answer) {
+    $this->ask(Question::create('')->callbackId('show_job')->addButtons($buttons), function (Answer $answer) {
       switch ($answer->getValue()) {
         case 'prev':
           $this->offset -= 1;

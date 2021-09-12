@@ -42,10 +42,8 @@ class AlumniConversation extends Conversation
         case 'yes':
           $this->doSearch();
           break;
-        case 'no':
-          $this->closing();
-          break;
         default:
+          $this->closing();
           break;
       }
     });
@@ -54,6 +52,7 @@ class AlumniConversation extends Conversation
   public function doSearch()
   {
     $this->ask("Kamu ingin mencari siapa?", function (Answer $answer) {
+      $this->users = User::where('type', User::DEFAULT_TYPE)->whereNotNull('grad')->orderBy('name');
       $keywords = explode(' ', strtolower(trim($answer->getText())));
       foreach (self::EXCEPTIONS_KEYWORDS as $except) {
         if (($index = array_search($except, $keywords)) !== false) {
@@ -91,6 +90,7 @@ class AlumniConversation extends Conversation
     if (($this->offset + 1) < $this->users->count()) {
       $buttons[] = Button::create('Berikutnya')->value('next');
     }
+    $buttons[] = Button::create('Ubah kata kunci')->value('change');
     $buttons[] = Button::create('Cukup')->value('enough');
 
     $user = $this->users->skip($this->offset)->take(1)->first();
@@ -112,9 +112,12 @@ class AlumniConversation extends Conversation
           $this->offset += 1;
           $this->showJob();
           break;
-        case 'enough':
-          $this->closing();
+        case 'change':
+          $this->offset = 0;
+          $this->doSearch();
+          break;
         default:
+          $this->closing();
           break;
       }
     });

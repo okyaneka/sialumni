@@ -43,13 +43,6 @@ Route::middleware('is_installed')->group(function () {
 		Route::put('setting/avatar', ['as' => 'profile.avatar', 'uses' => 'ProfileController@update_avatar']);
 		// Route::put('setting/email', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
 
-		Route::get('statistic', ['as' => 'statistic.index', 'uses' => 'StatisticController@index']);
-		Route::get('statistic/grad', ['as' => 'statistic.grad', 'uses' => 'StatisticController@grad']);
-		Route::get('statistic/origin', ['as' => 'statistic.origin', 'uses' => 'StatisticController@origin']);
-		Route::get('statistic/department', ['as' => 'statistic.department', 'uses' => 'StatisticController@department']);
-		Route::get('statistic/status', ['as' => 'statistic.status', 'uses' => 'StatisticController@status']);
-		Route::get('statistic/gender', ['as' => 'statistic.gender', 'uses' => 'StatisticController@gender']);
-
 		Route::middleware('is_admin')->group(function () {
 			Route::get('/admin', 'AdminController@admin')->name('admin');
 			Route::resource('department', 'DepartmentController', ['except' => ['show']]);
@@ -59,6 +52,13 @@ Route::middleware('is_installed')->group(function () {
 
 			Route::get('batch/user', 'UserBatchController@batch')->name('user.batch');
 			Route::put('batch/user', 'UserBatchController@insertBatch')->name('user.insert_batch');
+
+			Route::get('statistic', ['as' => 'statistic.index', 'uses' => 'StatisticController@index']);
+			Route::get('statistic/grad', ['as' => 'statistic.grad', 'uses' => 'StatisticController@grad']);
+			Route::get('statistic/origin', ['as' => 'statistic.origin', 'uses' => 'StatisticController@origin']);
+			Route::get('statistic/department', ['as' => 'statistic.department', 'uses' => 'StatisticController@department']);
+			Route::get('statistic/status', ['as' => 'statistic.status', 'uses' => 'StatisticController@status']);
+			Route::get('statistic/gender', ['as' => 'statistic.gender', 'uses' => 'StatisticController@gender']);
 
 			Route::get('download', 'DownloadDataController@index')->name('download');
 			Route::put('download', 'DownloadDataController@download')->name('download.download');

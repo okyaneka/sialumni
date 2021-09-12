@@ -291,6 +291,7 @@ class FirstUpdateConversation extends Conversation
     } catch (\Throwable $th) {
       $message = 'Mohon maaf, sepertinya kamu belum terdaftar sebagai alumni SMK N Pringsurat. Silahkan tekan /validasi untuk mengecek apakah akun kamu terdaftar sebagai alumni SMK N Pringsurat';
       $this->say($message);
+      throw $th;
     }
   }
 }

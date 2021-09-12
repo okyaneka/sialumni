@@ -92,9 +92,9 @@ class LokerConversation extends Conversation
         return $this->say("Mohon maaf, sepertinya belum ada info lowongan pekerjaan yang sedang dibuka.");
       }
     } catch (\Throwable $th) {
-      \Log::error($th->getMessage());
       $message = 'Mohon maaf, sepertinya kamu belum terdaftar sebagai alumni SMK N Pringsurat. Silahkan tekan /validasi untuk mengecek apakah akun kamu terdaftar sebagai alumni SMK N Pringsurat';
       $this->say($message);
+      throw $th;
     }
   }
 }

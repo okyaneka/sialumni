@@ -151,9 +151,9 @@ class AlumniConversation extends Conversation
         return $this->say("Mohon maaf, untuk saat ini belum ada alumni yang terdaftar di sistem kami.");
       }
     } catch (\Throwable $th) {
-      \Log::error($th->getMessage());
       $message = 'Mohon maaf, sepertinya kamu belum terdaftar sebagai alumni SMK N Pringsurat. Silahkan tekan /validasi untuk mengecek apakah akun kamu terdaftar sebagai alumni SMK N Pringsurat';
       $this->say($message);
+      throw $th;
     }
   }
 }

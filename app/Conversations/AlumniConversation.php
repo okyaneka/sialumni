@@ -35,19 +35,18 @@ class AlumniConversation extends Conversation
       Button::create('Tidak, terimakasih.')->value('no'),
     ];
 
-    // $question = Question::create("Kamu ingin mencoba mencarinya?")->callbackId('ask_search')->addButtons($buttons);
-$this->say('hmm');
-return true;
-    // $this->ask($question, function (Answer $answer) {
-    //   switch ($answer->getValue()) {
-    //     case 'yes':
-    //       $this->doSearch();
-    //       break;
-    //     default:
-    //       $this->closing();
-    //       break;
-    //   }
-    // });
+    $question = Question::create("Kamu ingin mencoba mencarinya?")->callbackId('ask_for_search')->addButtons($buttons);
+
+    $this->ask($question, function (Answer $answer) {
+      switch ($answer->getValue()) {
+        case 'yes':
+          $this->doSearch();
+          break;
+        default:
+          $this->closing();
+          break;
+      }
+    });
   }
 
   public function doSearch()

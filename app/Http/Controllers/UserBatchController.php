@@ -27,11 +27,11 @@ class UserBatchController extends Controller
 		// dd($request->file->getMimeType());
 
 		$messages = [
-			'mimes' => 'Format berkas yang di unggah harus .xls, .xlsx, .ods',
+			'mimes' => 'Format berkas yang di unggah dapat menggunakan .xls, .xlsx, .ods atau .csv',
 		];
 
 		$request->validate([
-			'file' => 'required|mimes:xlsx,ods,xls',
+			'file' => 'required|mimes:xlsx,ods,xls,csv',
 		], $messages);
 		
 		try {
@@ -46,6 +46,10 @@ class UserBatchController extends Controller
 
 				case 'ods':
 				Excel::import(new UsersImport, $request->file, null, \Maatwebsite\Excel\Excel::ODS);
+				break;
+
+				case 'csv':
+				Excel::import(new UsersImport, $request->file, null, \Maatwebsite\Excel\Excel::CSV);
 				break;
 
 				default:

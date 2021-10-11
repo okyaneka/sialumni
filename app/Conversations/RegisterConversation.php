@@ -416,7 +416,7 @@ class RegisterConversation extends Conversation
 
         if ($this->user->get()->count() == 1) {
             $this->user = $this->user->get()->first();
-            if($this->user->isDataComplete()) {
+            if($this->user->isDataComplete(true)) {
                 $question = Question::create("Kami mendeteksi bahwa anda telah terdaftar sebagai alumni aktif di dalam sistem kami")
                 ->callbackId('ask_confirmation')
                 ->addButtons([

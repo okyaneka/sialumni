@@ -52,9 +52,13 @@ class User extends Authenticatable
         return $this->type === self::ADMIN_TYPE;
     }
 
-    public function isDataComplete()
+    public function isDataComplete($is_bot = false)
     {
+        $ignored  = ['province_id', 'address', 'sub_district_id', 'district_id'];
         foreach ($this->fillable as $column) {
+            if ($is_bot && in_array($column, $ignored)) {
+                continue;
+            }
             if (empty($this->$column)) return FALSE;
         }
 
@@ -129,7 +133,7 @@ class User extends Authenticatable
         if ($this->department_slug) {
             return $this->department()->first()->department;
         }
-        
+
         return;
     }
 

@@ -59,14 +59,14 @@ class FirstUpdateConversation extends Conversation
         $pob = trim($answer->getText());
         if (preg_match("/^[a-zA-Z\s]*$/", $pob)) {
           $this->user['pob'] = $pob;
-          $this->askAddress();
+          $this->askDepartment();
         } else {
           $this->say('Maaf, data yang kamu masukkan sepertinya bukan tempat lahir yang valid. Silahkan coba lagi!');
           $this->askPob();
         }
       });
     } else {
-      $this->askAddress();
+      $this->askDepartment();
     }
   }
 
@@ -255,7 +255,7 @@ class FirstUpdateConversation extends Conversation
     } catch (\Throwable $th) {
       $old_status_id = '';
     }
-    
+
     if (isset($this->data['status'])) {
       foreach ($this->data['status'] as $status) {
         if (!empty($old_status_id)) {

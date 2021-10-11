@@ -6,9 +6,8 @@ use App\Http\Requests\ProfileRequest;
 use App\Http\Requests\PasswordRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
-use DB;
-use Auth;
-use Exception;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
@@ -57,9 +56,9 @@ class ProfileController extends Controller
 
         $user->name = $request->name;
         $user->gender = $request->gender;
-        $user->province = $request->province;
-        $user->district = $request->district;
-        $user->sub_district = $request->sub_district;
+        $user->province_id = $request->province;
+        $user->district_id = $request->district;
+        $user->sub_district_id = $request->sub_district;
         $user->address = $request->address;
         $user->street = $request->street;
         $user->pob = $request->pob;

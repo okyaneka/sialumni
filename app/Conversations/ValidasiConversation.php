@@ -43,7 +43,7 @@ class ValidasiConversation extends Conversation
       $user->save();
       $message = "Selamat, kamu sudah terdaftar sebagai alumni SMK N Pringsurat.";
 
-      if (!$user->isDataComplete()) {
+      if (!$user->isDataComplete(true)) {
         $message .= "\nTetapi data diri kamu masih belum lengkap nih, boleh minta tolong untuk melengkapi data diri kamu dengan menggunakan perintah /update. Terimakasih 😄";
       }
     } catch (\Throwable $th) {

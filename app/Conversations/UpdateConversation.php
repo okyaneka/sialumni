@@ -22,7 +22,7 @@ class UpdateConversation extends Conversation
 
   public function greetings()
   {
-    if ($this->user->isDataComplete()) {
+    if ($this->user->isDataComplete(true)) {
       $this->showMenu();
     } else {
       $message = "Sepertinya data kamu masih belum lengkap. Jangan khawatir, cukup ikuti instruksi saya ya.";

@@ -72,9 +72,9 @@ class HomeController extends Controller
         $user->name = $request->name;
         $user->gender = $request->gender;
         // $user->email = $request->email;
-        $user->province = $request->province;
-        $user->district = $request->district;
-        $user->sub_district = $request->sub_district;
+        $user->province_id = $request->province;
+        $user->district_id = $request->district;
+        $user->sub_district_id = $request->sub_district;
         $user->address = $request->address;
         $user->street = $request->street;
         $user->pob = $request->pob;

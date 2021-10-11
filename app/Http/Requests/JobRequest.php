@@ -27,12 +27,14 @@ class JobRequest extends FormRequest
             "company" => "required",
             "position" => "required",
             "salary" => "numeric|nullable",
+            'poster' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048|nullable',
             "province" => "required",
             "district" => "required",
             "street" => "nullable",
             "email" => "nullable|email",
             'phone' => "nullable|numeric|digits_between:9,14", 
             'duedate' => 'required|date',
+            'seen_until' => 'required|date',
         ];
     }
 }

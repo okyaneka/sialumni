@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\JobRequest;
 use App\Job;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class JobController extends Controller
 {
@@ -52,20 +53,29 @@ class JobController extends Controller
             }
         }
 
+        $poster = "";
+        if ($request->hasFile('poster')) {
+            $poster = 'poster_' . time() . '.' . $request->file('poster')->getClientOriginalExtension();
+            $request->file('poster')->storeAs('posters', $poster);
+            $poster = "posters/$poster";
+        }
+
         $job->create([
             'company' => $request->company,
             'position' => $request->position,
             'salary' => $request->salary,
-            'location' => serialize([
+            'location' => json_encode([
                 "province" => $request->province,
                 "district" => $request->district,
                 "street" => $request->street,
             ]),
+            'poster' => $poster,
             'email' => $request->email,
             'phone' => $request->phone,
             'description' => $request->description,
-            'requirements' => serialize($requirements),
+            'requirements' => json_encode($requirements),
             'duedate' => date('Y-m-d', strtotime($request->duedate)),
+            'seen_until' => date('Y-m-d', strtotime($request->seen_until)),
         ]);
 
         return redirect()->route('job.index')->withStatus('Lowongan kerja telah berhasil ditambahkan');
@@ -131,21 +141,31 @@ class JobController extends Controller
             }
         }
 
+        if ($request->get('delete-poster') == "1") {
+            Storage::delete($job->poster);
+            $job->poster = "";
+        }
+
+        if ($request->hasFile('poster')) {
+            $poster = 'poster_' . time() . '.' . $request->file('poster')->getClientOriginalExtension();
+            $request->file('poster')->storeAs('posters', $poster);
+            $job->poster = "posters/$poster";
+        }
+
         $job->company = $request->company;
         $job->position = $request->position;
         $job->salary = $request->salary;
-        $job->location = serialize([
+        $job->location = json_encode([
             "province" => $request->province,
             "district" => $request->district,
-            "sub_district" => $request->sub_district,
-            "address" => $request->address,
             "street" => $request->street,
         ]);
         $job->email = $request->email;
         $job->phone = $request->phone;
         $job->description = $request->description;
-        $job->requirements = serialize($requirements);
+        $job->requirements = json_encode($requirements);
         $job->duedate = date('Y-m-d', strtotime($request->duedate));
+        $job->seen_until = date('Y-m-d', strtotime($request->seen_until));
 
         $job->update();
 

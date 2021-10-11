@@ -22,11 +22,15 @@ class CreateJobsTable extends Migration
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
             $table->date('duedate');
+            $table->date('seen_until');
+            $table->text('poster')->nullable();
             $table->text('description')->nullable();
             $table->text('requirements')->nullable();
             $table->text('info')->nullable();
+            $table->text('raw_data')->nullable();
             $table->enum('published', [1,0])->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

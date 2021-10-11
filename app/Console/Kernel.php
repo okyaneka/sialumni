@@ -2,8 +2,11 @@
 
 namespace App\Console;
 
+use App\Job;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class Kernel extends ConsoleKernel
 {
@@ -26,6 +29,15 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+        $schedule->call(function () {
+            $jobs = Job::where('seen_until', '>', date('Y-m-d'))->get();
+            $count = $jobs->count();
+            foreach ($jobs as $job) {
+                Storage::delete($job->poster);
+                $job->delete();
+            }
+            Log::info("$count jobs deleted");
+        })->daily();
     }
 
     /**
@@ -35,7 +47,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }

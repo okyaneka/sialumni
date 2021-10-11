@@ -10,6 +10,12 @@
                 <div class="card-body">
                     <small class="text-muted">{{ date('d/m/Y', strtotime($job->updated_at)) }}</small>
                     <h2 class="display-2 text-primary">{{ $job->company }}</h2>
+                    @if (!empty($job->poster))
+                    <hr>
+                    <div class="text-center">
+                        <img class="w-75" src="/storage/{{ $job->poster }}" alt="">
+                    </div>
+                    @endif
                     <hr>
                     {!! $job->description !!}
                     <div class="bg-success p-3 text-white my-5 ml-0">
@@ -21,11 +27,11 @@
                     </div>
                     <p>Syarat yang diperlukan :</p>
                     <ul>
-                        @foreach (unserialize($job->requirements) as $requirements)
+                        @foreach (json_decode($job->requirements) as $requirements)
                         <li>{{ $requirements }}</li>
                         @endforeach
                     </ul>
-                    <p>Kirim lamaran anda sebelum tanggal <span class="text-primary">{{ date('d/m/Y', strtotime($job->duedate)) }}</span></p>
+                    <p>Dibuka sampai <span class="text-primary">{{ date('d/m/Y', strtotime($job->duedate)) }}</span></p>
                 </div>
             </div>
         </div>

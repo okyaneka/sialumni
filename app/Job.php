@@ -3,34 +3,40 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Job extends Model
 {
+	use SoftDeletes;
+
 	protected $fillable = [
 		'company',
 		'position',
 		'salary',
 		'location',
+		'poster',
 		'email',
 		'phone',
 		'description',
 		'requirements',
 		'duedate',
+		'seen_until',
+		'raw_data'
 	];
 
 	public function getProvinceIdAttribute()
 	{
-		return unserialize($this->location)['province'];
+		return json_decode($this->location)->province;
 	}
 
 	public function getDistrictIdAttribute()
 	{
-		return unserialize($this->location)['district'];
+		return json_decode($this->location)->district;
 	}
-	
+
 	public function getDistrictAttribute()
 	{
-		return unserialize($this->location)['street'];
+		return json_decode($this->location)->street;
 	}
 
 	public function getFullAddressAttribute()

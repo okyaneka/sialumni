@@ -39,7 +39,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
                                     </div>
-                                    <input class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" placeholder="{{ __('Password') }}" type="password" value="secret" required>
+                                    <input class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" placeholder="{{ __('Password') }}" type="password" required>
                                     <div class="input-group-append">
                                         <span class="input-group-text" data-toggle="tooltip" data-placement="bottom" title="Untuk Alumni yang belum pernah melakukan login, password menggunakan tanggal lahir (contoh: 17 Agustus 1945 menjadi 17081945)"><i class="fa fa-question-circle"></i></span>
                                     </div>

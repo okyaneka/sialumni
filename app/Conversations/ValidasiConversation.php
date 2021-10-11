@@ -15,10 +15,10 @@ class ValidasiConversation extends Conversation
     $this->user = new User;
   }
 
-  public function askNisn()
+  public function askName()
   {
-    return $this->ask("Silahkan masukkan nisn Kamu!", function (Answer $answer) {
-      $this->data['nisn'] = trim($answer->getText());
+    return $this->ask("Silahkan masukkan nama lengkap Kamu!", function (Answer $answer) {
+      $this->data['name'] = trim($answer->getText());
       $this->askDoB();
     });
   }
@@ -36,7 +36,7 @@ class ValidasiConversation extends Conversation
     $message = '';
     try {
       $user = User::where([
-        ['nisn', '=', $this->data['name']],
+        ['name', '=', $this->data['name']],
         ['dob', '=', date('Y-m-d', strtotime($this->data['dob']))],
       ])->firstOrFail();
       $user->telegram_id = $this->botinfo['user']['id'];

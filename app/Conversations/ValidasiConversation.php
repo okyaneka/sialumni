@@ -15,10 +15,10 @@ class ValidasiConversation extends Conversation
     $this->user = new User;
   }
 
-  public function askName()
+  public function askNisn()
   {
-    return $this->ask("Silahkan masukkan nama lengkap Kamu!", function (Answer $answer) {
-      $this->data['name'] = trim($answer->getText());
+    return $this->ask("Silahkan masukkan nisn Kamu!", function (Answer $answer) {
+      $this->data['nisn'] = trim($answer->getText());
       $this->askDoB();
     });
   }
@@ -36,7 +36,7 @@ class ValidasiConversation extends Conversation
     $message = '';
     try {
       $user = User::where([
-        ['name', '=', $this->data['name']],
+        ['nisn', '=', $this->data['name']],
         ['dob', '=', date('Y-m-d', strtotime($this->data['dob']))],
       ])->firstOrFail();
       $user->telegram_id = $this->botinfo['user']['id'];
@@ -47,7 +47,7 @@ class ValidasiConversation extends Conversation
         $message .= "\nTetapi data diri kamu masih belum lengkap nih, boleh minta tolong untuk melengkapi data diri kamu dengan menggunakan perintah /update. Terimakasih 😄";
       }
     } catch (\Throwable $th) {
-      $message = 'Mohon maaf, sepertinya kamu belum terdaftar sebagai alumni SMK N Pringsurat.';
+      $message = 'Mohon maaf, sepertinya kamu belum/tidak terdaftar sebagai alumni SMK N Pringsurat.';
     }
 
     $this->say($message);
@@ -69,7 +69,7 @@ class ValidasiConversation extends Conversation
       $user = User::where('telegram_id', $this->botinfo['user']['id'])->firstOrFail();
       $this->info($user);
     } catch (\Throwable $th) {
-      $this->askName();
+      $this->askNisn();
       \Log::error($th);
     }
   }

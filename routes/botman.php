@@ -9,14 +9,21 @@ $botman = resolve('botman');
 $botman->fallback(function ($bot) {
     $payload = $bot->getMessage()->getPayload();
     if ($payload['chat']['type'] != 'group') {
-        $bot->reply('', ['reply_markup' => json_encode([
+        $payload = $bot->getMessage()->getPayload();
+        $bot->reply('Maaf, saya tidak mengerti apa yang kamu maksud. Coba pakai perintah ini!', ['reply_markup' => json_encode([
             'keyboard' => [
-                ['text' => '/validasi'],
-                ['text' => '/update'],
-                ['text' => '/infoloker'],
-                ['text' => '/infoalumni'],
-                ['text' => '/tambahloker'],
-                ['text' => '/bantuan'],
+                [
+                    ['text' => '/validasi'],
+                    ['text' => '/update'],
+                ],
+                [
+                    ['text' => '/infoloker'],
+                    ['text' => '/infoalumni'],
+                ],
+                [
+                    ['text' => '/tambahloker'],
+                    ['text' => '/bantuan'],
+                ],
             ]
         ])]);
     }
@@ -24,12 +31,13 @@ $botman->fallback(function ($bot) {
 
 $botman->hears('/start', function ($bot) {
     $payload = $bot->getMessage()->getPayload();
+    $user = $payload['from'];
     if ($payload['chat']['type'] != 'group') {
         $bot->reply('Halo. Selamat datang di SkaniraBot. Disini kamu akan dapat mengakses informasi tentang alumni. Selain itu, disini kamu juga bisa mendaftarkan diri kamu sebagai alumni SMK Negeri Pringsurat. Silahkan tekan "/validasi", ikuti petunjuknya dan kemudian siap untuk dapat menikmati semua layanan dari SkaniraBot. Semoga harimu menyenangkan! ^_^.');
     }
     if ($payload['chat']['type'] == 'group') {
         $name = !empty($user['username']) ? '@' . $user['username'] : $user['first_name'];
-        $bot->reply("$name, Dibilangin jangan di group");
+        $bot->reply("$name, dibilangin jangan di group");
     }
 });
 

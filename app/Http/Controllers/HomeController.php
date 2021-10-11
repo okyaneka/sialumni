@@ -111,6 +111,6 @@ class HomeController extends Controller
         $link = '#';
         $link = '<a href="'.$link.'" target="_blank">'.$link.'</a>';
 
-        return redirect()->route('home')->withStatus(__('Anda terdaftar sebagai alumni SMK N Pringsurat dengan<br>NIS : '.$user->nis.'<br>Password : '.$temp_password.'<br>Profil telah diperbaharui, klik link berikut untuk bergabung dengan grup alumni anda '.$link));
+        return redirect()->route('home')->withStatus(__('Anda terdaftar sebagai alumni SMK N Pringsurat dengan<br>NISN : '.$user->nisn.'<br>Password : '.$temp_password.'<br>Profil telah diperbaharui, klik link berikut untuk bergabung dengan grup alumni anda '.$link));
     }
 }

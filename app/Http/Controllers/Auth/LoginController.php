@@ -49,7 +49,7 @@ class LoginController extends Controller
     {
         $login = request()->input('email');
  
-        $fieldType = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'nis';
+        $fieldType = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'nisn';
  
         request()->merge([$fieldType => $login]);
  

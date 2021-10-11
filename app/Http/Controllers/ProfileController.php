@@ -69,8 +69,6 @@ class ProfileController extends Controller
         $user->phone = $request->phone;
         $user->telegram = $request->telegram;
 
-        // dd($request->toArray());
-
         foreach ($request->status as $status) {
             if (isset($status['id'])) {
                 DB::table('user_statuses')

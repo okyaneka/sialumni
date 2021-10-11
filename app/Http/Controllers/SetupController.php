@@ -40,10 +40,7 @@ class SetupController extends Controller
         Artisan::call('migrate:refresh');
 
         $url = str_replace('<token>', env('TELEGRAM_TOKEN'), 'https://api.telegram.org/bot<token>/setWebhook');
-        // $file = curl_file_create($req->file->path());
-        $data = [
-            'url' => url('/telegram/' . env('TELEGRAM_WEBHOOK'))
-        ];
+        $data = ['url' => url('/telegram/' . env('TELEGRAM_WEBHOOK'))];
         $headers = ["Content-Type:multipart/form-data"];
         $ch = curl_init();
         $options = [
@@ -63,7 +60,7 @@ class SetupController extends Controller
         if ($info['http_code'] == 200) {
             try {
                 $admin = new User();
-                $admin->nis = $req->username;
+                $admin->nisn = $req->username;
                 $admin->name = $req->fullname;
                 $admin->email = $req->email;
                 $admin->password = Hash::make($req->password);

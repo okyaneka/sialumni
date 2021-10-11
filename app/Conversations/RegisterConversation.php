@@ -430,7 +430,7 @@ class RegisterConversation extends Conversation
                 });
 
             } else {
-                $data = "NIS : ".$this->user->nis."\n".
+                $data = "NISN : ".$this->user->nisn."\n".
                 "Nama : ".$this->user->name."\n".
                 "Jenis Kelamin : ".($this->user->gender == 'M' ? 'Laki-laki' : 'Perempuan')."\n".
                 "Email : ".$this->user->email."\n".
@@ -461,7 +461,7 @@ class RegisterConversation extends Conversation
     {
         return $this->ask('Sebelumnya, Silahkan masukan nomor induk siswa anda!', function(Answer $answer)
         {
-            $this->data['nis'] = $answer->getText();
+            $this->data['nisn'] = $answer->getText();
             $this->sayThanks();
         });
     }
@@ -470,8 +470,8 @@ class RegisterConversation extends Conversation
 
     function sayThanks($isRegistered = false)
     {
-        $this->say('Terimakasih telah mendaftarkan akun anda. Silahkan klik link berikut '.route('home').' untuk menikmati layana dari SI Alumni dengan login menggunakan nis dan password berikut');
-        $this->say('nis : '.$this->user->nis."\n".'password : '.$this->user->temp_password);
+        $this->say('Terimakasih telah mendaftarkan akun anda. Silahkan klik link berikut '.route('home').' untuk menikmati layana dari SI Alumni dengan login menggunakan nisn dan password berikut');
+        $this->say('nisn : '.$this->user->nisn."\n".'password : '.$this->user->temp_password);
 
         if (!$isRegistered) {
             $this->user->province = $this->data['province'];

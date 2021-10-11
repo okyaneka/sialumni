@@ -17,7 +17,7 @@ class UsersImport implements ToModel, WithHeadingRow
      */
     public function model(array $row)
     {
-        if (!is_numeric($row['nis'])) {
+        if (!is_numeric($row['nisn'])) {
             return null;
         }
 
@@ -30,7 +30,7 @@ class UsersImport implements ToModel, WithHeadingRow
         }
 
         return new User([
-            'nis' => $row['nis'],
+            'nisn' => $row['nisn'],
             'name' => $row['nama'],
             'email' => $row['email'],
             'password' => Hash::make(date('dmY', strtotime($dob))),

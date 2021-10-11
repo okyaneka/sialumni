@@ -26,7 +26,7 @@ class UserRequest extends FormRequest
     public function rules()
     {
         return [
-            'nis' => ['required', 'min:4'],
+            'nisn' => ['required', 'min:4'],
             'name' => ['required', 'min:3'],
             'email' => ['nullable', 'email', Rule::unique((new User)->getTable())->ignore($this->route()->user->id ?? null)],
             'dob' => ['required', 'date', 'before:' . date('Y-m-d', strtotime('-15 years'))],

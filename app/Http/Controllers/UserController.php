@@ -162,8 +162,6 @@ class UserController extends Controller
         $user->grad = $request->grad;
         $user->phone = $request->phone;
 
-        // dd($request->toArray());
-
         if ($request->status) {
             foreach ($request->status as $status) {
                 if (isset($status['id'])) {

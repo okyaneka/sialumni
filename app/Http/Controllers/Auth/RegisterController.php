@@ -54,7 +54,7 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             // 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'nis' => ['required', 'string', 'min:4'],
+            'nisn' => ['required', 'string', 'min:4'],
             // 'password' => ['required', 'string', 'min:6', 'confirmed'],
             'privacy' => ['required']
         ]);
@@ -74,11 +74,11 @@ class RegisterController extends Controller
         event(new Registered($user = $this->create($request->all())));
         
         if ($user == FALSE) {
-            return back()->withStatus('Maaf, NIS dan Nama lengkap yang anda masukkan tidak terdaftar sebagai alumni SMK N Pringsurat');
+            return back()->withStatus('Maaf, NISN dan Nama lengkap yang anda masukkan tidak terdaftar sebagai alumni SMK N Pringsurat');
         }
 
         if ($user->temp_password == '') {
-            return back()->withStatus('Maaf, NIS dan Nama lengkap yang anda masukkan telah terdaftar sebagai alumni SMK N Pringsurat, silahkan masuk menggunakan halaman <a href="'.route('login').'">Login</a>');
+            return back()->withStatus('Maaf, NISN dan Nama lengkap yang anda masukkan telah terdaftar sebagai alumni SMK N Pringsurat, silahkan masuk menggunakan halaman <a href="'.route('login').'">Login</a>');
         }
 
         $this->guard()->login($user);
@@ -96,7 +96,7 @@ class RegisterController extends Controller
     {
         $user = User::where([
             ['name', '=', $data['name']],
-            ['nis', '=', $data['nis']]
+            ['nisn', '=', $data['nisn']]
         ]);
 
         if ($user->count() == 1) {
@@ -107,7 +107,7 @@ class RegisterController extends Controller
 
         // return User::create([
         //     'name' => trim(ucwords($data['name'])),
-        //     'nis' => trim($data['nis']),
+        //     'nisn' => trim($data['nisn']),
         //     'email' => trim($data['email']),
         //     'password' => Hash::make($data['password']),
         //     'type' => User::DEFAULT_TYPE,

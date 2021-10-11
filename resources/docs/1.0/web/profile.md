@@ -11,7 +11,7 @@
 ![img-45][img-45]
 
 Menu __Profil Saya__ menampilkan informasi tentang profil pengguna yang berisi data sebagai berikut:
-- NIS
+- NISN
 - Nama
 - Alamat
 - Tahun lulus

@@ -59,14 +59,13 @@ class ProfileController extends Controller
         $user->province_id = $request->province;
         $user->district_id = $request->district;
         $user->sub_district_id = $request->sub_district;
-        $user->address = $request->address;
+        $user->address_id = $request->address;
         $user->street = $request->street;
         $user->pob = $request->pob;
         $user->dob = date('Y-m-d', strtotime($request->dob));
-        $user->department = $request->department;
+        $user->department_slug = $request->department;
         $user->grad = $request->grad;
         $user->phone = $request->phone;
-        $user->telegram = $request->telegram;
 
         foreach ($request->status as $status) {
             if (isset($status['id'])) {

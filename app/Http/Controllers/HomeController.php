@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Job;
-use DB;
-use Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -75,15 +75,13 @@ class HomeController extends Controller
         $user->province_id = $request->province;
         $user->district_id = $request->district;
         $user->sub_district_id = $request->sub_district;
-        $user->address = $request->address;
+        $user->address_id = $request->address;
         $user->street = $request->street;
         $user->pob = $request->pob;
         $user->dob = date('Y-m-d', strtotime($request->dob));
-        $user->department = $request->department;
+        $user->department_slug = $request->department;
         $user->grad = $request->grad;
         $user->phone = $request->phone;
-        $temp_password = $user->temp_password;
-        $user->temp_password = '';
 
         // dd($request->toArray());
 
@@ -111,6 +109,6 @@ class HomeController extends Controller
         $link = '#';
         $link = '<a href="'.$link.'" target="_blank">'.$link.'</a>';
 
-        return redirect()->route('home')->withStatus(__('Anda terdaftar sebagai alumni SMK N Pringsurat dengan<br>NISN : '.$user->nisn.'<br>Password : '.$temp_password.'<br>Profil telah diperbaharui, klik link berikut untuk bergabung dengan grup alumni anda '.$link));
+        return redirect()->route('home')->withStatus(__('Anda terdaftar sebagai alumni SMK N Pringsurat dengan<br>NISN : '.$user->nisn.'<br>Password : '.date('dmY', strtotime($user->dob)).'<br>Profil telah diperbaharui, klik link berikut untuk bergabung dengan grup alumni anda '.$link));
     }
 }

@@ -21,7 +21,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name', 'nisn', 'email', 'password', 'pob',
-        'dob', 'street', 'province_id', 'gender', 'address',
+        'dob', 'street', 'province_id', 'gender', 'address_id',
         'sub_district_id', 'district_id', 'department_slug', 'grad', 'phone',
     ];
 
@@ -54,15 +54,16 @@ class User extends Authenticatable
 
     public function isDataComplete($is_bot = false)
     {
-        $ignored  = ['province_id', 'address', 'sub_district_id', 'district_id'];
+        $ignored  = ['province_id', 'address_id', 'sub_district_id', 'district_id', 'street'];
         foreach ($this->fillable as $column) {
             if ($is_bot && in_array($column, $ignored)) {
                 continue;
             }
-            if (empty($this->$column)) return FALSE;
+            if (empty($this->$column)) {
+                return FALSE;
+            }
         }
-
-        if (empty($this->statuses()->get()->toArray())) return FALSE;
+        if (!$is_bot && empty($this->statuses()->get()->toArray())) return FALSE;
 
         return TRUE;
     }

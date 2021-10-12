@@ -12,7 +12,7 @@ class Department extends Model
      * @var array
      */
     protected $fillable = [
-        'code', 'department',
+        'code', 'department_slug',
     ];
 
     /**
@@ -22,6 +22,6 @@ class Department extends Model
      */
     public function user()
     {
-        return $this->hasMany('App\User','department','code');
+        return $this->hasMany('App\User', 'department_slug', 'code');
     }
 }

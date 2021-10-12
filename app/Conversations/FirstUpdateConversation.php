@@ -275,7 +275,7 @@ class FirstUpdateConversation extends Conversation
     }
 
     $message = "Selamat, data kamu sekarang sudah lengkap. Sekarang kamu bisa juga mengaksis website alumni SMK N Pringsurat dengan menggunakan:";
-    $message .= "\nEmail: {$this->user->email}";
+    $message .= "\nEmail: {$this->user->email} atau NISN: {$this->user->nisn}";
     $message .= "\nPassword: " . date('dmY', strtotime($this->user->dob));
     $this->say($message);
     $this->say('Terimakasih. ^_^');

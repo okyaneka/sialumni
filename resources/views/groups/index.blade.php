@@ -30,7 +30,7 @@
                     </div>
 
                     <div class="table-responsive">
-                        <table class="table align-items-center table-flush">
+                        <table class="table align-items-center table-flush table-striped table-hover">
                             <thead class="thead-light">
                                 <tr>
                                     <th scope="col">{{ __('Tahun') }}</th>

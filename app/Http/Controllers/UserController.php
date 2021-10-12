@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use DB;
-use Auth;
 use App\User;
 use App\Status;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -37,7 +37,7 @@ class UserController extends Controller
             $filter[] = ['name', 'like', '%' . $_GET['nama'] . '%'];
 
         if (!empty($_GET['jurusan']))
-            $filter[] =  ['department', '=', $_GET['jurusan']];
+            $filter[] =  ['department_slug', '=', $_GET['jurusan']];
 
         if (!empty($_GET['tahun']))
             $filter[] = ['grad', '=', $_GET['tahun']];

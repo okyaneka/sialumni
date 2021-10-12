@@ -69,7 +69,7 @@ class ValidasiConversation extends Conversation
       $user = User::where('telegram_id', $this->botinfo['user']['id'])->firstOrFail();
       $this->info($user);
     } catch (\Throwable $th) {
-      $this->askNisn();
+      $this->askName();
       \Log::error($th);
     }
   }

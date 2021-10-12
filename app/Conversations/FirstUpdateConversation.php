@@ -235,8 +235,9 @@ class FirstUpdateConversation extends Conversation
     foreach (\App\Status::all() as $s) {
       $options[] = Button::create($s->status)->value($s->id);
     }
+    $options[] = Button::create('Belum ada')->value(0);
 
-    $question = Question::create('Silahkan masukkan status kegiatan kamu saat sekarang!')
+    $question = Question::create('Silahkan pilih status kegiatan kamu saat sekarang!')
       ->callbackId('ask_status')
       ->addButtons($options);
 
@@ -258,6 +259,9 @@ class FirstUpdateConversation extends Conversation
 
     if (isset($this->data['status'])) {
       foreach ($this->data['status'] as $status) {
+        if (empty($status['status_id'])) {
+          continue;
+        }
         if (!empty($old_status_id)) {
           DB::table('user_statuses')
             ->where('id', $old_status_id)

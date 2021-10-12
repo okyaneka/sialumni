@@ -27,7 +27,7 @@ class UpdateConversation extends Conversation
     } else {
       $message = "Sepertinya data kamu masih belum lengkap. Jangan khawatir, cukup ikuti instruksi saya ya.";
       $this->say($message);
-    	$this->bot->startConversation(new FirstUpdateConversation(), $this->botinfo['user']['id'], TelegramDriver::class);
+      $this->bot->startConversation(new FirstUpdateConversation(), $this->botinfo['user']['id'], TelegramDriver::class);
     }
   }
 
@@ -181,10 +181,20 @@ class UpdateConversation extends Conversation
 
   public function askPhone()
   {
-    return $this->ask("Silahkan masukkan nomor telepon kamu!", function (Answer $answer) {
-      $this->data['phone'] = trim($answer->getText());
+    return $this->ask("Silahkan kirimkan nomor telepon kamu!", function (Answer $answer) {
+      $payload = $answer->getMessage()->getPayload();
+      $phone = $payload['contact']['phone_number'];
+      $this->data['phone'] = $phone;
       $this->askConfirm();
-    });
+    }, [
+      'reply_markup' => json_encode([
+        'keyboard' => [
+          [
+            ['text' => 'Kirim kontak', 'request_contact' => true]
+          ]
+        ]
+      ])
+    ]);
   }
 
   // ########################################################################
@@ -194,13 +204,7 @@ class UpdateConversation extends Conversation
     $message = "Kamu akan mengubah data-data berikut:\n";
     $message .= !empty($this->data['status']) ? "Status : dari " . $this->user->statuses()->first()->status . " menjadi " . \App\Status::find($this->data['status'][0]['status_id'])->status . "\n" : '';
     $message .= !empty($this->data['province']) ?
-      "Alamat :\ndari " .
-      $this->user->street . ', ' .
-      Location::getVillage($this->user->address)->nama . ', ' .
-      Location::getSubDistrict($this->user->sub_district)->nama . ', ' .
-      Location::getDistrict($this->user->district)->nama . ', ' .
-      Location::getProvince($this->user->province)->nama . "\n"
-      . "menjadi\n" .
+      "Alamat :\ndari " . $this->user->full_address . "menjadi\n" .
       $this->data['street'] . ', ' .
       Location::getVillage($this->data['address'])->nama . ', ' .
       Location::getSubDistrict($this->data['sub_district'])->nama . ', ' .
@@ -246,14 +250,13 @@ class UpdateConversation extends Conversation
     $this->user->address_id = empty($this->data['address']) ? $this->user->address_id : $this->data['address'];
     $this->user->street = empty($this->data['street']) ? $this->user->street : $this->data['street'];
     $this->user->phone = empty($this->data['phone']) ? $this->user->phone : $this->data['phone'];
-
-    $old_status_id = $this->user->statuses()->first()->pivot->id;
-
+    
     if (isset($this->data['status'])) {
+      $old_status_id = $this->user->statuses()->first();
       foreach ($this->data['status'] as $status) {
         if (!empty($old_status_id)) {
           DB::table('user_statuses')
-            ->where('id', $old_status_id)
+            ->where('id', $old_status_id->pivot->id)
             ->update([
               'user_id' => $this->user->id,
               'status_id' => $status['status_id'],

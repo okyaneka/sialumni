@@ -77,10 +77,6 @@ class RegisterController extends Controller
             return back()->withStatus('Maaf, NISN dan Nama lengkap yang anda masukkan tidak terdaftar sebagai alumni SMK N Pringsurat');
         }
 
-        if ($user->temp_password == '') {
-            return back()->withStatus('Maaf, NISN dan Nama lengkap yang anda masukkan telah terdaftar sebagai alumni SMK N Pringsurat, silahkan masuk menggunakan halaman <a href="'.route('login').'">Login</a>');
-        }
-
         $this->guard()->login($user);
 
         return $this->registered($request, $user) ?: redirect($this->redirectPath());

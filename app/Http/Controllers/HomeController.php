@@ -1,9 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Department;
 use Illuminate\Http\Request;
 use App\User;
 use App\Job;
+use App\Status;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -44,6 +47,8 @@ class HomeController extends Controller
                 ['type','=','default'],
                 ['grad','<',(date('Y') - 5)]
             ])->count(),
+            'department' => Department::count(),
+            'status' => Status::count(),
         ];
 
         return view('dashboard', $alumnus);

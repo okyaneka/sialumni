@@ -61,7 +61,7 @@
             </div>
             <hr>
             <div class="d-flex justify-content-between mb-3">
-                <div class="col text-left"><strong>Status Lulusan</strong></div>
+                <div class="col text-left"><strong>Status Pekerjaan</strong></div>
             </div>
             <?php $statuses = $user->statuses()->get() ?>
             @foreach ($statuses as $status)

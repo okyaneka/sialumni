@@ -1,4 +1,4 @@
-@extends('statistics.part.layout', ['title' => 'Statistik Berdasarkan Status Lulusan'])
+@extends('statistics.part.layout', ['title' => 'Statistik Berdasarkan Status Pekerjaan'])
 
 @section('tab-1')
 <table class="table table-striped table-hover">

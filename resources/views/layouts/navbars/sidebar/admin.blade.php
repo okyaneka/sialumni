@@ -156,7 +156,7 @@
                             <a class="nav-link" href="{{ route('department.index') }} ">Jurusan</a>
                         </li>
                         <li class="nav-item {{ Request::is('status*') ? 'active' : '' }}">
-                            <a class="nav-link" href="{{ route('status.index') }}">Status lulusan</a>
+                            <a class="nav-link" href="{{ route('status.index') }}">Status pekerjaan</a>
                         </li>
                     </ul>
                 </div>

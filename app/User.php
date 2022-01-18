@@ -131,11 +131,14 @@ class User extends Authenticatable
 
     public function getDepartmentAttribute()
     {
-        if ($this->department_slug) {
-            return $this->department()->first()->department;
+        try {
+            if ($this->department_slug) {
+                return $this->department()->first()->department;
+            }
+        } catch (\Throwable $th) {
+            return $this->department_slug;
         }
 
-        return;
     }
 
     public function department()

@@ -31,6 +31,10 @@
                     <form action="{{ route('user.insert_batch') }}" method="POST" enctype="multipart/form-data">
                         @csrf @method('put')
 
+                        <div class="mb-4">
+                            Untuk melihat format upload bisa <a href="/data/format-upload.xlsx">Download Format</a>
+                        </div>
+
                         <div class="form-group">
                             <input type="file" class="form-control-file form-group{{ $errors->has('file') ? ' has-danger' : '' }}" name="file" id="file" aria-describedby="fileHelp">
                             <small id="fileHelp" class="form-text text-muted">Silahkan upload file .xlsx. Klik <a href="/docs/1.0/web/admin/alumnus#section-5" target="_blank">Bantuan</a> untuk mendapatkan petunjuk lebih lanjut.</small>

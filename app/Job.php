@@ -24,26 +24,43 @@ class Job extends Model
 		'raw_data'
 	];
 
+	public static function PendingJob()
+	{
+		return Job::where('published', '0');
+	}
+
 	public function getProvinceIdAttribute()
 	{
-		return json_decode($this->location)->province;
+		try {
+			return json_decode($this->location)->province;
+		} catch (\Throwable $th) {
+			return '';
+		}
 	}
 
 	public function getDistrictIdAttribute()
 	{
-		return json_decode($this->location)->district;
+		try {
+			return json_decode($this->location)->district;
+		} catch (\Throwable $th) {
+			return '';
+		}
 	}
 
 	public function getDistrictAttribute()
 	{
-		return json_decode($this->location)->street;
+		try {
+			return json_decode($this->location)->street;
+		} catch (\Throwable $th) {
+			return '';
+		}
 	}
 
 	public function getFullAddressAttribute()
 	{
-		$province = Location::getProvince($this->province_id)->nama;
-		$district = Location::getDistrict($this->district_id)->nama;
-		$street = $this->street ? "{$this->street}, " : '';
+		$province = !empty($this->province_id) ? Location::getProvince($this->province_id)->nama : "";
+		$district = !empty($this->district_id) ? Location::getDistrict($this->district_id)->nama : "";
+		$street = !empty($this->street) ? "{$this->street}, " : '';
 
 		return "{$street}{$district}, {$province}";
 	}

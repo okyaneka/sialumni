@@ -10,7 +10,7 @@
                 <div class="card-header bg-white border-0">
                     <div class="row align-items-center">
                         <div class="col-8">
-                            <h3 class="mb-0">{{ __('Edit Jurusan') }}</h3>
+                            <h3 class="mb-0">{{ __('Edit Lowongan Kerja') }}</h3>
                         </div>
                         <div class="col-4 text-right">
                             <a href="{{ route('job.index') }}" class="btn btn-sm btn-primary">{{ __('Kembali') }}</a>
@@ -199,18 +199,27 @@
                                 @php $requirements = old('requirements', json_decode($job->requirements)) @endphp
                                 @if (empty($requirements))
                                 <div class="row mx-0 mb-3" style="flex-wrap: nowrap;">
-                                    <input type="text" name="requirements[]" class="input-requirements form-control" required >
+                                    <input type="text" name="requirements[]" class="input-requirements form-control" >
                                     <button type="button" class="btn-remove btn btn-danger ml-2"><i class="fa fa-minus"></i></button>
                                 </div>
                                 @else
                                 @foreach ($requirements as $value)
                                 <div class="row mx-0 mb-3" style="flex-wrap: nowrap;">
-                                    <input type="text" name="requirements[]" class="input-requirements form-control" value="{{ $value }}" required>
+                                    <input type="text" name="requirements[]" class="input-requirements form-control" value="{{ $value }}" >
                                     <button type="button" class="btn-remove btn btn-danger ml-2"><i class="fa fa-minus"></i></button>
                                 </div>
                                 @endforeach
                                 @endif
                                 <button type="button" class="btn-add btn btn-success">{{ __('Tambah') }}</button>
+                            </div>
+
+                            <div class="form-check">
+                                <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" value="1" name="published" id="publish" {{ $job->published == '1' ? 'checked' : '' }}>
+                                    Terbitkan
+                                </label>
+                                </div>
                             </div>
 
                             <div class="text-center">
@@ -225,7 +234,7 @@
     {{-- Form persyaratan --}}
     <div id="input-persyaratan" class="d-none">
         <div class="row mx-0 mb-3" style="flex-wrap: nowrap;">
-            <input type="text" name="requirements[]" class="input-requirements form-control" required >
+            <input type="text" name="requirements[]" class="input-requirements form-control"  >
             <button type="button" class="btn-remove btn btn-danger ml-2"><i class="fa fa-minus"></i></button>
         </div>
     </div>

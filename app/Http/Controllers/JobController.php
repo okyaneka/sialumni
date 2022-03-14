@@ -22,8 +22,20 @@ class JobController extends Controller
         if (!empty($_GET['company']))
             $filter[] = ['company', 'like', '%' . $_GET['company'] . '%'];
 
-        $jobs = $job->where($filter)->paginate(15);
+        $jobs = $job->where('published', '1')->where($filter)->paginate(15);
         return view('jobs.index', ['jobs' => $jobs, 'filter' => $filter]);
+    }
+
+    public function pending(Job $job)
+    {
+        $filter = [];
+
+        // if (!empty($_GET['submit'])) {
+        if (!empty($_GET['company']))
+            $filter[] = ['company', 'like', '%' . $_GET['company'] . '%'];
+
+        $jobs = $job->where('published', '0')->where($filter)->paginate(15);
+        return view('jobs.pending', ['jobs' => $jobs, 'filter' => $filter]);
     }
 
     /**
@@ -109,7 +121,11 @@ class JobController extends Controller
      */
     public function show(Job $job)
     {
-        return view('jobs.show', compact('job'));
+        if (!empty($job->published)) {
+            return view('jobs.show', compact('job'));
+        } else {
+            return abort(404);
+        }
     }
 
     /**
@@ -124,6 +140,12 @@ class JobController extends Controller
         return view('jobs.edit', compact('job'));
     }
 
+    public function review(Job $job)
+    {
+        //
+        return view('jobs.review', compact('job'));
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -135,9 +157,11 @@ class JobController extends Controller
     {
         $requirements = [];
 
-        foreach ($request->requirements as $r) {
-            if (!empty($r)) {
-                $requirements[] = $r;
+        if ($request->filled('requirements')) {
+            foreach ($request->requirements as $r) {
+                if (!empty($r)) {
+                    $requirements[] = $r;
+                }
             }
         }
 
@@ -166,6 +190,7 @@ class JobController extends Controller
         $job->requirements = json_encode($requirements);
         $job->duedate = date('Y-m-d', strtotime($request->duedate));
         $job->seen_until = date('Y-m-d', strtotime($request->seen_until));
+        $job->published = !empty($request->published) ? $request->published : 0;
 
         $job->update();
 

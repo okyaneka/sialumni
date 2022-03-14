@@ -67,7 +67,10 @@
                         <tbody>
                             @foreach ($jobs as $job)
                             <tr>
-                                <td><a href="{{ route('job.show', $job) }}">{{ $job->company }}</a></td>
+                                <td><a href="{{ route('job.show', $job) }}" target="_blank" title="Lihat loker">
+                                    <span>{{ $job->company }}</span>
+                                    <i class="ml-1 fa fa-external-link-alt"></i>
+                                </a></td>
                                 <td>{{ $job->full_address }}</td>
                                 <td>{{ $job->email }}</td>
                                 <td>{{ $job->phone }}</td>

@@ -23,7 +23,7 @@ class UpdateConversation extends Conversation
 
   private static function keyboardFree()
   {
-    return json_encode(['keyboard' => []]);
+    return json_encode(['remove_keyboard' => true]);
   }
 
   private static function keyboardDefault()
@@ -110,23 +110,10 @@ class UpdateConversation extends Conversation
 
   public function closing()
   {
-    $this->say('Terimakasih telah menggunakan layanan dari Skanira Bot. Untuk informasi dan fitur-fitur yang lain, silahkan gunakan perintah "/" pada tombol dibawah.', ['reply_markup' => json_encode([
-      'keyboard' => [
-        [
-          ['text' => '/validasi'],
-          ['text' => '/update'],
-        ],
-        [
-          ['text' => '/infoloker'],
-          ['text' => '/infoalumni'],
-        ],
-        [
-          ['text' => '/tambahloker'],
-          ['text' => '/bantuan'],
-        ],
-      ],
-      'resize_keyboard' => true
-    ])]);
+    $this->say(
+      'Terimakasih telah menggunakan layanan dari Skanira Bot. Untuk informasi dan fitur-fitur yang lain, silahkan gunakan perintah "/" pada tombol dibawah.',
+      ['reply_markup' => self::keyboardDefault()]
+    );
   }
 
   // ########################################################################

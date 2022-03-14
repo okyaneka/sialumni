@@ -25,12 +25,14 @@
                         <strong>Nomor telepon : {{ $job->phone }}</strong><br>
                         <strong>Email : {{ $job->email }}</strong>
                     </div>
+                    @if (!empty($job->requirements) && !empty(json_decode($job->requirements)))
                     <p>Syarat yang diperlukan :</p>
                     <ul>
                         @foreach (json_decode($job->requirements) as $requirements)
                         <li>{{ $requirements }}</li>
                         @endforeach
                     </ul>
+                    @endif
                     <p>Dibuka sampai <span class="text-primary">{{ date('d/m/Y', strtotime($job->duedate)) }}</span></p>
                 </div>
             </div>
@@ -38,7 +40,8 @@
     </div>
 
     <div class="separator separator-bottom separator-skew zindex-100">
-        <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
+            xmlns="http://www.w3.org/2000/svg">
             <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
         </svg>
     </div>

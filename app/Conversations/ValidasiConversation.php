@@ -17,7 +17,7 @@ class ValidasiConversation extends Conversation
 
   private static function keyboardFree()
   {
-    return json_encode(['keyboard' => []]);
+    return json_encode(['remove_keyboard' => true]);
   }
 
   private static function keyboardDefault()

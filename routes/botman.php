@@ -50,9 +50,7 @@ $botman->hears('/validasi', TelegramController::class . '@validasi'); // validas
 $botman->hears('/update', TelegramController::class . '@update'); // update
 $botman->hears('/infoloker', TelegramController::class . '@infoloker'); // infoloker
 $botman->hears('/infoalumni', TelegramController::class . '@infoalumni'); // infoalumni
-$botman->hears('/tambahloker', function ($bot) {
-    $bot->reply('Mohon maaf, untuk fitur ini masih dalam pengembangan. Terimakasih.');
-}); // tambahloker
+$botman->hears('/tambahloker', TelegramController::class . '@tambahloker'); // tambahloker
 $botman->hears('/bantuan', function ($bot) {
     $bot->reply('Mohon maaf, untuk fitur ini masih dalam pengembangan. Terimakasih.');
 }); // bantuan
@@ -62,9 +60,7 @@ $botman->hears('/validasi@' . env("TELEGRAM_BOT_ID"), TelegramController::class 
 $botman->hears('/update@' . env("TELEGRAM_BOT_ID"), TelegramController::class . '@update'); // update
 $botman->hears('/infoloker@' . env("TELEGRAM_BOT_ID"), TelegramController::class . '@infoloker'); // infoloker
 $botman->hears('/infoalumni@' . env("TELEGRAM_BOT_ID"), TelegramController::class . '@infoalumni'); // infoalumni
-$botman->hears('/tambahloker@' . env("TELEGRAM_BOT_ID"), function ($bot) {
-    $bot->reply('Mohon maaf, untuk fitur ini masih dalam pengembangan. Terimakasih.');
-}); // tambahloker
+$botman->hears('/tambahloker@' . env("TELEGRAM_BOT_ID"), TelegramController::class . '@tambahloker'); // tambahloker
 $botman->hears('/bantuan@' . env("TELEGRAM_BOT_ID"), function ($bot) {
     $bot->reply('Mohon maaf, untuk fitur ini masih dalam pengembangan. Terimakasih.');
 }); // bantuan

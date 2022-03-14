@@ -1,7 +1,7 @@
-@extends('layouts.app', ['title' => __('Status Lulusan')])
+@extends('layouts.app', ['title' => __('Status Pekerjaan')])
 
 @section('content')
-    @include('users.partials.header', ['title' => __('Daftar Status Lulusan')])
+    @include('users.partials.header', ['title' => __('Daftar Status Pekerjaan')])
 
     <div class="container-fluid mt-3">
         <div class="row">
@@ -10,7 +10,7 @@
                     <div class="card-header border-0">
                         <div class="row align-items-center">
                             <div class="col-8">
-                                <h3 class="mb-0">{{ __('Status Lulusan') }}</h3>
+                                <h3 class="mb-0">{{ __('Status Pekerjaan') }}</h3>
                             </div>
                             <div class="col-4 text-right">
                                 <a href="{{ route('status.create') }}" class="btn btn-sm btn-primary">{{ __('Tambah') }}</a>
@@ -30,11 +30,11 @@
                     </div>
 
                     <div class="table-responsive">
-                        <table class="table align-items-center table-flush">
+                        <table class="table table-striped table-hover align-items-center table-flush">
                             <thead class="thead-light">
                                 <tr>
                                     <th scope="col">{{ __('id') }}</th>
-                                    <th scope="col">{{ __('Status Lulusan') }}</th>
+                                    <th scope="col">{{ __('Status Pekerjaan') }}</th>
                                     <th scope="col"></th>
                                 </tr>
                             </thead>
@@ -54,7 +54,7 @@
                                                             @method('delete')
 
                                                             <a class="dropdown-item" href="{{ route('status.edit', $status) }}">{{ __('Edit') }}</a>
-                                                            <button type="button" class="dropdown-item" onclick="confirm('{{ __("Apakah anda yakin akan menghapus status lulusan ini? (Beberapa data alumni dapat terpengaruh) ") }}') ? this.parentElement.submit() : ''">
+                                                            <button type="button" class="dropdown-item" onclick="confirm('{{ __("Apakah anda yakin akan menghapus status pekerjaan ini? (Beberapa data alumni dapat terpengaruh) ") }}') ? this.parentElement.submit() : ''">
                                                                 {{ __('Delete') }}
                                                             </button>
                                                         </form>

@@ -9,6 +9,7 @@ use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use App\User;
 use App\Location;
+use App\Status;
 use DB;
 
 class RegisterConversation extends Conversation
@@ -25,7 +26,7 @@ class RegisterConversation extends Conversation
         $this->say('Dalam menu pendaftaran ini, anda akan diminta memasukan beberapa data secara bertahap.');
         $this->say('Data-data tersebut antara lain');
         $this->say('nama lengkap, tempat lahir, tanggal lahir, jurusan, tahun lulus, alamat, dan nomor telepon');
-        return $this->ask('Baik kita mulai untuk yang pertama. (Balas "oke" untuk memulai)', function(Answer $answer) {
+        return $this->ask('Baik kita mulai untuk yang pertama. (Balas "oke" untuk memulai)', function (Answer $answer) {
             if (strtolower($answer->getText()) == 'oke') {
                 $this->askName();
             } else {
@@ -37,8 +38,7 @@ class RegisterConversation extends Conversation
     function askName($is_fix = FALSE)
     {
         $this->data['is_fix'] = $is_fix;
-        return $this->ask("Silahkan masukkan nama lengkap Anda!", function(Answer $answer)
-        {
+        return $this->ask("Silahkan masukkan nama lengkap Anda!", function (Answer $answer) {
             $this->data['name'] = trim($answer->getText());
             if ($this->data['is_fix']) {
                 $this->askConfirm(1);
@@ -51,8 +51,7 @@ class RegisterConversation extends Conversation
     function askPoB($is_fix = FALSE)
     {
         $this->data['is_fix'] = $is_fix;
-        return $this->ask("Silahkan masukkan tempat lahir anda!", function(Answer $answer)
-        {
+        return $this->ask("Silahkan masukkan tempat lahir anda!", function (Answer $answer) {
             $this->data['pob'] = trim($answer->getText());
             if ($this->data['is_fix']) {
                 $this->askConfirm(1);
@@ -65,8 +64,7 @@ class RegisterConversation extends Conversation
     function askDoB($is_fix = FALSE)
     {
         $this->data['is_fix'] = $is_fix;
-        return $this->ask("Silahkan masukkan tanggal lahir (format TAHUN-BULAN-TANGGAL) anda!\nContoh : 1945-08-17", function(Answer $answer)
-        {
+        return $this->ask("Silahkan masukkan tanggal lahir (format TAHUN-BULAN-TANGGAL) anda!\nContoh : 1945-08-17", function (Answer $answer) {
             $this->data['dob'] = trim($answer->getText());
             if ($this->data['is_fix']) {
                 $this->askConfirm(1);
@@ -83,11 +81,10 @@ class RegisterConversation extends Conversation
             $department_button[] = Button::create($d->department)->value($d->code);
         }
         $question = Question::create('Silahkam masukkan jurusan anda!')
-        ->callbackId('ask_department')
-        ->addButtons($department_button);
+            ->callbackId('ask_department')
+            ->addButtons($department_button);
 
-        return $this->ask($question, function(Answer $answer)
-        {
+        return $this->ask($question, function (Answer $answer) {
             $this->data['department'] = $answer->getValue();
             $this->askConfirm(1);
             // $this->askGrad();
@@ -99,21 +96,19 @@ class RegisterConversation extends Conversation
     function banned()
     {
         $question = Question::create('Data yang anda masukkan tidak terdeteksi sebagai alumni dari SMK Negeri Pringsurat. Apakah anda ingin mengeceknya kembali?')
-        ->callbackId('ask_check')
-        ->addButtons([
-            Button::create('Iya tolong')->value('TRUE'),
-            Button::create('Tidak, terimakasih')->value('FALSE')
-        ]);
+            ->callbackId('ask_check')
+            ->addButtons([
+                Button::create('Iya tolong')->value('TRUE'),
+                Button::create('Tidak, terimakasih')->value('FALSE')
+            ]);
 
-        return $this->ask($question, function (Answer $answer)
-        {
+        return $this->ask($question, function (Answer $answer) {
             if ($answer->getValue() == '') {
                 $this->check();
             } else {
                 $this->closing();
             }
         });
-
     }
 
     // ########################################################################
@@ -121,8 +116,7 @@ class RegisterConversation extends Conversation
     function askGrad($is_fix = FALSE)
     {
         $this->data['is_fix'] = $is_fix;
-        return $this->ask("Silahkan masukkan tahun lulus anda!", function(Answer $answer)
-        {
+        return $this->ask("Silahkan masukkan tahun lulus anda!", function (Answer $answer) {
             $this->data['grad'] = trim($answer->getText());
             if ($this->data['is_fix']) {
                 $this->askConfirm(2);
@@ -136,18 +130,19 @@ class RegisterConversation extends Conversation
     {
         $this->data['is_fix'] = $is_fix;
         $question = Question::create('Silahkan masukkan jenis kelamin anda!')
-        ->callbackId('ask_gender')
-        ->addButtons([Button::create('Laki-laki')->value('M'),
-            Button::create('Perempuan')->value('F')
-        ]);
+            ->callbackId('ask_gender')
+            ->addButtons([
+                Button::create('Laki-laki')->value('M'),
+                Button::create('Perempuan')->value('F')
+            ]);
 
-        return $this->ask($question, function(Answer $answer) {
+        return $this->ask($question, function (Answer $answer) {
             $this->data['gender'] = $answer->getValue();
             $this->askProvince();
         });
     }
 
-    function askProvince($is_fix = FALSE)  
+    function askProvince($is_fix = FALSE)
     {
         $this->data['is_fix'] = $is_fix;
         $location = [];
@@ -157,11 +152,10 @@ class RegisterConversation extends Conversation
         }
 
         $question = Question::create('Silahkan masukkan alamat (provinsi) anda!')
-        ->callbackId('ask_province')
-        ->addButtons($location);
+            ->callbackId('ask_province')
+            ->addButtons($location);
 
-        return $this->ask($question, function(Answer $answer)
-        {
+        return $this->ask($question, function (Answer $answer) {
             $this->data['province'] = $answer->getValue();
             $this->askDistrict($this->data['is_fix']);
         });
@@ -177,11 +171,10 @@ class RegisterConversation extends Conversation
         }
 
         $question = Question::create('Silahkan masukkan alamat (kabupaten) anda!')
-        ->callbackId('ask_district')
-        ->addButtons($location);
+            ->callbackId('ask_district')
+            ->addButtons($location);
 
-        return $this->ask($question, function(Answer $answer)
-        {
+        return $this->ask($question, function (Answer $answer) {
             $this->data['district'] = $answer->getValue();
             $this->askSubDistrict($this->data['is_fix']);
         });
@@ -197,11 +190,10 @@ class RegisterConversation extends Conversation
         }
 
         $question = Question::create('Silahkan masukkan alamat (kecamatan) anda!')
-        ->callbackId('ask_sub_district')
-        ->addButtons($location);
+            ->callbackId('ask_sub_district')
+            ->addButtons($location);
 
-        return $this->ask($question, function(Answer $answer)
-        {
+        return $this->ask($question, function (Answer $answer) {
             $this->data['sub_district'] = $answer->getValue();
             $this->askAddress($this->data['is_fix']);
         });
@@ -217,11 +209,10 @@ class RegisterConversation extends Conversation
         }
 
         $question = Question::create('Silahkan masukkan alamat (desa / kelurahan) anda!')
-        ->callbackId('ask_address')
-        ->addButtons($location);
+            ->callbackId('ask_address')
+            ->addButtons($location);
 
-        return $this->ask($question, function(Answer $answer)
-        {
+        return $this->ask($question, function (Answer $answer) {
             $this->data['address'] = $answer->getValue();
             $this->askStreet($this->data['is_fix']);
         });
@@ -230,8 +221,7 @@ class RegisterConversation extends Conversation
     function askStreet($is_fix = FALSE)
     {
         $this->data['is_fix'] = $is_fix;
-        return $this->ask("Silahkan masukkan alamat (jalan / dusun / RT RW) anda!", function(Answer $answer)
-        {
+        return $this->ask("Silahkan masukkan alamat (jalan / dusun / RT RW) anda!", function (Answer $answer) {
             $this->data['street'] = trim($answer->getText());
             if ($this->data['is_fix']) {
                 $this->askConfirm(2);
@@ -244,8 +234,7 @@ class RegisterConversation extends Conversation
     function askPhone($is_fix = FALSE)
     {
         $this->data['is_fix'] = $is_fix;
-        return $this->ask("Silahkan masukkan nomor telepon anda!", function(Answer $answer)
-        {
+        return $this->ask("Silahkan masukkan nomor telepon anda!", function (Answer $answer) {
             $this->data['phone'] = trim($answer->getText());
             if ($this->data['is_fix']) {
                 $this->askConfirm(2);
@@ -257,8 +246,7 @@ class RegisterConversation extends Conversation
 
     function askTelegram($is_fix = FALSE)
     {
-        return $this->ask("Silahkan masukkan nomor telegram anda!", function(Answer $answer)
-        {
+        return $this->ask("Silahkan masukkan nomor telegram anda!", function (Answer $answer) {
             $this->data['telegram'] = trim($answer->getText());
             $this->askStatus();
         });
@@ -266,21 +254,34 @@ class RegisterConversation extends Conversation
 
     function askStatus($is_fix = FALSE)
     {
-        $status = [];
-
+        $keyboard = [];
         foreach (\App\Status::all() as $s) {
-            $status[] = Button::create($s->status)->value($s->id);
+            $keyboard[] = [['text' => $s->status]];
         }
 
         $question = Question::create('Silahkan masukkan status kegiatan anda!')
-        ->callbackId('ask_status')
-        ->addButtons($status);
+            ->callbackId('ask_status');
+        // ->addButtons($status);
 
-        return $this->ask($question, function(Answer $answer)
-        {
-            $this->data['status'][0]['status_id'] = $answer->getValue();
+        return $this->ask($question, function (Answer $answer) {
+            $status = Status::where('status', $answer->getText())->first();
+
+            if (empty($this->data['status'])) {
+                $this->data['status'] = [
+                    ['status_id' => $status->id]
+                ];
+            } else {
+                $this->data['status'][0]['status_id'] = $status->id;
+            }
+
             $this->askConfirm(2);
-        });
+        }, [
+            'reply_markup' => json_encode([
+                'keyboard' => [
+                    $keyboard
+                ]
+            ])
+        ]);
     }
 
     // ########################################################################
@@ -290,41 +291,40 @@ class RegisterConversation extends Conversation
         $this->data['case'] = $case;
         switch ($this->data['case']) {
             case 1:
-            $this->say("Anda memasukkan data berikut:\n".
-                "Nama : ".$this->data['name']."\n".
-                "Tempat Lahir : ".$this->data['pob']."\n".
-                "Tanggal Lahir : ".$this->data['dob']."\n".
-                "Jurusan : ".$this->data['department']."\n");
-            break;
+                $this->say("Anda memasukkan data berikut:\n" .
+                    "Nama : " . $this->data['name'] . "\n" .
+                    "Tempat Lahir : " . $this->data['pob'] . "\n" .
+                    "Tanggal Lahir : " . $this->data['dob'] . "\n" .
+                    "Jurusan : " . $this->data['department'] . "\n");
+                break;
             case 2:
-            $this->say("Anda memasukkan data berikut:\n".
-                "Tahun lulus : ".$this->data['grad']."\n".
-                "Alamat : ".
-                $this->data['street'].', '.
-                Location::getVillage($this->data['address'])->nama.', '.
-                Location::getSubDistrict($this->data['sub_district'])->nama.', '.
-                Location::getDistrict($this->data['district'])->nama.', '.
-                Location::getProvince($this->data['province'])->nama."\n".
-                "Nomor Telepon : ".$this->data['phone']."\n".
-                "Status : ".\App\Status::find($this->data['status'][0]['status_id'])->status);
-            break;
+                $this->say("Anda memasukkan data berikut:\n" .
+                    "Tahun lulus : " . $this->data['grad'] . "\n" .
+                    "Alamat : " .
+                    $this->data['street'] . ', ' .
+                    Location::getVillage($this->data['address'])->nama . ', ' .
+                    Location::getSubDistrict($this->data['sub_district'])->nama . ', ' .
+                    Location::getDistrict($this->data['district'])->nama . ', ' .
+                    Location::getProvince($this->data['province'])->nama . "\n" .
+                    "Nomor Telepon : " . $this->data['phone'] . "\n" .
+                    "Status : " . \App\Status::find($this->data['status'][0]['status_id'])->status);
+                break;
             default:
-            break;
+                break;
         }
 
         $question = Question::create('Apakah data yang anda masukkan sudah benar?')
-        ->callbackId('ask_confirmation')
-        ->addButtons([
-            Button::create('Ya, sudah benar')->value('TRUE'),
-            Button::create('Ada yang salah')->value('FALSE')
-        ]);
+            ->callbackId('ask_confirmation')
+            ->addButtons([
+                Button::create('Ya, sudah benar')->value('TRUE'),
+                Button::create('Ada yang salah')->value('FALSE')
+            ]);
 
-        return $this->ask($question, function(Answer $answer)
-        {
+        return $this->ask($question, function (Answer $answer) {
             if ($answer->getValue() == 'TRUE') {
                 if ($this->data['case'] == 1) {
                     $this->check();
-                } else {                    
+                } else {
                     $this->sayThanks();
                 }
             } else {
@@ -333,74 +333,74 @@ class RegisterConversation extends Conversation
         });
     }
 
-    function askFix($case)  
+    function askFix($case)
     {
         $this->data['case'] = $case;
         $button = [];
         switch ($this->data['case']) {
             case 1:
-            $button = [
-                Button::create('Nama')->value('name'),
-                Button::create('Tempat lahir')->value('pob'),
-                Button::create('Tanggal lahir')->value('dob'),
-                Button::create('Jurusan')->value('department'),
-            ];
-            break;
+                $button = [
+                    Button::create('Nama')->value('name'),
+                    Button::create('Tempat lahir')->value('pob'),
+                    Button::create('Tanggal lahir')->value('dob'),
+                    Button::create('Jurusan')->value('department'),
+                ];
+                break;
 
             case 2:
-            $button = [
-                Button::create('Tahun lulus')->value('grad'),
-                Button::create('Alamat')->value('address'),
-                Button::create('Nomor telepon')->value('phone'),
-                Button::create('Status')->value('status'),
-            ];
-            break;
-            
+                $button = [
+                    Button::create('Tahun lulus')->value('grad'),
+                    Button::create('Alamat')->value('address'),
+                    Button::create('Nomor telepon')->value('phone'),
+                    Button::create('Status')->value('status'),
+                ];
+                break;
+
             default:
                 // code...
-            break;
+                break;
         }
 
         $question = Question::create('Silahkan pilih data mana yang ingin diperbaiki?')
-        ->callbackId('ask_fix')
-        ->addButtons($button);
+            ->callbackId('ask_fix')
+            ->addButtons($button);
 
-        return $this->ask($question, function(Answer $answer) {
+        return $this->ask($question, function (Answer $answer) {
             switch ($answer->getValue()) {
                 case 'name':
-                $this->askName(TRUE);
-                break;
+                    $this->askName(TRUE);
+                    break;
 
                 case 'pob':
-                $this->askPoB(TRUE);
-                break;
+                    $this->askPoB(TRUE);
+                    break;
 
                 case 'dob':
-                $this->askDoB(TRUE);
-                break;
+                    $this->askDoB(TRUE);
+                    break;
 
                 case 'department':
-                $this->askDepartment(TRUE);
-                break;
+                    $this->askDepartment(TRUE);
+                    break;
 
                 case 'grad':
-                $this->askGrad(TRUE);
-                break;
+                    $this->askGrad(TRUE);
+                    break;
 
                 case 'address':
-                $this->askProvince(TRUE);
-                break;
+                    $this->askProvince(TRUE);
+                    break;
 
                 case 'phone':
-                $this->askPhone(TRUE);
-                break;
+                    $this->askPhone(TRUE);
+                    break;
 
                 case 'status':
-                $this->askStatus(TRUE);
-                break;
+                    $this->askStatus(TRUE);
+                    break;
 
                 default:
-                break;
+                    break;
             }
         });
     }
@@ -408,41 +408,40 @@ class RegisterConversation extends Conversation
     function check()
     {
         $this->user = $this->user->where([
-            [ 'name','=',$this->data['name'] ],
-            [ 'dob','=',$this->data['dob'] ],
-            [ 'pob','=',$this->data['pob'] ],
-            [ 'department','=',$this->data['department'] ]
+            ['name', '=', $this->data['name']],
+            ['dob', '=', $this->data['dob']],
+            ['pob', '=', $this->data['pob']],
+            ['department', '=', $this->data['department']]
         ]);
 
         if ($this->user->get()->count() == 1) {
             $this->user = $this->user->get()->first();
-            if($this->user->isDataComplete()) {
+            if ($this->user->isDataComplete(true)) {
                 $question = Question::create("Kami mendeteksi bahwa anda telah terdaftar sebagai alumni aktif di dalam sistem kami")
-                ->callbackId('ask_confirmation')
-                ->addButtons([
-                    Button::create('OK!')->value('OK'),
-                ]);
-                
+                    ->callbackId('ask_confirmation')
+                    ->addButtons([
+                        Button::create('OK!')->value('OK'),
+                    ]);
+
                 return $this->ask($question, function (Answer $answer) {
                     if ($answer->getValue() == 'TRUE') {
                         $this->sayThanks(true);
                     }
                 });
-
             } else {
-                $data = "NIS : ".$this->user->nis."\n".
-                "Nama : ".$this->user->name."\n".
-                "Jenis Kelamin : ".($this->user->gender == 'M' ? 'Laki-laki' : 'Perempuan')."\n".
-                "Email : ".$this->user->email."\n".
-                "Tempat Lahir : ".$this->user->dob."\n".
-                "Tanggal Lahir : ".$this->user->pob."\n".
-                "Jurusan : ".$this->user->department;
+                $data = "NISN : " . $this->user->nisn . "\n" .
+                    "Nama : " . $this->user->name . "\n" .
+                    "Jenis Kelamin : " . ($this->user->gender == 'M' ? 'Laki-laki' : 'Perempuan') . "\n" .
+                    "Email : " . $this->user->email . "\n" .
+                    "Tempat Lahir : " . $this->user->dob . "\n" .
+                    "Tanggal Lahir : " . $this->user->pob . "\n" .
+                    "Jurusan : " . $this->user->department;
 
                 $this->say("Kami mendeteksi bahwa data anda telah terdaftar dalam sistem kami dengan rincian sebagai berikut:\n");
                 $this->say($data);
                 $this->say('Untuk selanjutnya, anda akan diminta untuk memasukan beberapa data seperti tahun lulus, alamat, status, nomor telepon');
 
-                return $this->ask('Balas "Oke" untuk melanjutkan.', function(Answer $answer) {
+                return $this->ask('Balas "Oke" untuk melanjutkan.', function (Answer $answer) {
                     if (strtolower($answer->getText()) == 'oke') {
                         $this->askGrad();
                     } else {
@@ -459,9 +458,8 @@ class RegisterConversation extends Conversation
 
     function askNis()
     {
-        return $this->ask('Sebelumnya, Silahkan masukan nomor induk siswa anda!', function(Answer $answer)
-        {
-            $this->data['nis'] = $answer->getText();
+        return $this->ask('Sebelumnya, Silahkan masukan nomor induk siswa anda!', function (Answer $answer) {
+            $this->data['nisn'] = $answer->getText();
             $this->sayThanks();
         });
     }
@@ -470,8 +468,8 @@ class RegisterConversation extends Conversation
 
     function sayThanks($isRegistered = false)
     {
-        $this->say('Terimakasih telah mendaftarkan akun anda. Silahkan klik link berikut '.route('home').' untuk menikmati layana dari SI Alumni dengan login menggunakan nis dan password berikut');
-        $this->say('nis : '.$this->user->nis."\n".'password : '.$this->user->temp_password);
+        $this->say('Terimakasih telah mendaftarkan akun anda. Silahkan klik link berikut ' . route('home') . ' untuk menikmati layana dari SI Alumni dengan login menggunakan nisn dan password berikut');
+        $this->say('nisn : ' . $this->user->nisn . "\n" . 'password : ' . $this->user->temp_password);
 
         if (!$isRegistered) {
             $this->user->province = $this->data['province'];
@@ -482,7 +480,7 @@ class RegisterConversation extends Conversation
             $this->user->grad = $this->data['grad'];
             $this->user->phone = $this->data['phone'];
             $this->user->telegram_id = $this->botinfo['user']['id'];
-        } 
+        }
         $this->user->temp_password = '';
 
         foreach ($this->data['status'] as $status) {

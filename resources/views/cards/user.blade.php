@@ -25,9 +25,9 @@
     </div>
     <div class="card-body pt-0 pt-md-4">
         <div class="text-center mt-md-5">
-            @if (Auth::user()->nis == $user->nis || Auth::user()->isAdmin())
+            @if (Auth::user()->nisn == $user->nisn || Auth::user()->isAdmin())
             <h4>
-                NIS : {{ $user->nis }}
+                NISN : {{ $user->nisn }}
             </h4>
             @endif
             <h3>
@@ -61,7 +61,7 @@
             </div>
             <hr>
             <div class="d-flex justify-content-between mb-3">
-                <div class="col text-left"><strong>Status Lulusan</strong></div>
+                <div class="col text-left"><strong>Status Pekerjaan</strong></div>
             </div>
             <?php $statuses = $user->statuses()->get() ?>
             @foreach ($statuses as $status)

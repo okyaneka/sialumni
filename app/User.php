@@ -20,8 +20,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'nis', 'email', 'password', 'pob',
-        'dob', 'street', 'province_id', 'gender', 'address',
+        'name', 'nisn', 'email', 'password', 'pob',
+        'dob', 'street', 'province_id', 'gender', 'address_id',
         'sub_district_id', 'district_id', 'department_slug', 'grad', 'phone',
     ];
 
@@ -52,13 +52,18 @@ class User extends Authenticatable
         return $this->type === self::ADMIN_TYPE;
     }
 
-    public function isDataComplete()
+    public function isDataComplete($is_bot = false)
     {
+        $ignored  = ['province_id', 'address_id', 'sub_district_id', 'district_id', 'street'];
         foreach ($this->fillable as $column) {
-            if (empty($this->$column)) return FALSE;
+            if ($is_bot && in_array($column, $ignored)) {
+                continue;
+            }
+            if (empty($this->$column)) {
+                return FALSE;
+            }
         }
-
-        if (empty($this->statuses()->get()->toArray())) return FALSE;
+        if (!$is_bot && empty($this->statuses()->get()->toArray())) return FALSE;
 
         return TRUE;
     }
@@ -73,6 +78,8 @@ class User extends Authenticatable
         ) {
             $street = $this->street ? "{$this->street}, " : '';
             return "{$street}{$this->address}, {$this->sub_district}, {$this->district}, {$this->province}";
+        } else {
+            return "Belum terdata";
         }
         return;
     }
@@ -126,11 +133,15 @@ class User extends Authenticatable
 
     public function getDepartmentAttribute()
     {
-        if ($this->department_slug) {
-            return $this->department()->first()->department;
+        try {
+            if ($this->department_slug) {
+                return $this->department()->first()->department;
+            } else {
+                return "Belum terdata";
+            }
+        } catch (\Throwable $th) {
+            return $this->department_slug;
         }
-        
-        return;
     }
 
     public function department()

@@ -52,7 +52,7 @@
             
             <div class="card shadow">
                 <div class="table-responsive">
-                    <table class="table align-items-center table-flush">
+                    <table class="table table-hover table-striped align-items-center table-flush">
                         <thead class="thead-light">
                             <tr>
                                 <th scope="col">Nama Perusahaan</th>
@@ -67,8 +67,10 @@
                         <tbody>
                             @foreach ($jobs as $job)
                             <tr>
-                                <td><a href="{{ route('job.show', $job) }}">{{ $job->company }}</a></td>
-                                <?php $location = unserialize($job->location);?>
+                                <td><a href="{{ route('job.show', $job) }}" target="_blank" title="Lihat loker">
+                                    <span>{{ $job->company }}</span>
+                                    <i class="ml-1 fa fa-external-link-alt"></i>
+                                </a></td>
                                 <td>{{ $job->full_address }}</td>
                                 <td>{{ $job->email }}</td>
                                 <td>{{ $job->phone }}</td>

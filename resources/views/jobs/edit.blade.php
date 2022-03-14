@@ -10,7 +10,7 @@
                 <div class="card-header bg-white border-0">
                     <div class="row align-items-center">
                         <div class="col-8">
-                            <h3 class="mb-0">{{ __('Edit Jurusan') }}</h3>
+                            <h3 class="mb-0">{{ __('Edit Lowongan Kerja') }}</h3>
                         </div>
                         <div class="col-4 text-right">
                             <a href="{{ route('job.index') }}" class="btn btn-sm btn-primary">{{ __('Kembali') }}</a>
@@ -18,22 +18,34 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <form method="post" action="{{ route('job.update', $job) }}" autocomplete="off">
+                    <form method="post" action="{{ route('job.update', $job) }}" autocomplete="off" enctype="multipart/form-data">
                         @method('put')
                         @csrf
 
                         <div class="pl-lg-4">
                             <div class="form-group">
-                                <label class="form-control-label"
-                                    for="input-company">{{ __('Nama Perusahaan') }}</label>
-                                <input type="text" name="company" id="input-company"
-                                    class="form-control{{ $errors->has('company') ? ' is-invalid' : '' }}"
-                                    placeholder="{{ __('Nama Perusahaan') }}"
-                                    value="{{ old('company', $job->company) }}" required>
+                                <label class="form-control-label" for="input-company">{{ __('Nama Perusahaan') }}</label>
+                                <input type="text" name="company" id="input-company" class="form-control{{ $errors->has('company') ? ' is-invalid' : '' }}" placeholder="{{ __('Nama Perusahaan') }}" value="{{ old('company', $job->company) }}" required>
 
                                 @if ($errors->has('company'))
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $errors->first('company') }}</strong>
+                                </span>
+                                @endif
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-control-label" for="">Poster/Pamflet</label>
+                                <img class="poster-preview w-100 mb-3 d-none" src="" alt="Poster / Pamflet" data-toggle="modal" data-target="#zoomImageModal" style="height: 256px; object-fit: contain">
+                                <div class="row mx-0 mb-3" style="flex-wrap: nowrap;">
+                                    <input id="poster" class="d-none" type="file" name="poster" accept="image/*">
+                                    <input id="delete-poster" type="hidden" name="delete-poster" value="0">
+                                    <button id="poster-add" type="button" class="btn btn-primary">Tambah Gambar</button>
+                                    <button id="poster-remove" type="button" class="btn btn-danger d-none">Hapus Gambar</button>
+                                </div>
+                                @if ($errors->has('poster'))
+                                <span class="invalid-feedback" role="alert" style="display: block;">
+                                    <strong>{{ $errors->first('poster') }}</strong>
                                 </span>
                                 @endif
                             </div>
@@ -94,6 +106,19 @@
                                 </span>
                                 @endif
                             </div>
+
+                            <div class="form-group">
+                                <label class="form-control-label" for="input-seen_until">Ditampilkan sampai</label>
+                                <input type="text" name="seen_until" id="input-seen_until"
+                                    class="form-control datepicker{{ $errors->has('seen_until') ? ' is-invalid' : '' }}"
+                                    value="{{ old('seen_until', $job->seen_until) }}" required>
+
+                                @if ($errors->has('seen_until'))
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $errors->first('seen_until') }}</strong>
+                                </span>
+                                @endif
+                            </div>
                             <hr>
 
                             <p class="text-muted">Alamat</p>
@@ -131,7 +156,7 @@
                                 <label class="form-control-label" for="input-street">{{ __('Jalan') }}</label>
                                 <input type="text" name="street" id="input-street"
                                     class="form-control {{ $errors->has('street') ? ' is-invalid' : '' }}"
-                                    placeholder="{{ __('Jalan') }}" value="{{ old('street', $job->street) }}">
+                                    placeholder="{{ __('Jalan (opsional)') }}" value="{{ old('street', $job->street) }}">
                                 <small class="form-text text-muted">
                                     Jalan / Dusun / RT / RW
                                 </small>
@@ -170,19 +195,31 @@
                             </div>
 
                             <div class="form-group">
-                                @php $requirements = old('requirements', unserialize($job->requirements)) @endphp
-                                <label class="form-control-label" for="input-requirements">Persyaratan</label>
-                                <input type="text" name="requirements[]" class="input-requirements form-control"
-                                    required value="{{ is_array($requirements) ? $requirements[0] : '' }}">
-                                @if (!empty(old('requirements', $requirements)))
-                                @for ($i = 1; $i < count($requirements); $i++) @if (!empty($requirements[$i])) <input
-                                    type="text" name="requirements[]" class="input-requirements form-control mt-3"
-                                    value="{{ $requirements[$i] }}">
-                                    @endif
-                                    @endfor
-                                    <input type="text" name="requirements[]"
-                                        class="input-requirements form-control mt-3">
-                                    @endif
+                                <p class="form-control-label" for="input-requirements">Persyaratan</p>
+                                @php $requirements = old('requirements', json_decode($job->requirements)) @endphp
+                                @if (empty($requirements))
+                                <div class="row mx-0 mb-3" style="flex-wrap: nowrap;">
+                                    <input type="text" name="requirements[]" class="input-requirements form-control" >
+                                    <button type="button" class="btn-remove btn btn-danger ml-2"><i class="fa fa-minus"></i></button>
+                                </div>
+                                @else
+                                @foreach ($requirements as $value)
+                                <div class="row mx-0 mb-3" style="flex-wrap: nowrap;">
+                                    <input type="text" name="requirements[]" class="input-requirements form-control" value="{{ $value }}" >
+                                    <button type="button" class="btn-remove btn btn-danger ml-2"><i class="fa fa-minus"></i></button>
+                                </div>
+                                @endforeach
+                                @endif
+                                <button type="button" class="btn-add btn btn-success">{{ __('Tambah') }}</button>
+                            </div>
+
+                            <div class="form-check">
+                                <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" value="1" name="published" id="publish" {{ $job->published == '1' ? 'checked' : '' }}>
+                                    Terbitkan
+                                </label>
+                                </div>
                             </div>
 
                             <div class="text-center">
@@ -194,24 +231,38 @@
             </div>
         </div>
     </div>
+    {{-- Form persyaratan --}}
+    <div id="input-persyaratan" class="d-none">
+        <div class="row mx-0 mb-3" style="flex-wrap: nowrap;">
+            <input type="text" name="requirements[]" class="input-requirements form-control"  >
+            <button type="button" class="btn-remove btn btn-danger ml-2"><i class="fa fa-minus"></i></button>
+        </div>
+    </div>
 
+    {{-- Modal zoom image --}}
+    <div class="modal fade" id="zoomImageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <img class="poster-preview w-100" src="" >
+                </div>
+            </div>
+        </div>
+    </div>
     @include('layouts.footers.auth')
 </div>
 @endsection
 
 @push('js')
 <script src="{{ asset('argon') }}/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
-<script src="https://cdn.tiny.cloud/1/11gbqitr6wxn3kei2wjuino6e84fucjdwff4sjpt48ima2u0/tinymce/5/tinymce.min.js"
-    referrerpolicy="origin"></script>
+<script src="https://cdn.tiny.cloud/1/11gbqitr6wxn3kei2wjuino6e84fucjdwff4sjpt48ima2u0/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 <script type="text/javascript">
     $(function() {
-        function inputRequrements() {    
-            $('.input-requirements').last().keyup(function() {
-                if ($(this).val() != '') {
-                    $(this).after("<input type=''text' name='requirements[]' class='input-requirements form-control form-control-alternative mt-3'>");
-                    $('.input-requirements').unbind();
-                    inputRequrements();
-                }
+        function bindBtnRemove() {
+            $('.btn-remove').click(function () { 
+                $(this).parent().remove() 
+                $('.btn-remove').unbind();
+                bindBtnRemove();
             });
         }
 
@@ -223,7 +274,37 @@
 
         $('.datepicker').datepicker();
 
-        inputRequrements();
+        $('.btn-add').click(function() {
+            $(this).before($('#input-persyaratan').html().trim())
+            bindBtnRemove();
+        })
+
+        $('#poster-add').click(function () {
+            $('#poster').click()
+        })
+
+        $('#poster-remove').click(function () {
+            $('#poster').val("")
+            $('.poster-preview, #poster-remove').addClass('d-none')
+            $('#poster-add').text('Tambah Gambar')
+            $('#delete-poster').val(1)
+        })
+
+        $('#poster').change(function (e) {
+            const src = URL.createObjectURL(e.currentTarget.files[0])
+            $('.poster-preview').attr('src', src)
+            $('.poster-preview, #poster-remove').removeClass('d-none')
+            $('#poster-add').text('Ganti Gambar')
+            $('#delete-poster').val(0)
+        })
+
+        bindBtnRemove();
+
+        @if (!empty($job->poster))
+        $('.poster-preview').attr('src', '/storage/{{ $job->poster }}')
+        $('.poster-preview, #poster-remove').removeClass('d-none')
+        $('#poster-add').text('Ganti Gambar')
+        @endif
 
         var prov_id = {{ old('province', $job->province_id) ?: 'false' }};
         var kab_id = {{ old('district', $job->district_id) ?: 'false' }};

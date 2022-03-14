@@ -1,11 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Department;
 use Illuminate\Http\Request;
 use App\User;
 use App\Job;
-use DB;
-use Auth;
+use App\Status;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -44,6 +47,8 @@ class HomeController extends Controller
                 ['type','=','default'],
                 ['grad','<',(date('Y') - 5)]
             ])->count(),
+            'department' => Department::count(),
+            'status' => Status::count(),
         ];
 
         return view('dashboard', $alumnus);
@@ -72,18 +77,16 @@ class HomeController extends Controller
         $user->name = $request->name;
         $user->gender = $request->gender;
         // $user->email = $request->email;
-        $user->province = $request->province;
-        $user->district = $request->district;
-        $user->sub_district = $request->sub_district;
-        $user->address = $request->address;
+        $user->province_id = $request->province;
+        $user->district_id = $request->district;
+        $user->sub_district_id = $request->sub_district;
+        $user->address_id = $request->address;
         $user->street = $request->street;
         $user->pob = $request->pob;
         $user->dob = date('Y-m-d', strtotime($request->dob));
-        $user->department = $request->department;
+        $user->department_slug = $request->department;
         $user->grad = $request->grad;
         $user->phone = $request->phone;
-        $temp_password = $user->temp_password;
-        $user->temp_password = '';
 
         // dd($request->toArray());
 
@@ -111,6 +114,6 @@ class HomeController extends Controller
         $link = '#';
         $link = '<a href="'.$link.'" target="_blank">'.$link.'</a>';
 
-        return redirect()->route('home')->withStatus(__('Anda terdaftar sebagai alumni SMK N Pringsurat dengan<br>NIS : '.$user->nis.'<br>Password : '.$temp_password.'<br>Profil telah diperbaharui, klik link berikut untuk bergabung dengan grup alumni anda '.$link));
+        return redirect()->route('home')->withStatus(__('Anda terdaftar sebagai alumni SMK N Pringsurat dengan<br>NISN : '.$user->nisn.'<br>Password : '.date('dmY', strtotime($user->dob)).'<br>Profil telah diperbaharui, klik link berikut untuk bergabung dengan grup alumni anda '.$link));
     }
 }

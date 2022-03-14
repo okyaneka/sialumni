@@ -1,7 +1,7 @@
 @extends('statistics.part.layout', ['title' => 'Statistik Berdasarkan Jenis Kelamin'])
 
 @section('tab-1')
-<table class="table">
+<table class="table table-striped table-hover">
 	<thead class="thead-light">
 		<tr>
 			<th scope="col">{{ $key }}</th>
@@ -22,7 +22,7 @@
 @endsection
 
 @section('tab-2')
-<table class="table">
+<table class="table table-striped table-hover">
 	<thead class="thead-light">
 		<tr>
 			<th scope="col">{{ $key }}</th>
@@ -43,7 +43,7 @@
 @endsection
 
 @section('tab-3')
-<table class="table">
+<table class="table table-striped table-hover">
 	<thead class="thead-light">
 		<tr>
 			<th scope="col">{{ $key }}</th>
@@ -64,7 +64,7 @@
 @endsection
 
 @section('tab-4')
-<table class="table">
+<table class="table table-striped table-hover">
 	<thead class="thead-light">
 		<tr>
 			<th scope="col">{{ $key }}</th>

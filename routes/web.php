@@ -49,6 +49,8 @@ Route::middleware('is_installed')->group(function () {
 			Route::resource('status', 'StatusController', ['except' => ['show']]);
 			Route::resource('group', 'GroupController', ['except' => ['show']]);
 			Route::resource('job', 'JobController', ['except' => ['show']]);
+			Route::get('/job/pending', 'JobController@pending')->name('job.pending');
+			Route::get('/job/{job}/review', 'JobController@review')->name('job.review');
 
 			Route::get('batch/user', 'UserBatchController@batch')->name('user.batch');
 			Route::put('batch/user', 'UserBatchController@insertBatch')->name('user.insert_batch');

@@ -6,9 +6,8 @@ use App\Http\Requests\ProfileRequest;
 use App\Http\Requests\PasswordRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
-use DB;
-use Auth;
-use Exception;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
@@ -57,19 +56,16 @@ class ProfileController extends Controller
 
         $user->name = $request->name;
         $user->gender = $request->gender;
-        $user->province = $request->province;
-        $user->district = $request->district;
-        $user->sub_district = $request->sub_district;
-        $user->address = $request->address;
+        $user->province_id = $request->province;
+        $user->district_id = $request->district;
+        $user->sub_district_id = $request->sub_district;
+        $user->address_id = $request->address;
         $user->street = $request->street;
         $user->pob = $request->pob;
         $user->dob = date('Y-m-d', strtotime($request->dob));
-        $user->department = $request->department;
+        $user->department_slug = $request->department;
         $user->grad = $request->grad;
         $user->phone = $request->phone;
-        $user->telegram = $request->telegram;
-
-        // dd($request->toArray());
 
         foreach ($request->status as $status) {
             if (isset($status['id'])) {

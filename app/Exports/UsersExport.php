@@ -20,7 +20,7 @@ class UsersExport implements FromCollection, WithHeadings, ShouldAutoSize
 
 		foreach ($data as $k => $d) {
 			$array[$k] = [
-				'NIS' => $d->nis,
+				'NISN' => $d->nisn,
 				'NAMA' => $d->name,
 				'EMAIL' => $d->email,
 				'JENIS KELAMIN' => $d->gender == 'M' ? 'Laki-laki' : 'Perempuan',
@@ -49,7 +49,7 @@ class UsersExport implements FromCollection, WithHeadings, ShouldAutoSize
 	public function headings(): array
 	{
 		return [
-			'NIS',
+			'NISN',
 			'NAMA',
 			'EMAIL',
 			'JENIS KELAMIN',

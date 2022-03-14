@@ -2,3 +2,7 @@
   position: absolute;
   top: 0;
 }
+
+.table td {
+  padding: .5rem;
+}

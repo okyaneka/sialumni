@@ -24,16 +24,16 @@
                         @csrf
 
             
-                        <div class="form-group{{ $errors->has('nis') ? ' has-danger' : '' }}">
+                        <div class="form-group{{ $errors->has('nisn') ? ' has-danger' : '' }}">
                             <div class="input-group input-group-alternative mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="ni ni-tag"></i></span>
                                 </div>
-                                <input class="form-control{{ $errors->has('nis') ? ' is-invalid' : '' }}" placeholder="{{ __('NIS') }}" type="text" name="nis" value="{{ old('nis') }}" required autofocus>
+                                <input class="form-control{{ $errors->has('nisn') ? ' is-invalid' : '' }}" placeholder="{{ __('NISN') }}" type="text" name="nisn" value="{{ old('nisn') }}" required autofocus>
                             </div>
-                            @if ($errors->has('nis'))
+                            @if ($errors->has('nisn'))
                             <span class="invalid-feedback" style="display: block;" role="alert">
-                                <strong>{{ $errors->first('nis') }}</strong>
+                                <strong>{{ $errors->first('nisn') }}</strong>
                             </span>
                             @endif
                         </div>

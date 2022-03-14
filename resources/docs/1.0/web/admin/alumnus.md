@@ -36,7 +36,7 @@ Fitur __Pencarian__ merupakan fitur yang digunakan untuk mencari alumni berdasar
 
 Fitur __Lihat Alumni__ merupakan fitur yang digunakan untuk melihat informasi alumni. Informasi yang diberikan antara lain sebagai berikut:
 
-- NIS (admin)
+- NISN (admin)
 - Nama
 - Tempat lahir (admin)
 - Tanggal lahir (admin)
@@ -92,7 +92,7 @@ Cara untuk mengubah data alumni adalah:
 
 Fitur ini digunakan untuk mengunggah data alumni melalui file Excel. Cara menggunakan fitur ini adalah sebagai berikut:
 
-1. Siapkan file Excel dengan ketentuan wajib mencantumkan nama kolom beserta data NIS, NAMA, EMAIL, TANGGAL LAHIR, JENIS KELAMIN, JURUSAN, TEMPAT LAHIR. (untuk lebih jelas dapat melihat gambar)
+1. Siapkan file Excel dengan ketentuan wajib mencantumkan nama kolom beserta data NISN, NAMA, EMAIL, TANGGAL LAHIR, JENIS KELAMIN, JURUSAN, TEMPAT LAHIR. (untuk lebih jelas dapat melihat gambar)
 
 	![img-71][img-71]
 

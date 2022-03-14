@@ -24,6 +24,33 @@ class LokerConversation extends Conversation
     $this->jobs = Job::where('duedate', '>=', date('Y-m-d'))->get();
   }
 
+  private static function keyboardFree()
+  {
+    return json_encode(['remove_keyboard' => true]);
+  }
+
+  private static function keyboardDefault()
+  {
+    return json_encode([
+      'keyboard' => [
+        [
+          ['text' => '/validasi'],
+          ['text' => '/update'],
+        ],
+        [
+          ['text' => '/infoloker'],
+          ['text' => '/infoalumni'],
+        ],
+        [
+          ['text' => '/tambahloker'],
+          ['text' => '/bantuan'],
+        ],
+      ],
+      'resize_keyboard' => true,
+      'one_time_keyboard' => true
+    ]);
+  }
+
   public function showJob()
   {
     $buttons = [];
@@ -96,11 +123,14 @@ class LokerConversation extends Conversation
         $this->say($message);
         $this->showJob();
       } else {
-        return $this->say("Mohon maaf, sepertinya belum ada info lowongan pekerjaan yang sedang dibuka.");
+        $message = "Mohon maaf, sepertinya belum ada info lowongan pekerjaan yang sedang dibuka.";
+        $message .= "\n\nKamu masih bisa mencari informasi lainya dengan menekan perintah berikut.";
+
+        return $this->say($message, ['reply_markup' => self::keyboardDefault()]);
       }
     } catch (\Throwable $th) {
       $message = 'Mohon maaf, sepertinya kamu belum terdaftar sebagai alumni SMK N Pringsurat. Silahkan tekan /validasi untuk mengecek apakah akun kamu terdaftar sebagai alumni SMK N Pringsurat';
-      $this->say($message);
+      $this->say($message, ['reply_markup' => self::keyboardDefault()]);
       \Log::error($th);
     }
   }

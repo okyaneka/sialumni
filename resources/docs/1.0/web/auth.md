@@ -15,7 +15,7 @@ Menu __Register__ digunakan bagi alumni untuk mendaftarkan diri sebagai alumni a
 
 	![img-4][img-4]
 
-1. Masukkan Nomor Induk Siswa (NIS) dan Nama lengkap
+1. Masukkan Nomor Induk Siswa (NISN) dan Nama lengkap
 
 	![img-5][img-5]
 
@@ -37,7 +37,7 @@ Menu __Login__ digunakan bagi alumni untuk melakukan otentifikasi kedalam sistem
 
 	![img-36][img-36]
 
-1. Masuk dengan menggunakan NIS / Email yang telah didaftarkan sebelumnya, kemudian masukkan kata sandi (password)
+1. Masuk dengan menggunakan NISN / Email yang telah didaftarkan sebelumnya, kemudian masukkan kata sandi (password)
 
 	![img-35][img-35]
 

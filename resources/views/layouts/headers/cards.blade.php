@@ -12,6 +12,27 @@
     <div class="header-body">
         <!-- Card stats -->
         <div class="row">
+            @if (empty($department) || empty($status))
+            <div class="mb-3 col-12">
+                <div class="card card-stats mb-4 mb-xl-0">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <h5 class="card-title text-uppercase text-muted mb-2">Master Data Jurusan dan atau
+                                    Status Pekerjaan masih kosong</h5>
+                                <ul>
+                                    <li><a href="{{ route('department.index') }}">Klik link berikut untuk menambahkan
+                                            masterdata Jurusan di halaman master data jurusan.</a></li>
+                                    <li><a href="{{route('status.index')}}">Klik link berikut untuk menambahkan
+                                            masterdata Status Pekerjaan di halaman master data status pekerjaan.</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
             <div class="mb-3 col-lg-6">
                 <div class="card card-stats mb-4 mb-xl-0">
                     <div class="card-body">
@@ -48,7 +69,8 @@
                             </div>
                         </div>
                         {{-- <p class="mt-3 mb-0 text-muted text-sm">
-                            <span class="text-warning mr-2"><i class="fas fa-percentage"></i> {{ number_format($inputed/$total*100, 2).'%' }}</span>
+                            <span class="text-warning mr-2"><i class="fas fa-percentage"></i> {{
+                                number_format($inputed/$total*100, 2).'%' }}</span>
                             <span class="text-nowrap">total alumni</span>
                         </p> --}}
                     </div>
@@ -95,7 +117,8 @@
                         </div>
                         {{-- <p class="mt-3 mb-0 text-muted text-sm">
                             @if ($last_year)
-                            <span class="text-warning mr-2"><i class="fas fa-arrow-down"></i> {{ number_format($this_year/$last_year*100, 2).'%' }}</span>
+                            <span class="text-warning mr-2"><i class="fas fa-arrow-down"></i> {{
+                                number_format($this_year/$last_year*100, 2).'%' }}</span>
                             <span class="text-nowrap">tahun terakhir</span> @endif
                         </p> --}}
                     </div>

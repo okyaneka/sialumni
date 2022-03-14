@@ -36,11 +36,11 @@
 						@csrf @method('put')
 
 						<div class="form-group">
-							<input type="file" class="form-control-file form-group{{ $errors->has('avatar') ? ' has-danger' : '' }}" name="avatar" id="avatar" aria-describedby="fileHelp">
-							<small id="fileHelp" class="form-text text-muted">Silahkan upload file gambar dengan ukuran kurang dari 2 MB dengan dimensi 1x1.</small>
+							<input type="file" class="form-control-file form-group{{ $errors->has('avatar') ? ' has-danger' : '' }}" name="avatar" id="avatar" aria-describedby="fileHelp" accept="image/*">
+							<small id="fileHelp" class="form-text text-muted">Silahkan upload file gambar dengan ukuran kurang dari <strong>2MB</strong> dengan dimensi 1:1.</small>
 						</div>
 						@if ($errors->has('avatar'))
-						<span class="invalid-feedback" role="alert">
+						<span class="invalid-feedback" role="alert" style="display: block;">
 						    <strong>{{ $errors->first('avatar') }}</strong>
 						</span> 
 						@endif
@@ -68,18 +68,22 @@
 							<div class="form-group{{ $errors->has('old_password') ? ' has-danger' : '' }}">
 								<label class="form-control-label" for="input-current-password">{{ __('Current Password') }}</label>
 								<input type="password" name="old_password" id="input-current-password" class="form-control form-control-alternative{{ $errors->has('old_password') ? ' is-invalid' : '' }}"
-								placeholder="{{ __('Current Password') }}" value="" required>                                @if ($errors->has('old_password'))
-								<span class="invalid-feedback" role="alert">
+								placeholder="{{ __('Current Password') }}" value="" required>                                
+								@if ($errors->has('old_password'))
+								<span class="invalid-feedback" role="alert" style="display: block">
 									<strong>{{ $errors->first('old_password') }}</strong>
-								</span> @endif
+								</span> 
+								@endif
 							</div>
 							<div class="form-group{{ $errors->has('password') ? ' has-danger' : '' }}">
 								<label class="form-control-label" for="input-password">{{ __('New Password') }}</label>
 								<input type="password" name="password" id="input-password" class="form-control form-control-alternative{{ $errors->has('password') ? ' is-invalid' : '' }}"
-								placeholder="{{ __('New Password') }}" value="" required>                                @if ($errors->has('password'))
-								<span class="invalid-feedback" role="alert">
+								placeholder="{{ __('New Password') }}" value="" required>                                
+								@if ($errors->has('password'))
+								<span class="invalid-feedback" role="alert" style="display: block">
 									<strong>{{ $errors->first('password') }}</strong>
-								</span> @endif
+								</span> 
+								@endif
 							</div>
 							<div class="form-group">
 								<label class="form-control-label" for="input-password-confirmation">{{ __('Confirm New Password') }}</label>

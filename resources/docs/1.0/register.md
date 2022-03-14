@@ -16,7 +16,7 @@
 
 	![img-4][img-4]
 
-1. Masukkan NIS dan Nama lengkap serta menyetujui kebijakan dan privasi. Klik "Create an account".
+1. Masukkan NISN dan Nama lengkap serta menyetujui kebijakan dan privasi. Klik "Create an account".
 
 	![img-5][img-5]
 

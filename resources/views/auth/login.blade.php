@@ -16,16 +16,21 @@
                         <form role="form" method="POST" action="{{ route('login') }}">
                             @csrf
 
-                            <div class="form-group{{ $errors->has('email') ? ' has-danger' : '' }} mb-3">
+                            <div class="form-group{{ $errors->has('email') || $errors->has('nisn') ? ' has-danger' : '' }} mb-3">
                                 <div class="input-group input-group-alternative">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="ni ni-email-83"></i></span>
                                     </div>
-                                    <input class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" placeholder="{{ __('NIS / Email') }}" type="text" name="email" value="{{ old('email') }}" value="admin@argon.com" required autofocus>
+                                    <input class="form-control{{ $errors->has('email') || $errors->has('nisn') ? ' is-invalid' : '' }}" placeholder="{{ __('NISN / Email') }}" type="text" name="email" value="{{ old('email') }}" required autofocus>
                                 </div>
-                                @if ($errors->has('email'))
+                                @if ($errors->has('email') || $errors->has('nisn'))
                                     <span class="invalid-feedback" style="display: block;" role="alert">
                                         <strong>{{ $errors->first('email') }}</strong>
+                                    </span>
+                                    @endif
+                                @if ( $errors->has('nisn'))
+                                    <span class="invalid-feedback" style="display: block;" role="alert">
+                                        <strong>{{ $errors->first('nisn') }}</strong>
                                     </span>
                                 @endif
                             </div>
@@ -34,7 +39,10 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
                                     </div>
-                                    <input class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" placeholder="{{ __('Password') }}" type="password" value="secret" required>
+                                    <input class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" placeholder="{{ __('Password') }}" type="password" required>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" data-toggle="tooltip" data-placement="bottom" title="Untuk Alumni yang belum pernah melakukan login, password menggunakan tanggal lahir (contoh: 17 Agustus 1945 menjadi 17081945)"><i class="fa fa-question-circle"></i></span>
+                                    </div>
                                 </div>
                                 @if ($errors->has('password'))
                                     <span class="invalid-feedback" style="display: block;" role="alert">

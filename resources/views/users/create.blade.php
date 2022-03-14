@@ -23,13 +23,13 @@
 
             <div class="pl-lg-4">
               <div class="form-group">
-                <label class="form-control-label" for="input-nis">{{ __('NIS') }}</label>
-                <input type="text" name="nis" id="input-nis"
-                  class="form-control{{ $errors->has('nis') ? ' is-invalid' : '' }}"
-                  placeholder="{{ __('NIS') }}" value="{{ old('nis') }}" required>
-                @if ($errors->has('nis'))
+                <label class="form-control-label" for="input-nisn">{{ __('NISN') }}</label>
+                <input type="text" name="nisn" id="input-nisn"
+                  class="form-control{{ $errors->has('nisn') ? ' is-invalid' : '' }}"
+                  placeholder="{{ __('NISN') }}" value="{{ old('nisn') }}" required>
+                @if ($errors->has('nisn'))
                 <span class="invalid-feedback" role="alert">
-                  <strong>{{ $errors->first('nis') }}</strong>
+                  <strong>{{ $errors->first('nisn') }}</strong>
                 </span>
                 @endif
               </div>

@@ -57,8 +57,7 @@
                     <div class="card-body">
                         <h4>{{ $j->position }}</h4>
                         <h3 class="text-primary">{{ $j->company }}</h3>
-                        <?php $location = unserialize($j->location);?>
-                        <span class="text-muted small">{{ $location['street'] }}, {{ \App\Location::getDistrict($location['district'])->nama }}, {{ \App\Location::getProvince($location['province'])->nama }}</span>
+                        <span class="text-muted small">{{ $j->full_address }}</span>
                     </div>
                     <div class="card-footer bg-primary py-2">
                         <h3><a href="{{ route('job.show', $j) }}" class="text-white">lihat detail</a></h3>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\JobRequest;
 use App\Job;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class JobController extends Controller
 {
@@ -21,8 +22,20 @@ class JobController extends Controller
         if (!empty($_GET['company']))
             $filter[] = ['company', 'like', '%' . $_GET['company'] . '%'];
 
-        $jobs = $job->where($filter)->paginate(15);
+        $jobs = $job->where('published', '1')->where($filter)->paginate(15);
         return view('jobs.index', ['jobs' => $jobs, 'filter' => $filter]);
+    }
+
+    public function pending(Job $job)
+    {
+        $filter = [];
+
+        // if (!empty($_GET['submit'])) {
+        if (!empty($_GET['company']))
+            $filter[] = ['company', 'like', '%' . $_GET['company'] . '%'];
+
+        $jobs = $job->where('published', '0')->where($filter)->paginate(15);
+        return view('jobs.pending', ['jobs' => $jobs, 'filter' => $filter]);
     }
 
     /**
@@ -52,20 +65,29 @@ class JobController extends Controller
             }
         }
 
+        $poster = "";
+        if ($request->hasFile('poster')) {
+            $poster = 'poster_' . time() . '.' . $request->file('poster')->getClientOriginalExtension();
+            $request->file('poster')->storeAs('posters', $poster);
+            $poster = "posters/$poster";
+        }
+
         $job->create([
             'company' => $request->company,
             'position' => $request->position,
             'salary' => $request->salary,
-            'location' => serialize([
+            'location' => json_encode([
                 "province" => $request->province,
                 "district" => $request->district,
                 "street" => $request->street,
             ]),
+            'poster' => $poster,
             'email' => $request->email,
             'phone' => $request->phone,
             'description' => $request->description,
-            'requirements' => serialize($requirements),
+            'requirements' => json_encode($requirements),
             'duedate' => date('Y-m-d', strtotime($request->duedate)),
+            'seen_until' => date('Y-m-d', strtotime($request->seen_until)),
         ]);
 
         return redirect()->route('job.index')->withStatus('Lowongan kerja telah berhasil ditambahkan');
@@ -99,7 +121,11 @@ class JobController extends Controller
      */
     public function show(Job $job)
     {
-        return view('jobs.show', compact('job'));
+        if (!empty($job->published)) {
+            return view('jobs.show', compact('job'));
+        } else {
+            return abort(404);
+        }
     }
 
     /**
@@ -114,6 +140,12 @@ class JobController extends Controller
         return view('jobs.edit', compact('job'));
     }
 
+    public function review(Job $job)
+    {
+        //
+        return view('jobs.review', compact('job'));
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -125,27 +157,40 @@ class JobController extends Controller
     {
         $requirements = [];
 
-        foreach ($request->requirements as $r) {
-            if (!empty($r)) {
-                $requirements[] = $r;
+        if ($request->filled('requirements')) {
+            foreach ($request->requirements as $r) {
+                if (!empty($r)) {
+                    $requirements[] = $r;
+                }
             }
+        }
+
+        if ($request->get('delete-poster') == "1") {
+            Storage::delete($job->poster);
+            $job->poster = "";
+        }
+
+        if ($request->hasFile('poster')) {
+            $poster = 'poster_' . time() . '.' . $request->file('poster')->getClientOriginalExtension();
+            $request->file('poster')->storeAs('posters', $poster);
+            $job->poster = "posters/$poster";
         }
 
         $job->company = $request->company;
         $job->position = $request->position;
         $job->salary = $request->salary;
-        $job->location = serialize([
+        $job->location = json_encode([
             "province" => $request->province,
             "district" => $request->district,
-            "sub_district" => $request->sub_district,
-            "address" => $request->address,
             "street" => $request->street,
         ]);
         $job->email = $request->email;
         $job->phone = $request->phone;
         $job->description = $request->description;
-        $job->requirements = serialize($requirements);
+        $job->requirements = json_encode($requirements);
         $job->duedate = date('Y-m-d', strtotime($request->duedate));
+        $job->seen_until = date('Y-m-d', strtotime($request->seen_until));
+        $job->published = !empty($request->published) ? $request->published : 0;
 
         $job->update();
 

@@ -70,6 +70,12 @@ class TelegramController extends Controller
         return $bot->startConversation(new \App\Conversations\LokerConversation(), $bot->getUser()->getId(), TelegramDriver::class);
     }
 
+    public function tambahloker(BotMan $bot)
+    {
+        $this->isGroup($bot);
+        return $bot->startConversation(new \App\Conversations\TambahLokerConversation(), $bot->getUser()->getId(), TelegramDriver::class);
+    }
+
     public function infoalumni(BotMan $bot)
     {
         $this->isGroup($bot);
@@ -90,10 +96,10 @@ class TelegramController extends Controller
             if (!empty($message)) {
                 $bot->reply($message);
             } elseif (User::where('telegram_id', $payload['from']['id'])->count()) {
-                $bot->reply("Hai $name.\nSilahkan check pesan pribadi ya");
+                $bot->reply("Hai $name.\nSilahkan tekan https://t.me/skanirabot lalu tekan \"start\" dulu ya...");
             } else {
                 $bot->reply("Hai $name.\nCoba /start Aku dulu. Lewat japri ya...");
-            } 
+            }
             return true;
         }
         return false;

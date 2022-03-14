@@ -78,6 +78,8 @@ class User extends Authenticatable
         ) {
             $street = $this->street ? "{$this->street}, " : '';
             return "{$street}{$this->address}, {$this->sub_district}, {$this->district}, {$this->province}";
+        } else {
+            return "Belum terdata";
         }
         return;
     }
@@ -134,11 +136,12 @@ class User extends Authenticatable
         try {
             if ($this->department_slug) {
                 return $this->department()->first()->department;
+            } else {
+                return "Belum terdata";
             }
         } catch (\Throwable $th) {
             return $this->department_slug;
         }
-
     }
 
     public function department()

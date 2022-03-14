@@ -2,7 +2,9 @@
 
 namespace App\Conversations;
 
+use App\Department;
 use App\Location;
+use App\Status;
 use App\User;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer;
@@ -13,6 +15,33 @@ use Illuminate\Support\Facades\DB;
 class FirstUpdateConversation extends Conversation
 {
   protected $data = [], $user, $botinfo;
+
+  private static function keyboardFree()
+  {
+    return json_encode(['keyboard' => []]);
+  }
+
+  private static function keyboardDefault()
+  {
+    return json_encode([
+      'keyboard' => [
+        [
+          ['text' => '/validasi'],
+          ['text' => '/update'],
+        ],
+        [
+          ['text' => '/infoloker'],
+          ['text' => '/infoalumni'],
+        ],
+        [
+          ['text' => '/tambahloker'],
+          ['text' => '/bantuan'],
+        ],
+      ],
+      'resize_keyboard' => true,
+      'one_time_keyboard' => true
+    ]);
+  }
 
   public function askEmail()
   {
@@ -175,19 +204,30 @@ class FirstUpdateConversation extends Conversation
   public function askDepartment()
   {
     if (empty($this->user->department_slug)) {
-      $department_button = [];
+      $db = [];
       foreach (\App\Department::all() as $d) {
-        $department_button[] = Button::create($d->department)->value($d->code);
+        if (empty($db) || count(last($db)) >= 3) {
+          $db[] = [];
+        }
+        $db[count($db) - 1][] = $d->department;
       }
-      $question = Question::create('Silahkam pilih jurusan kamu:')
-        ->callbackId('ask_department')
-        ->addButtons($department_button);
 
-      $this->ask($question, function (Answer $answer) {
-        $this->user->department_slug = $answer->getValue();
-        $this->say($answer->getText());
-        $this->askGrad();
-      });
+      $this->ask('Silahkam pilih jurusan kamu!', function (Answer $answer) {
+        try {
+          $department = Department::firstWhere('department', $answer->getText());
+          $this->user->department_slug = $department->code;
+          $this->say("Baik, jurusan yang kamu pilih adalah " . $department->department);
+          $this->askGrad();
+        } catch (\Throwable $th) {
+          \Log::debug($th->getMessage());
+          $this->say("Mohon maaf, silahkan ulangi lagi.");
+          $this->askDepartment();
+        }
+      }, ['reply_markup' => json_encode([
+        'keyboard' => $db,
+        'one_time_keyboard' => true,
+        'resize_keyboard' => true
+      ])]);
     } else {
       $this->askGrad();
     }
@@ -197,7 +237,7 @@ class FirstUpdateConversation extends Conversation
   {
     if (empty($this->user->grad)) {
       # code...
-      $this->ask("Silahkan masukkan tahun lulus kamu:", function (Answer $answer) {
+      $this->ask("Kemudian, silahkan masukkan tahun lulus kamu!", function (Answer $answer) {
         $grad = trim($answer->getText());
         if (preg_match("/^[0-9\s]*$/", $grad)) {
           $this->user->grad = $grad;
@@ -217,11 +257,20 @@ class FirstUpdateConversation extends Conversation
     if (empty($this->user->phone)) {
       $this->ask('Nomor telepon:', function (Answer $answer) {
         $payload = $answer->getMessage()->getPayload();
-        $phone = $payload['contact']['phone_number'];
+        $phone = null;
+        try {
+          $phone = $payload['contact']['phone_number'];
+        } catch (\Throwable $th) {
+          $phone = trim($answer->getText());
+        }
         $this->user->phone = $phone;
         $this->askStatus();
       }, ['reply_markup' => json_encode([
-        'keyboard' => [[['text' => 'Kirim kontak', 'request_contact' => true]]]
+        'keyboard' => [[[
+          'text' => 'Kirim kontak', 'request_contact' => true,
+        ]]],
+        'resize_keyboard' => true,
+        'one_time_keyboard' => true
       ])]);
     } else {
       $this->askStatus();
@@ -230,21 +279,43 @@ class FirstUpdateConversation extends Conversation
 
   public function askStatus()
   {
-    $options = [];
-
-    foreach (\App\Status::all() as $s) {
-      $options[] = Button::create($s->status)->value($s->id);
+    $db = [];
+    foreach (\App\Status::all() as $d) {
+      if (empty($db) || count(last($db)) >= 3) {
+        $db[] = [];
+      }
+      $db[count($db) - 1][] = $d->status;
     }
-    $options[] = Button::create('Belum ada')->value(0);
+    if (empty($db) || count(last($db)) >= 3) {
+      $db[] = [];
+    }
+    $db[count($db) - 1][] = "Belum ada";
 
-    $question = Question::create('Silahkan pilih status kegiatan kamu saat sekarang!')
-      ->callbackId('ask_status')
-      ->addButtons($options);
+    return $this->ask('Silahkan pilih status pekerjaan/kegiatan kamu saat sekarang!', function (Answer $answer) {
+      try {
+        $status = Status::where('status', $answer->getText())->first();
+        if (empty($status)) {
+          $this->data['status'] =  [];
+        } else {
+          if (empty($this->data['status'])) {
+            $this->data['status'] = [['status_id' => $status->id]];
+          } else {
+            \Log::debug('status' . json_encode($this->data['status']));
+            $this->data['status'][0]['status_id'] = $status->id;
+          }
+        }
 
-    return $this->ask($question, function (Answer $answer) {
-      $this->data['status'][0]['status_id'] = $answer->getValue();
-      $this->update();
-    });
+        $this->update();
+      } catch (\Throwable $th) {
+        \Log::debug($th->getMessage());
+        $this->say("Mohon maaf, silahkan ulangi lagi.");
+        $this->askStatus();
+      }
+    }, ['reply_markup' => json_encode([
+      'keyboard' => $db,
+      'one_time_keyboard' => true,
+      'resize_keyboard' => true
+    ])]);
   }
 
   public function update()
@@ -282,7 +353,7 @@ class FirstUpdateConversation extends Conversation
     $message .= "\nEmail: {$this->user->email} atau NISN: {$this->user->nisn}";
     $message .= "\nPassword: " . date('dmY', strtotime($this->user->dob));
     $this->say($message);
-    $this->say('Terimakasih. ^_^');
+    $this->say('Terimakasih. ^_^', ['reply_markup' => self::keyboardDefault()]);
     return true;
   }
 
@@ -294,7 +365,7 @@ class FirstUpdateConversation extends Conversation
       $this->askEmail();
     } catch (\Throwable $th) {
       $message = 'Mohon maaf, sepertinya kamu belum terdaftar sebagai alumni SMK N Pringsurat. Silahkan tekan /validasi untuk mengecek apakah akun kamu terdaftar sebagai alumni SMK N Pringsurat';
-      $this->say($message);
+      $this->say($message, ['reply_markup' => self::keyboardDefault()]);
       \Log::error($th);
     }
   }

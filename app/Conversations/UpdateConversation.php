@@ -8,6 +8,7 @@ use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use App\User;
 use App\Location;
+use App\Status;
 use BotMan\Drivers\Telegram\TelegramDriver;
 use Illuminate\Support\Facades\DB;
 
@@ -20,12 +21,39 @@ class UpdateConversation extends Conversation
     $this->user = new User;
   }
 
+  private static function keyboardFree()
+  {
+    return json_encode(['keyboard' => []]);
+  }
+
+  private static function keyboardDefault()
+  {
+    return json_encode([
+      'keyboard' => [
+        [
+          ['text' => '/validasi'],
+          ['text' => '/update'],
+        ],
+        [
+          ['text' => '/infoloker'],
+          ['text' => '/infoalumni'],
+        ],
+        [
+          ['text' => '/tambahloker'],
+          ['text' => '/bantuan'],
+        ],
+      ],
+      'resize_keyboard' => true,
+      'one_time_keyboard' => true
+    ]);
+  }
+
   public function greetings()
   {
     if ($this->user->isDataComplete(true)) {
       $this->showMenu();
     } else {
-      $message = "Sepertinya data kamu masih belum lengkap. Jangan khawatir, cukup ikuti instruksi saya ya.";
+      $message = "Silahkan ikuti instruksi saya ya.";
       $this->say($message);
       $this->bot->startConversation(new FirstUpdateConversation(), $this->botinfo['user']['id'], TelegramDriver::class);
     }
@@ -41,56 +69,109 @@ class UpdateConversation extends Conversation
     ];
 
     $question = Question::create("Silahkan pilih data apa yang ingin diperbarui!")
-      ->callbackId('menu')
-      ->addButtons($button);
+      ->callbackId('menu');
 
-    return $this->ask($question, function (Answer $answer) {
-      switch ($answer->getValue()) {
-        case 'status':
+    return $this->ask('Silahkan pilih data apa yang ingin diperbarui!', function (Answer $answer) {
+      switch ($answer->getText()) {
+        case 'Status Pekerjaan':
           $this->askStatus();
           break;
 
-        case 'address':
+        case 'Alamat':
           $this->askAddress();
           break;
 
-        case 'phone':
+        case 'Telepon':
           $this->askPhone();
           break;
 
-        case 'cancel':
+        case 'Tidak Jadi':
           $this->closing();
           break;
         default:
-          // code...
+          $this->say("Mohon maaf, silahkan ulangi lagi.");
+          $this->showMenu();
           break;
       }
-    });
+    }, ['reply_markup' => json_encode([
+      'keyboard' => [
+        [
+          ['text' => 'Status Pekerjaan', 'callback_data' => 13],
+          ['text' => 'Alamat'],
+          ['text' => 'Telepon'],
+        ], [
+          ['text' => 'Tidak Jadi'],
+        ]
+      ],
+      'one_time_keyboard' => true,
+      'resize_keyboard' => true
+    ])]);
   }
 
   public function closing()
   {
-    $this->say('Terimakasih telah menggunakan layanan dari Skanira Bot. Untuk informasi dan fitur-fitur yang lain, silahkan gunakan perintah "/" pada tombol dibawah.');
+    $this->say('Terimakasih telah menggunakan layanan dari Skanira Bot. Untuk informasi dan fitur-fitur yang lain, silahkan gunakan perintah "/" pada tombol dibawah.', ['reply_markup' => json_encode([
+      'keyboard' => [
+        [
+          ['text' => '/validasi'],
+          ['text' => '/update'],
+        ],
+        [
+          ['text' => '/infoloker'],
+          ['text' => '/infoalumni'],
+        ],
+        [
+          ['text' => '/tambahloker'],
+          ['text' => '/bantuan'],
+        ],
+      ],
+      'resize_keyboard' => true
+    ])]);
   }
 
   // ########################################################################
 
   public function askStatus()
   {
-    $status = [];
-
-    foreach (\App\Status::all() as $s) {
-      $status[] = Button::create($s->status)->value($s->id);
+    $db = [];
+    foreach (\App\Status::all() as $d) {
+      if (empty($db) || count(last($db)) >= 3) {
+        $db[] = [];
+      }
+      $db[count($db) - 1][] = $d->status;
     }
+    if (empty($db) || count(last($db)) >= 3) {
+      $db[] = [];
+    }
+    $db[count($db) - 1][] = "Belum ada";
 
-    $question = Question::create('Silahkan masukkan status kegiatan kamu yang baru!')
-      ->callbackId('ask_status')
-      ->addButtons($status);
 
-    return $this->ask($question, function (Answer $answer) {
-      $this->data['status'][0]['status_id'] = $answer->getValue();
-      $this->askConfirm();
-    });
+    return $this->ask('Silahkan masukkan status kegiatan kamu yang baru!', function (Answer $answer) {
+      try {
+        $status = Status::where('status', $answer->getText())->first();
+
+        if (empty($status)) {
+          $this->data['status'] =  [];
+        } else {
+          if (empty($this->data['status'])) {
+            $this->data['status'] = [['status_id' => $status->id]];
+          } else {
+            $this->data['status'][0]['status_id'] = $status->id;
+          }
+        }
+        return $this->askConfirm();
+      } catch (\Throwable $th) {
+        \Log::debug($th->getMessage());
+        $this->say("Mohon maaf, silahkan ulangi lagi.");
+        $this->askStatus();
+      }
+    }, [
+      'reply_markup' => json_encode([
+        'keyboard' => $db,
+        'one_time_keyboard' => true,
+        'resize_keyboard' => true
+      ])
+    ]);
   }
 
   public function askAddress()
@@ -183,16 +264,21 @@ class UpdateConversation extends Conversation
   {
     return $this->ask("Silahkan kirimkan nomor telepon kamu!", function (Answer $answer) {
       $payload = $answer->getMessage()->getPayload();
-      $phone = $payload['contact']['phone_number'];
+      $phone = null;
+      try {
+        $phone = $payload['contact']['phone_number'];
+      } catch (\Throwable $th) {
+        $phone = trim($answer->getText());
+      }
       $this->data['phone'] = $phone;
       $this->askConfirm();
     }, [
       'reply_markup' => json_encode([
         'keyboard' => [
-          [
-            ['text' => 'Kirim kontak', 'request_contact' => true]
-          ]
-        ]
+          [['text' => 'Kirim kontak', 'request_contact' => true]]
+        ],
+        'resize_keyboard' => true,
+        'one_time_keyboard' => true
       ])
     ]);
   }
@@ -202,44 +288,53 @@ class UpdateConversation extends Conversation
   public function askConfirm()
   {
     $message = "Kamu akan mengubah data-data berikut:\n";
-    $message .= !empty($this->data['status']) ? "Status : dari " . $this->user->statuses()->first()->status . " menjadi " . \App\Status::find($this->data['status'][0]['status_id'])->status . "\n" : '';
+    if (!empty($this->data['status'])) {
+      $old_status = empty($this->user->statuses()->first()) ? 'Belum ada' : $this->user->statuses()->first()->status;
+      $new_status = empty(\App\Status::find($this->data['status'][0]['status_id'])) ? 'Belum ada' : \App\Status::find($this->data['status'][0]['status_id'])->status;
+      $message .=  "- Status pekerjaan dari " . $old_status . " menjadi " . $new_status . "";
+    } else {
+      $old_status = empty($this->user->statuses()->first()) ? 'Belum ada' : $this->user->statuses()->first()->status;
+      $new_status = 'Belum ada';
+      $message .=  "- Status pekerjaan dari " . $old_status . " menjadi " . $new_status . "";
+    }
     $message .= !empty($this->data['province']) ?
-      "Alamat :\ndari " . $this->user->full_address . "menjadi\n" .
+      "\n- Alamat dari " . $this->user->full_address . " menjadi " .
       $this->data['street'] . ', ' .
       Location::getVillage($this->data['address'])->nama . ', ' .
       Location::getSubDistrict($this->data['sub_district'])->nama . ', ' .
       Location::getDistrict($this->data['district'])->nama . ', ' .
-      Location::getProvince($this->data['province'])->nama . "\n" : '';
-    $message .= !empty($this->data['phone']) ? "Nomor telepon : dari " . $this->user->phone . " menjadi " . $this->data['phone'] : '';
+      Location::getProvince($this->data['province'])->nama . "" : '';
+    $message .= !empty($this->data['phone']) ? "\n- Nomor telepon dari " . $this->user->phone . " menjadi " . $this->data['phone'] : '';
     $this->say($message);
 
-    $question = Question::create("Apakah kamu akan mengubah data tersebut?")
-      ->callbackId('confirm')
-      ->addButtons([
-        Button::create("Iya, perbarui sekarang")->value('yes'),
-        Button::create("Tidak, ada lagi")->value('more'),
-        Button::create("Batal")->value('cancel'),
-      ]);
-
-    return $this->ask($question, function (Answer $answer) {
-      switch ($answer->getValue()) {
-        case 'yes':
+    return $this->ask('Apakah kamu akan mengubah data tersebut?', function (Answer $answer) {
+      switch ($answer->getText()) {
+        case 'Iya, perbarui sekarang':
           $this->update();
           break;
 
-        case 'more':
+        case 'Belum, masih ada lagi':
           $this->showMenu();
           break;
 
-        case 'cancel':
+        case 'Batal':
+        default:
           $this->closing();
           break;
-
-        default:
-          // code...
-          break;
       }
-    });
+    }, [
+      'reply_markup' => json_encode([
+        'keyboard' => [
+          [
+            ['text' => 'Iya, perbarui sekarang'],
+            ['text' => 'Belum, masih ada lagi'],
+            ['text' => 'Batal'],
+          ]
+        ],
+        'resize_keyboard' => true,
+        'one_time_keyboard' => true
+      ])
+    ]);
   }
 
   public function update()
@@ -250,7 +345,7 @@ class UpdateConversation extends Conversation
     $this->user->address_id = empty($this->data['address']) ? $this->user->address_id : $this->data['address'];
     $this->user->street = empty($this->data['street']) ? $this->user->street : $this->data['street'];
     $this->user->phone = empty($this->data['phone']) ? $this->user->phone : $this->data['phone'];
-    
+
     if (isset($this->data['status'])) {
       $old_status_id = $this->user->statuses()->first();
       foreach ($this->data['status'] as $status) {
@@ -287,7 +382,7 @@ class UpdateConversation extends Conversation
       $this->greetings();
     } catch (\Throwable $th) {
       $message = 'Mohon maaf, sepertinya kamu belum terdaftar sebagai alumni SMK N Pringsurat. Silahkan tekan /validasi untuk mengecek apakah akun kamu terdaftar sebagai alumni SMK N Pringsurat';
-      $this->say($message);
+      $this->say($message, ['reply_markup' => self::keyboardDefault()]);
       \Log::error($th);
     }
   }

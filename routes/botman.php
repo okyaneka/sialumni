@@ -6,34 +6,38 @@ use BotMan\Drivers\Telegram\TelegramDriver;
 
 $botman = resolve('botman');
 
-$botman->fallback(function ($bot) {
+$keyboard_markup = json_encode([
+    'keyboard' => [
+        [
+            ['text' => '/validasi'],
+            ['text' => '/update'],
+        ],
+        [
+            ['text' => '/infoloker'],
+            ['text' => '/infoalumni'],
+        ],
+        [
+            ['text' => '/tambahloker'],
+            ['text' => '/bantuan'],
+        ],
+    ],
+    'resize_keyboard' => true,
+    'one_time_keyboard' => true
+]);
+
+$botman->fallback(function ($bot) use ($keyboard_markup) {
     $payload = $bot->getMessage()->getPayload();
     if ($payload['chat']['type'] != 'group') {
         $payload = $bot->getMessage()->getPayload();
-        $bot->reply('Maaf, saya tidak mengerti apa yang kamu maksud. Coba pakai perintah ini!', ['reply_markup' => json_encode([
-            'keyboard' => [
-                [
-                    ['text' => '/validasi'],
-                    ['text' => '/update'],
-                ],
-                [
-                    ['text' => '/infoloker'],
-                    ['text' => '/infoalumni'],
-                ],
-                [
-                    ['text' => '/tambahloker'],
-                    ['text' => '/bantuan'],
-                ],
-            ]
-        ])]);
+        $bot->reply('Maaf, saya tidak mengerti apa yang kamu maksud. Coba pakai perintah ini!', ['reply_markup' => $keyboard_markup]);
     }
 });
 
-$botman->hears('/start', function ($bot) {
+$botman->hears('/start', function ($bot) use ($keyboard_markup) {
     $payload = $bot->getMessage()->getPayload();
     $user = $payload['from'];
     if ($payload['chat']['type'] != 'group') {
-        $bot->reply('Halo. Selamat datang di SkaniraBot. Disini kamu akan dapat mengakses informasi tentang alumni. Selain itu, disini kamu juga bisa mendaftarkan diri kamu sebagai alumni SMK Negeri Pringsurat. Silahkan tekan "/validasi", ikuti petunjuknya dan kemudian siap untuk dapat menikmati semua layanan dari SkaniraBot. Semoga harimu menyenangkan! ^_^.');
+        $bot->reply('Halo. Selamat datang di SkaniraBot. Disini kamu akan dapat mengakses informasi tentang alumni. Selain itu, disini kamu juga bisa mendaftarkan diri kamu sebagai alumni SMK Negeri Pringsurat. Silahkan tekan /validasi, ikuti petunjuknya dan kemudian siap untuk dapat menikmati semua layanan dari SkaniraBot. Semoga harimu menyenangkan! ^_^.', ['reply_markup' => $keyboard_markup]);
     }
     if ($payload['chat']['type'] == 'group') {
         $name = !empty($user['username']) ? '@' . $user['username'] : $user['first_name'];
@@ -72,9 +76,9 @@ $botman->group(['driver' => [TelegramDriver::class]], function ($botman) {
             $name = !empty($user['username']) ? '@' . $user['username'] : $user['first_name'];
             if (User::where('telegram_id', $user['id'])->count()) {
                 $message = "\nSebelumnya, cek pesan pribadiku dulu ya!";
-                $botman->say("Halo $name, sebelum mulai lebih jauh, coba deh kamu tekan /validasi dulu.", $user['id'], TelegramDriver::class);
+                $botman->say("Halo \"$name\", sebelum mulai lebih jauh, coba deh kamu tekan /validasi dulu.", $user['id'], TelegramDriver::class);
             } else {
-                $message = "\nCoba /start Aku dulu ya... Eits, tapi jangan di group";
+                $message = "Silahkan tekan https://t.me/skanirabot lalu tekan \"start\" dulu ya...";
             }
             $botman->reply("Halo $name, selamat datang di grup Alumni SMK N Pringsurat. $message");
         }

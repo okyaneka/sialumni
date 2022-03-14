@@ -30,23 +30,33 @@ class AlumniConversation extends Conversation
 
   public function askForSearch()
   {
-    $buttons = [
-      Button::create('Ya, tolong!')->value('yes'),
-      Button::create('Tidak, terimakasih.')->value('no'),
-    ];
+    // $buttons = [
+    //   Button::create('Ya, tolong!')->value('yes'),
+    //   Button::create('Tidak, terimakasih.')->value('no'),
+    // ];
 
-    $question = Question::create("Kamu ingin mencoba mencarinya?")->callbackId('ask_for_search')->addButtons($buttons);
+    $question = Question::create("Kamu ingin mencoba mencarinya?")->callbackId('ask_for_search');
 
     $this->ask($question, function (Answer $answer) {
-      switch ($answer->getValue()) {
-        case 'yes':
+      switch ($answer->getText()) {
+        case 'Ya':
           $this->doSearch();
           break;
+        case 'Tidak':
         default:
           $this->closing();
           break;
       }
-    });
+    }, [
+      'reply_markup' => json_encode([
+        'keyboard' => [
+          [
+            ['text' => 'Ya'],
+            ['text' => 'Tidak']
+          ]
+        ]
+      ])
+    ]);
   }
 
   public function doSearch()
@@ -101,35 +111,46 @@ class AlumniConversation extends Conversation
 
   public function askConfirm($message)
   {
-    $buttons = [];
+    $keyboard = [];
     if ($this->offset > 0) {
-      $buttons[] = Button::create('Sebelumnya')->value('prev');
+      $keyboard[] = ['text' => 'Sebelumnya'];
     }
     if (($this->offset + 1) < $this->users->count()) {
-      $buttons[] = Button::create('Berikutnya')->value('next');
+      $keyboard[] = ['text' => 'Berikutnya'];
     }
-    $buttons[] = Button::create('Ubah kata kunci')->value('change');
-    $buttons[] = Button::create('Cukup')->value('enough');
 
-    $this->ask(Question::create($message)->callbackId('show_job')->addButtons($buttons), function (Answer $answer) {
-      switch ($answer->getValue()) {
-        case 'prev':
+    $this->ask(Question::create($message)->callbackId('show_job'), function (Answer $answer) {
+      switch ($answer->getText()) {
+        case 'Sebelumnya':
           $this->offset -= 1;
           $this->showJob();
           break;
-        case 'next':
+        case 'Berikutnya':
           $this->offset += 1;
           $this->showJob();
           break;
-        case 'change':
+        case 'Ubah kata kunci':
           $this->offset = 0;
           $this->doSearch();
           break;
+        case 'Cukup':
         default:
           $this->closing();
           break;
       }
-    });
+    }, [
+      'reply_markup' => json_encode([
+        'keyboard' => [
+          [
+            $keyboard
+          ],
+          [
+            ['text' => 'Ubah kata kunci'],
+            ['text' => 'Cukup'],
+          ]
+        ]
+      ])
+    ]);
   }
 
   public function closing()
